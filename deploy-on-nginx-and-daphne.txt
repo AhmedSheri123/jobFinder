@@ -1,0 +1,57 @@
+https://okbaboularaoui.medium.com/how-to-set-up-django-with-postgres-nginx-and-daphne-django-channels-on-ubuntu-20-04-b0d24dcc7da9
+
+https://youtu.be/TLGucyn9URA?si=wiMeBthxhKz_dGxc
+
+add ssl cert = https://github.com/django/daphne
+
+
+
+sudo nano /etc/systemd/system/daphne.service
+=================daphne=====================
+[Unit]
+Description=daphne daemon
+Requires=daphne.socket
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/jobFinder
+ExecStart=/var/www/jobFinder/env/bin/daphne -b 0.0.0.0 -p 8000 jobFinder.asgi:application
+
+[Install]
+WantedBy=multi-user.target
+=====================================
+
+
+
+
+sudo nano /etc/nginx/sites-available/myproject
+=================nginx====================
+upstream channels-backend {server localhost:8000;}
+
+server {
+listen 80;
+server_name 203.161.42.87;
+location = /favicon.ico { access_log off; log_not_found off; }
+location /static/ {
+root /var/www/jobFinder;
+}
+location /media/ {
+root /var/www/jobFinder;
+}
+location / {
+proxy_pass http://channels-backend;
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection "Upgrade";
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header Host $http_host;
+proxy_redirect off;
+}
+}
+=====================================
+
+sudo systemctl restart nginx
+sudo systemctl daemon-reload
+sudo systemctl restart daphne

@@ -72,7 +72,7 @@ def cvSignupCvCreation(request, alt_id):
         about_me = request.POST.get('about_me')
         cert_type = request.POST.get('cert_type')
         major = request.POST.get('major')
-        skils = request.POST.getlist('skils[]')
+        skils = request.POST.get('skils')
         desires = request.POST.getlist('desires')
         
         userprofile = UserProfile.objects.get(alt_id=alt_id)
@@ -90,7 +90,7 @@ def cvSignupCvCreation(request, alt_id):
         employee_profile.about_me = about_me
         employee_profile.cert_type = cert_type
         employee_profile.major = major
-        employee_profile.skils.set(skils_model.filter(id__in=skils))
+        employee_profile.skils = skils
         employee_profile.desires = {'desires':desires}
         
 
