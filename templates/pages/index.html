@@ -1,0 +1,762 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block sheri %}
+
+
+<header >
+	<div class="overlay" style="display: flex; align-items: center; justify-content: center;">
+        <div >
+            <h1 >البحث عن أصحاب المهارات</h1>
+            <div style="margin-top: 10px;">
+                <p style="max-width: 900px; margin: auto; font-size: 18px;">وظف افضل المواهب واشخاص ذوي الاختصاصات العلية</p>
+                <br><br>
+            </div>
+<form action="">
+
+    <div class="input-group mb-3">
+
+        
+            <button style="padding: 15px 25px;font-size: 20px;" type="submit" class="input-group-text btn btn-primary" >
+                <i class="bi bi-search-heart"></i>
+            </button>
+            <select name="" id="" class="input-group-text" >
+                <option value="">السعودية</option>
+            </select>
+
+
+        <input type="text" dir="rtl" class="form-control" placeholder="الرغبات او المسمى الوظيفي او المهارات" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+
+
+</form>
+        </div>
+	</div>
+</header>
+
+
+
+<div class="container" style="margin-top: 40px;">
+    <h2 style="text-align: center; padding: 70px 0;">
+        بعض الباحثين عن العمل
+    </h2>
+    <div class="cv-flex-main">
+
+        {% for userprofile in userprofiles|slice:6 %}
+        <div class="cv-main-box mt-5">
+
+
+            <div class="cv-box">
+                <div dir="rtl" class="p-3 cv-content">
+                    <h4 class="text-primary" style="margin-bottom: 20px;">
+                        <i class="bi bi-briefcase"></i>
+                        {{userprofile.employeeprofile.job_title}}
+
+                    </h4>
+                    {% get_cv_imgs userprofile.id as profile_images %}
+
+                    <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" >
+                        <div class="carousel-indicators">
+                            {% for profile_image in profile_images %}
+                            <button type="button" data-bs-target="#carouselExampleIndicators{{forloop.counter|add:-1}}" data-bs-slide-to="{{forloop.counter|add:-1}}" {%if forloop.counter == 1 %} class="active" aria-current="true" {%endif%} aria-label="Slide {{forloop.counter}}"></button>
+                
+                            {% endfor %}    
+                    
+                    </div>
+                        <div class="carousel-inner">
+
+                            {% if profile_images %}
+                            {% for profile_image in profile_images %}
+                            <div class="carousel-item {%if forloop.counter == 1 %} active{%endif%}">
+                                <img src="{{profile_image.img_base64}}" class="d-block w-100" alt="...">
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="carousel-item active">
+                                <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100" alt="...">
+                            </div>
+                            {% endif %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators{{forloop.counter|add:-1}}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators{{forloop.counter|add:-1}}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+
+                    <h6 class="mt-4 ">
+                        <i class="bi bi-stars "></i>
+                        نبذة مختصرة</h6>
+                    <div  style="background-color: #ffffff82; padding: 10px; border-radius: 10px;box-shadow:inset #cecece 0px 0px 6px;">
+
+
+                        <div class="d-inline-block text-truncate pt-2" style="max-width: 100%;">
+                            {{userprofile.employeeprofile.about_me}}
+                        </div>
+
+
+                        <div style="display: flex;justify-content: space-around;margin-top: 20px;">
+                            <p style="margin-left: 20px;">
+                                <i class="bi bi-eye " ></i>
+    
+                                1244
+                            </p>
+    
+                            <p >
+                                <i class="bi bi-hand-thumbs-up "></i>
+    
+                                232
+                            </p>
+                        </div>
+                    </div>
+                    
+                    
+
+                    <h6 class="pt-2 ">
+                        <i class="bi bi-info-circle-fill "></i>
+                        معلومات</h6>
+
+
+                    <div class="contents-box" style="position: relative; overflow: hidden;">
+
+                        
+                          <p >
+                            <span class="questtion">الجنسية</span>
+
+                            <span class="answer" >{{userprofile.employeeprofile.get_nationality_display}}</span>
+                        </p >
+
+                        <p >
+                            <span class="questtion">العمر</span>
+                            <span class="answer" >{{userprofile.employeeprofile.age}}</span>
+                            
+                        </p >
+
+
+
+                        <p >
+                            <span class="questtion">المؤهل</span>
+                            <span class="answer" >{{userprofile.employeeprofile.get_cert_type_display}}</span>
+                            
+                        </p >
+
+                        <p >
+                            <span class="questtion">التخصص</span>
+                            <span class="answer" >{{userprofile.employeeprofile.major}}</span>
+                            
+                        </p >
+
+                        <p >
+                            <span class="questtion">الحالة الاجتماعية</span>
+                            <span class="answer" >{{userprofile.employeeprofile.get_marital_status_display}}</span>
+                            
+                        </p >
+
+
+                        <p >
+                            <span class="questtion">الحالة الصحية</span>
+
+                            <span class="answer" >{{userprofile.employeeprofile.get_health_status_display}}</span>
+                        </p >
+
+
+                    </div>
+
+
+
+
+                    <div class="mt-3" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+                        <p style="margin-left: 20px;">
+                            <i class="bi bi-geo-alt "></i>
+                            {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
+                        </p>
+                        
+                        
+                    </div>
+                    <div id="more-info-{{forloop.counter|add:-1}}" class="hide" >
+                            <nav dir="rtl" class="mt-5">
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-home-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-home{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-home{{forloop.counter|add:-1}}" aria-selected="true">نبذة عني</button>
+                                 <button class="nav-link" id="nav-profile-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-profile{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-profile{{forloop.counter|add:-1}}" aria-selected="false">المؤهل الدراسي</button> 
+                                 <button class="nav-link" id="nav-disabled-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-disabled{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-disabled{{forloop.counter|add:-1}}" aria-selected="false">المهارات</button>
+                                 <button class="nav-link" id="nav-contact-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-contact{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-contact{{forloop.counter|add:-1}}" aria-selected="false">التواصل</button>
+                                </div>
+                            </nav>
+                        <div class="tab-content p-3" id="nav-tabContent" >
+                            <div class="tab-pane fade show " id="nav-disabled{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-disabled-tab{{forloop.counter|add:-1}}" tabindex="0">
+                                <h6 class="pt-2 ">
+                                    <i class="bi bi-stars "></i>
+                                    المهارات</h6>
+            
+                                <div class="contact-info">
+                                    {{userprofile.employeeprofile.skils}}
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show " id="nav-profile{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-profile-tab{{forloop.counter|add:-1}}" tabindex="0">
+                                سشيشيسشيسشيس
+                            </div>
+
+                            <div class="tab-pane fade show active" id="nav-home{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-home-tab{{forloop.counter|add:-1}}" tabindex="0">
+                                <h6 class="pt-2 ">
+                                    <i class="bi bi-stars "></i>
+                                    نبذة عن العضو</h6>
+                                    <p class="contact-info">
+                                        {{userprofile.employeeprofile.about_me}}
+                                    </p>
+        
+        
+        
+
+                            
+                            </div>
+                            
+                            
+                            <div class="tab-pane fade" id="nav-contact{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-contact-tab{{forloop.counter|add:-1}}" tabindex="0" style="max-width:700px;">
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
+                                    <input value="{{userprofile.user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                                  </div>
+                          
+                          
+                                    <div class="input-group mb-3">
+                                      <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
+                                      <input value="{{userprofile.employeeprofile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
+                                        aria-describedby="basic-addon1">
+                                    </div>
+
+                    
+                    
+                    
+                                    <div class="contact-info">
+                                        <a href="{{userprofile.employeeprofile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
+                                        <a href="{{userprofile.employeeprofile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                                        <a href="{{userprofile.employeeprofile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                    
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary more-info" style="width: 105px;" onclick="showHideMoreDetailes('{{forloop.counter|add:-1}}', this)">
+                        تفاصيل اكثر
+                    </button>
+
+                    <div class="mb-4"></div>
+                </div>
+
+                
+                
+            
+            </div>
+        </div>
+
+
+
+
+
+
+        {%endfor%}
+    </div>
+
+
+
+
+    <h2 style="text-align: center; margin-top: 150px;" class="mb-5">
+        الباقات
+    </h2>
+
+
+    <div class="Subscriptions-main-box" dir="rtl" style="display: flex; justify-content: space-between; flex-wrap: wrap; align-items: flex-start;">
+        <div class="Subscriptions-card">
+            <div>
+                <i style="font-size: 35px;" class="bi bi-asterisk"></i>
+            </div>
+            <h4 class="pt-4">المجانية</h4>
+            <p >خطة ممتازة للمبتدئين</p>
+
+            <div style="display: flex;align-items: flex-end; margin-top: 50px;" >
+                <div style="display: flex;">
+                    <p style="padding: 0; margin: 0;">دولار</p>
+                    <span style="font-size: 100px; padding: 0; margin: 0;line-height: 1;">0</span>
+                </div>
+
+                <p style="padding: 0; margin: 0;">/مجاني</p>
+            </div>
+
+            <hr class="mt-5">
+            <div class="subscriptions-card-details">
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد الايام غير محدود
+                </p>
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد استقبال الرسائل اليومية 1
+                </p>
+
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد الرسائل المسموح بقرائتها خلال ٢٤ ساعه 1
+                </p>
+
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد الرسائل المسموح بالرد عليها خلال ٢٤ ساعه 1
+                </p>
+
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    الحصول على رابط احاله للربح
+                </p>
+                
+                <div style="display: grid;">
+                    <button class="btn btn-outline-primary mt-5 p-2">الخطة الحالية</button>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="Subscriptions-card" >
+            <div>
+                <i style="font-size: 35px;" class="bi bi-asterisk"></i>
+            </div>
+            <h4 class="pt-4">البرونزية</h4>
+            <p >خطة ممتازة للمبتدئين</p>
+
+            <div style="display: flex;align-items: flex-end; margin-top: 50px;" >
+                <div style="display: flex;">
+                    <p style="padding: 0; margin: 0;">دولار</p>
+                    <span style="font-size: 100px; padding: 0; margin: 0;line-height: 1;">10</span>
+                </div>
+
+                <p style="padding: 0; margin: 0;">/شهر</p>
+            </div>
+
+            <hr class="mt-5">
+            <div class="subscriptions-card-details">
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد الايام غير محدود
+                </p>
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد استقبال الرسائل اليومية 1
+                </p>
+
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد الرسائل المسموح بقرائتها خلال ٢٤ ساعه 1
+                </p>
+
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد الرسائل المسموح بالرد عليها خلال ٢٤ ساعه 1
+                </p>
+
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    الحصول على رابط احاله للربح
+                </p>
+                
+                <div style="display: grid;">
+                    <button class="btn btn-primary mt-5 p-2">اختر الخطة</button>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="Subscriptions-card bg-primary text-white" >
+            <div>
+                <i style="font-size: 35px;" class="bi bi-asterisk"></i>
+            </div>
+            <h4 class="pt-4">المجانية</h4>
+            <p >خطة ممتازة للمبتدئين</p>
+
+            <div style="display: flex;align-items: flex-end; margin-top: 50px;" >
+                <div style="display: flex;">
+                    <p style="padding: 0; margin: 0;">دولار</p>
+                    <span style="font-size: 100px; padding: 0; margin: 0;line-height: 1;">0</span>
+                </div>
+
+                <p style="padding: 0; margin: 0;">/مجاني</p>
+            </div>
+
+            <hr class="mt-5">
+            <div class="subscriptions-card-details">
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد الايام غير محدود
+                </p>
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد استقبال الرسائل اليومية 1
+                </p>
+
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد الرسائل المسموح بقرائتها خلال ٢٤ ساعه 1
+                </p>
+
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    عدد الرسائل المسموح بالرد عليها خلال ٢٤ ساعه 1
+                </p>
+
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    الحصول على رابط احاله للربح
+                </p>
+                
+                <div style="display: grid;">
+                    <button class="btn btn-outline-light mt-5 p-2" >الخطة الحالية</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function showHideMoreDetailes(id, button) {
+        let obj = document.getElementById('more-info-'+id)
+        if (obj.classList.contains('showDetailes')) {
+            obj.classList.remove('showDetailes')
+            button.innerText = 'تفاصيل اكثر'
+        } else {
+            obj.classList.add('showDetailes')
+            button.innerText = 'تفاصيل اقل'
+        }
+    }
+</script>
+
+
+<br><br><br><br><br><br>
+<style>
+    .cv-main-box .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
+    .cv-main-box .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
+    .cv-main-box .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select,
+    .cv-main-box .input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  
+    .cv-main-box .input-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+.subscriptions-card-details p {
+    margin: 0;
+}
+.Subscriptions-card {
+    margin-top: 20px;
+    padding: 35px; width: 300px; background-color: #f1f1f1; border: 1px solid rgb(207, 207, 207); border-radius: 25px;
+}
+
+.tab-content {
+    background-color: #ffffff82;
+}
+
+.cv-flex-main {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.hide {
+    width: 0;
+    height: 0px; overflow: hidden;
+    transition: all .15s ease-in;
+    opacity: 0;
+
+}
+
+.showDetailes {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transition: all .15s ease-out;
+    opacity: 1;
+}
+    
+.more-info {
+
+    position: absolute; bottom: -14px; border-radius: 10px; color: white; font-weight: bold; width: 100px; height: 50px; text-align: center; display: flex; align-items: center; justify-content: center;right: 50%; transform: translate(50%, 20%); z-index: 1;
+}
+.contact-info {
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: flex-start;
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgb(229, 229, 229);
+}
+.tab-content {
+    background-color: #fff;
+    border: solid 1px #e1e1e1;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top: none;
+}
+
+.contact-info i {
+        background-color: #f1f1f1;
+        color: rgb(48, 48, 48);
+        padding: 15px;
+        margin-left: 5px;
+        margin-top: 5px;
+        font-size: 22px;
+        border-radius: 10px;
+        box-shadow: inset rgb(100, 100, 100) 0px 0px 6px ;
+
+}
+
+.contact-info a {
+    margin-left: 5px;
+    margin-top: 5px;
+    display: flex;
+}
+
+.contact-info i:hover {
+
+        transition: all .13s linear;
+        box-shadow: rgb(100, 100, 100) 0px 0px 6px ;
+        color: rgb(87, 87, 255);
+
+}
+
+
+.cv-content {width: 100%; padding: 20px;}
+
+
+.cv-box .contents-box p {
+    position: relative;
+    overflow: hidden;
+    z-index: 3;
+    border: solid 1px #00000033;
+    border-radius: 3px;
+    margin: 3px;
+    background-color: #fff;
+}
+
+.contents-box p{
+    background-color: #f1f1f1; border-radius: 10px;
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-items: stretch;
+    align-items: stretch;
+}
+.contents-box p span {
+    padding: 5px;
+}
+
+
+/* .contents-box p span {
+    padding: 4px;
+    margin: 2px;
+    background-color: #fff;
+    border: solid 1px #00000033;
+} */
+
+.contents-box .questtion, .contents-box .answer{
+    display: block;
+    font-size: .9em;
+}
+
+.contents-box .answer{
+    color: var(--bs-purpul);
+    font-weight: 100;
+    display: flex;
+    align-items: center;
+}
+.questtion {
+    background-color: #f1f1f1;
+    text-align: center !important;
+    border-left: solid 1px #00000033;
+    width: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contents-box {
+    display: grid; grid-template-columns: auto auto;
+    justify-items: stretch;
+    background-color: #ffffff82; padding: 10px; border-radius: 10px;
+    box-shadow:inset #cecece 0px 0px 6px;
+}
+.cv-main-box {
+    position: relative;
+    width: min(100%, 500px);
+    margin-left: 1rem !important;
+
+}
+
+.cv-box {
+    background-color: #f1f1f1;
+    border: .1rem solid #dedede;
+    border-radius: .8rem;
+    display: flex;
+    justify-content: flex-end;
+    overflow: hidden;
+    box-shadow: #00000052 0px 0px 16px 1px;
+
+    flex-direction: column-reverse;
+    align-items: center !important;
+}
+.cv-box p {
+    font-weight: bold;
+}
+.carousel img {
+    height: 200px !important;
+    width: 200px !important;
+    border-radius: 100%;
+    object-fit: cover;
+    margin: auto;
+
+}
+@media only screen and (max-width: 768px) {
+    .cv-main-box {
+        margin-left: 0 !important;
+    }
+
+    .Subscriptions-main-box {
+        justify-content: center !important;
+    }
+}
+@media only screen and (max-width: 600px) {
+
+    /* .contents-box {
+        grid-template-columns: auto auto;
+    } */
+
+    .input-group {
+        flex-direction: column-reverse;
+    }
+
+    .input-group input, .input-group select {
+        width: 100% !important;
+        border-radius: 0;
+        padding: 10px;
+    }
+
+    .input-group select {
+        border-bottom-right-radius: 15px !important;
+        border-bottom-left-radius: 15px !important;
+    }
+
+    .input-group input {
+        border-top-right-radius: 15px !important;
+        border-top-left-radius: 15px !important;
+    }
+
+    .input-group button {
+        margin: auto;
+        margin-top: 10px;
+        border-radius: 15px !important;
+        padding: 15px 30px;
+        font-size: 20px;
+        
+    }
+    .input-group button::before {
+        content: "بحث";
+    }
+
+}
+
+@media only screen and (max-width: 370px) {
+    .contents-box {
+        
+        grid-template-columns: auto;
+    }
+}
+header {
+		background: url('{% static '/img/header.jpg' %}');
+		text-align: center;
+		width: 100%;
+		height: 100vh;
+		background-size: cover;
+		background-attachment: fixed;
+		position: relative;
+		overflow: hidden;
+		/* border-radius: 0 0 85% 85% / 30%; */
+	}
+
+	header .overlay {
+		width: 100%;
+		height: 100%;
+		padding: 50px;
+		color: #FFF;
+		text-shadow: 1px 1px 1px #333;
+		background-image: linear-gradient( 135deg, #00000095 10%, #00000095 100%);
+
+	}
+
+	h1 {
+		/* font-family: 'Dancing Script', cursive; */
+		font-size: 40px;
+		margin-bottom: 30px;
+	}
+
+	h3,
+	.overlay p {
+		font-size: 30px;
+		margin-bottom: 30px;
+	}
+
+	.read-btn {
+		text-decoration: none;
+		border: none;
+		outline: none;
+		padding: 10px 20px;
+		border-radius: 50px;
+		color: #333;
+		background: #fff;
+		margin-bottom: 20px;
+		{% comment %} box-shadow: 0 3px 20px 0 #0000003b; {% endcomment %}
+	}
+
+	button:hover, a:hover {
+		cursor: pointer;
+		background-color: #eeeeee;
+	}
+
+	.none-hover:hover {
+		background-color: #fff;
+	}
+
+</style>
+
+{% endblock sheri %}

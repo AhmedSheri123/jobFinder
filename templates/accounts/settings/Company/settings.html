@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" />
+{% endblock links %}
+
+
+{% block sheri %}
+<style>
+  .carousel {
+      max-width: 300px;
+      margin: auto;
+      margin-top: 60px;
+  }
+  .carousel img {
+  height: 200px !important;
+  width: 200px !important;
+  border-radius: 100%;
+  object-fit: cover;
+  margin: auto;
+
+}
+</style>
+
+
+<div class="container" style="display: flex; justify-content: flex-end;">
+
+  <div class=" mt-5 pt-5" dir="rtl" style="width: min(100%, 700px); ">
+    {% include "accounts/settings/Company/settingsHeader.html" %}
+
+      
+    <div class="mt-3 bg-f1 p-3">
+
+
+
+    
+
+
+<!-- Modal -->
+<div class="modal fade" id="cropImagePop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">رفع صورة</h1>
+        <button type="button" class="btn-close" style="margin: 0;margin-right: auto;" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="demo-wrap upload-demo">
+          <div class="container">
+              <div class="pull-left">
+                 
+                  <div >
+                      <a >
+                        <label for="exampleInputEmail1" class="form-label">رفع صورة</label>
+                          <input type="file" id="upload" class="form-control" value="" accept="image/*" />
+                      </a>
+
+                  </div>
+              </div>
+              <div class="pull-left">
+                  <div class="upload-msg" onclick="document.querySelector('#upload').click()">
+                      معاينة
+                  </div>
+                  <div class="upload-demo-wrap">
+                      <div id="upload-demo"></div>
+                  </div>
+              </div>
+          </div>
+      </div>  
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+        <button type="button" class="btn btn-primary upload-result">رفع</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+      <p>رابط ملفك الشخصية: 
+        <a href="" target="_blank">http://127.0.0.1:8000/accounts/Settings</a>
+      </p>
+
+      <form class="mt-5" method="post">
+
+        <div class="carousel-inner carousel">
+            {% if user.userprofile.companyprofile.img_base64 %}
+            <div class="carousel-item active" id="cropped-result">
+              <div class="carousel-item-content" id="cropped-result">
+                <img src="{{user.userprofile.companyprofile.img_base64}}" class="d-block w-100" alt="...">
+                <input type="hidden" value="{{user.userprofile.companyprofile.img_base64}}" id="userprofile-avatar" name="profile_img" class="form-control" >
+                <i class="bi bi-trash-fill" onclick="CarouselOnclickRemove()"></i>
+              </div>
+            </div>
+            {% else %}
+            <div class="carousel-item active" id="cropped-result">
+              <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100" alt="...">
+              <input type="hidden" id="userprofile-avatar" name="profile_img" class="form-control" >
+  
+            </div>
+            {% endif %}
+      </div>
+
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary mt-3 mb-4" style="margin: auto;display: block;" data-bs-toggle="modal" data-bs-target="#cropImagePop">
+  رفع صورة ملف الشخصي
+</button>
+
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">اسم المستخدم</label>
+          <input type="text" name="username" value="{{user.username}}" class="form-control" id="exampleInputPassword1">
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
+          <input type="email" name="email" value="{{user.email}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+
+        {{form}}
+
+      <button class="btn btn-primary mt-3">حفظ</button>
+
+      </form>
+
+      <a href="" class="btn btn-outline-primary mt-5"> تغير كلمة المرور</a>
+    </div>
+
+  </div>
+  
+
+  
+</div>
+<div class="mt-5"></div>
+
+
+
+<style>
+  .bg-f1 {
+    background-color: #f1f1f1;
+  }
+</style>
+
+
+
+<style>
+  .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
+  .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
+  .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select,
+  .input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .input-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+
+  .upload-demo .upload-demo-wrap,
+
+.upload-demo.ready .upload-msg {
+    display: none;
+}
+.upload-demo.ready .upload-demo-wrap {
+    display: block;
+}
+.upload-demo.ready .upload-result {
+    display: block;    
+}
+.upload-demo-wrap {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.upload-demo .container {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+.upload-msg {
+    text-align: center;
+    padding: 50px;
+    font-size: 22px;
+    color: #aaa;
+    width: 260px;
+    margin: 50px auto;
+    border: 1px solid #aaa;
+}
+
+
+
+.carousel {
+  max-width: 300px;
+  margin: auto;
+  margin-top: 60px;
+}
+.carousel img {
+height: 200px !important;
+width: 200px !important;
+border-radius: 100%;
+object-fit: cover;
+margin: auto;
+
+}
+
+.carousel-item-content {
+position: relative;width: 200px;margin: auto;border-radius: 100%;overflow: hidden;
+}
+
+.carousel-item-content i{
+position: absolute; bottom: 0; right: 50%; transform: translate(50%, 21%); color: white; width: 100%; background: #00000066; text-align: center; height: 60px; font-size: 25px; cursor: pointer;
+}
+</style>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+
+<script>
+  
+$(document).ready(function(){
+
+var $uploadCrop;
+
+function readFile(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        $('.upload-demo').addClass('ready');
+        $uploadCrop.croppie('bind', {
+                url: e.target.result
+        }).then(function(){
+                console.log('jQuery bind complete');
+        });
+
+    }
+
+    reader.readAsDataURL(input.files[0]);
+}
+else {
+        console.log("Sorry - you're browser doesn't support the FileReader API");
+    }
+}
+
+$uploadCrop = $('#upload-demo').croppie({
+        viewport: {
+                width: 200,
+                height: 200,
+                type: 'circle'
+        },
+        enableExif: true
+});
+
+$('#upload').on('change', function () { readFile(this); });
+
+
+
+$('.upload-result').on('click', function (ev) {
+$uploadCrop.croppie('result', {
+  type: 'canvas',
+  size: 'viewport'
+}).then(function (resp) {
+  // in this hidden input we can send cropped image to server
+  $('#userprofile-avatar').val(resp);
+  $('#cropped-result img').attr('src',resp);
+  $('#cropImagePop').modal('hide');
+});
+});    
+
+});
+
+
+function CarouselOnclickRemove() {
+  let imgBox = document.querySelector('#cropped-result')
+  imgBox.querySelector('img').src = "{% static '/img/default-profile-img-2.png' %}"
+  imgBox.querySelector('input').value = ""
+}
+</script>
+{% endblock %}

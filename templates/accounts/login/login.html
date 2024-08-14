@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+
+{% endblock links %}
+
+
+{% block sheri %}
+
+
+<div class="pt-5 container" dir="rtl">
+    
+
+
+    <div class=" mt-5 p-5" style="max-width: 600px; background-color: #f1f1f1; border-radius: 15px; border: 1px solid rgb(211, 211, 211); display: block; margin: auto;     box-shadow: 0 10px 15px rgba(0, 0, 0, .1) !important;">
+        <h4>تسجيل الدخول</h4>
+        <p>الرجاء إكمال البيانات بالاسفل</p>
+
+        <div style="max-width: 500px;" dir="rtl">
+            <form method="post" class="pt-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
+                  <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">كلمة مرور الحساب</label>
+                  <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+                </div>
+   
+                <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+
+                <p class="mt-3">
+                    ليس لديك حساب؟ <a data-bs-toggle="modal" data-bs-target="#SignupModal" href="#">انشاء حساب</a>
+                </p>
+              </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock sheri %}

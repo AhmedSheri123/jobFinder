@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+
+{% endblock links %}
+
+
+{% block sheri %}
+
+<div class="container" style="display: flex; justify-content: flex-end;">
+
+  <div class=" mt-5 pt-5" dir="rtl" style="width: min(100%, 700px); ">
+    {% include "accounts/settings/Employee/settingsHeader.html" %}
+
+
+      
+    <div class="mt-3 bg-f1 p-3">
+      <p>رابط ملفك الشخصية: 
+        <a href="" target="_blank">http://127.0.0.1:8000/accounts/Settings</a>
+      </p>
+
+      <form class="mt-5" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">اسم المستخدم</label>
+          <input type="text" name="username" value="{{user.username}}" class="form-control" id="exampleInputPassword1">
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
+          <input type="email" name="email" value="{{user.email}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">الهاتف</label>
+          <input type="text" name="phone" value="{{employee_profile.phone}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+
+
+      <button class="btn btn-primary">حفظ</button>
+
+      </form>
+
+      <a href="" class="btn btn-outline-primary mt-5"> تغير كلمة المرور</a>
+    </div>
+
+  </div>
+  
+
+  
+</div>
+<div class="mt-5"></div>
+
+
+
+<style>
+  .bg-f1 {
+    background-color: #f1f1f1;
+  }
+</style>
+{% endblock %}

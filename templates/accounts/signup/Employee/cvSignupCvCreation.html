@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/multi_select.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+
+{% endblock links %}
+
+{% block sheri %}
+
+<div class="pt-5 main-box-flex" style="display: flex;" dir="rtl">
+    <div class="bg-light p-5 progress-box" style="position: relative;">
+        
+
+
+        <div class="progress-box-fixed">
+        <h4>خطوات انشاء الحساب</h4>
+        <div class="pt-5"></div>
+
+            <div class="progress-content pt-2" >
+                <div class="progress-steps-box">
+                    <div class="progress-steps">
+                        <i class="bi bi-person-plus-fill"></i>
+                        <p>
+                            إنشاء حساب
+                        </p>
+                    </div>
+
+
+                    <i class="bi bi-check2"></i>
+                </div>
+            </div>
+
+
+
+
+            <div class="progress-content pt-2">
+                <div class="progress-steps-box">
+                    <div class="progress-steps">
+                        <i class="bi bi-person-check-fill"></i>
+                        <p>
+                            تاكيد الحساب
+                        </p>
+                    </div>
+
+
+                    <i class="bi bi-check2"></i>
+
+                </div>
+            </div>
+
+
+
+            <div class="progress-content pt-2" >
+                <div class="progress-steps-box">
+                    <div class="progress-steps">
+                        <i class="bi bi-person-fill-gear"></i>
+                        <p>
+                            إعداد ملف شخصي
+
+                        </p>
+                    </div>
+
+
+                    <i class="bi bi-check2"></i>
+                </div>
+            </div>
+
+
+
+            <div class="progress-content pt-2" style="opacity: 1;">
+                <div class="progress-steps-box">
+                    <div class="progress-steps">
+                        <i class="bi bi-person-vcard-fill"></i>
+                        <p>
+                            بناء سيرتك الذاتية
+
+                        </p>
+                    </div>
+
+
+                    <i class="bi bi-exclamation-circle"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="container mt-5 p-5">
+        <h4>انشاء الحساب</h4>
+        <p>الرجاء إكمال البيانات بالاسفل</p>
+
+
+        <div style="max-width: 500px;" dir="rtl">
+            <form method="post" class="pt-3" action="{% url 'SignupSetupProcess' alt_id %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">الوزن</label>
+                    <input required name="weight" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                  </div>
+  
+  
+                  <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">الطول</label>
+                      <input required name="height" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+
+                    
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">الحالة الإجتماعية</label>
+                    <select required name="marital_status" id="" class="form-control">
+                        {% for i in StateFields %}
+                        <option value="{{i.0}}">{{i.1}}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">الحالة الصحية</label>
+                        <select required name="health_status" id="" class="form-control">
+                            {% for i in HealthStatusFields %}
+                            <option value="{{i.0}}">{{i.1}}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">دولة الاقامة</label>
+                            <select required name="country" id="" class="form-control">
+                                {% for i in countrys %}
+                                <option value="{{i.id}}">{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+
+                        
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">المدينة</label>
+                        <input required name="employee_city" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">الحي</label>
+                        <input required name="district" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">الجنسية</label>
+
+                        <select required class="form-control" name="nationality" id="">
+                            {% for i in NationalityFields %}
+                            <option value="{{i.0}}">{{i.1}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">أمتلك سيارة ورخصة قيادة</label>
+                            <select required name="have_car" id="" class="form-control">
+                                {% for i in YesNoFields %}
+                                <option value="{{i.0}}">{{i.1}}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">نبذة عنك</label>
+                        <textarea class="form-control" name="about_me" id="" rows="5"></textarea>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">الرغبات</label>
+                        <div class="desires" id="desires">
+                            <div class="desires-box" id="desires-box-1">
+                                <input required name="desires" type="text" style="padding-left:30px ;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <a onclick="document.getElementById('desires-box-1').remove()" class="bi bi-trash-fill desiresButton"></a>
+                            </div>
+                            
+                        </div>
+                        <button type="button" onclick="addDesires()" class="btn btn-primary mt-2">اضافة رغبة اخرى</button>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">المهارات</label>
+                        <select required dir="ltr" id="skils" name="skils" data-placeholder="اختر المهارات" multiple data-multi-select>
+                            {% for i in skils_model %}
+                            <option value="{{i.id}}">{{i.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">نوع الشهادة</label>
+                        <select required class="form-control" name="cert_type" id="">
+                            {% for i in CertTypeFields %}
+                            <option value="{{i.0}}">{{i.1}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">التخصص الدراسي</label>
+                        <input required name="major" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+
+
+
+
+
+
+
+
+                </div>
+
+                <button type="submit" class="btn btn-primary">انشاء حساب</button>
+              </form>
+        </div>
+
+    </div>
+
+
+</div>
+<script src="{% static 'js/multi_select.js' %}"></script>
+<script>
+    let desiresID = 2
+
+    function addDesires() {
+        desiresID++
+
+        html_code = `
+                            <div class="desires-box mt-3" id="desires-box-${desiresID}">
+                                <input required name="desires" type="text" style="padding-left:30px ;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <a onclick="document.getElementById('desires-box-${desiresID}').remove()" class="bi bi-trash-fill desiresButton"></a>
+                            </div>
+        `
+        document.getElementById('desires').insertAdjacentHTML('beforeend', html_code)
+
+
+    }
+</script>
+{% endblock sheri %}

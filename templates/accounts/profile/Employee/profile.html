@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+
+{% endblock links %}
+
+
+{% block sheri %}
+<style>
+    .carousel {
+        max-width: 300px;
+        margin: auto;
+        margin-top: 60px;
+    }
+    .carousel img {
+    height: 200px !important;
+    width: 200px !important;
+    border-radius: 100%;
+    object-fit: cover;
+    margin: auto;
+
+}
+</style>
+
+<div class="bg-f1">
+    <div class="container p-5" style="padding-bottom: 0 !important;">
+        <div id="carouselExampleIndicators" class="carousel slide carousel-dark" >
+            <div class="carousel-indicators">
+            {% for profile_image in profile_images %}
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{forloop.counter|add:-1}}" {%if forloop.counter == 1 %} class="active" aria-current="true" {%endif%} aria-label="Slide {{forloop.counter}}"></button>
+
+            {% endfor %}
+            </div>
+            <div class="carousel-inner">
+            {% if profile_images %}
+            {% for profile_image in profile_images %}
+            <div class="carousel-item {%if forloop.counter == 1 %} active{%endif%}">
+                <img src="{{profile_image.img_base64}}" class="d-block w-100" alt="...">
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="carousel-item active">
+                <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100" alt="...">
+            </div>
+            {% endif %}
+
+
+
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+        <h4 class="text-center pt-3">{{employee_profile.name}}</h4>
+        <div class="main-info">
+            <div class="main-info-item">
+                <p>صاحب سيرة</p>
+                <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="main-info-item">
+                <p>{{employee_profile.job_title}}</p>
+                <i class="bi bi-briefcase-fill"></i>
+            </div>
+
+            <div class="main-info-item">
+                <p>{{employee_profile.country}}</p>
+                <i class="bi bi-geo-alt-fill"></i>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; flex-direction: row-reverse; align-items: center; flex-wrap: wrap;">
+            <nav dir="rtl" class="mt-5">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">الملف الشخصي</button>
+                  <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">المعلومات الشخصية</button>
+                  <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">التواصل</button>
+                  <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false">احصائيات</button>
+                </div>
+              </nav>
+
+              <a href="{% url 'CVSettingsGernral' %}" class="btn btn-primary m-3">
+                تعديل الملف الشخصي
+                <i class="bi bi-pencil-square"></i>
+            </a>
+        </div>
+
+
+    </div>
+
+</div>
+
+<div class="container" style="background-color: #fff; margin-top: 30px;" dir="rtl">
+        
+    <div class="tab-content p-3" id="nav-tabContent" >
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+            <div class="p-2 bg-f1">
+                <p>نبذة عني
+                </p>
+                <hr>
+                <div class="p-2">
+                    {{employee_profile.about_me}}
+                </div>
+            </div>
+
+            <div class="p-2 mt-3 bg-f1">
+                <p>مهاراتي</p>
+                <hr>
+                <div>
+                    <div class="p-2">
+                        {{employee_profile.skils}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+            <div class="contents-box p-2 bg-f1">
+                <p >
+                    <span class="questtion">الجنسية:</span>
+
+                    <span class="answer" style="width: 85px;">{{employee_profile.get_nationality_display}}</span>
+                </p >
+
+                <p >
+                    <span class="questtion">العمر:</span>
+                    <span class="answer" style="width: 85px;">{{employee_profile.age}}</span>
+                    
+                </p >
+
+
+
+                <p >
+                    <span class="questtion">المؤهل:</span>
+                    <span class="answer" style="width: 85px;">{{employee_profile.get_cert_type_display}}</span>
+                    
+                </p >
+
+                <p >
+                    <span class="questtion">التخصص:</span>
+                    <span class="answer" style="width: 85px;">{{employee_profile.major}}</span>
+                    
+                </p >
+
+                <p >
+                    <span class="questtion">الحالة الاجتماعية:</span>
+                    <span class="answer" style="width: 85px;">{{employee_profile.get_marital_status_display}}</span>
+                    
+                </p >
+
+
+                <p >
+                    <span class="questtion">الحالة الصحية:</span>
+
+                    <span class="answer" style="width: 85px;">{{employee_profile.get_health_status_display}}</span>
+                </p >
+
+
+
+            </div>
+        </div>
+        
+        
+        
+        
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0" style="max-width:700px;">
+                <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
+                <input value="{{user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+              </div>
+      
+      
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
+                  <input value="{{employee_profile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
+                    aria-describedby="basic-addon1">
+                </div>
+      
+      
+                <!-- <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-facebook"></i></span>
+                  <input value="{{employee_profile.facebook}}" disabled type="text" name="facebook" class="form-control" placeholder="ملف الفيسبوك" aria-label="Username"
+                    aria-describedby="basic-addon1">
+                </div>
+      
+      
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-linkedin"></i></span>
+                  <input value="{{employee_profile.linkedin}}" disabled type="text" name="linkedin" class="form-control" placeholder="ملف لينكدان" aria-label="Username"
+                    aria-describedby="basic-addon1">
+                </div>
+      
+      
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-whatsapp"></i></span>
+                  <input value="{{employee_profile.whatsapp}}" disabled type="text" name="whatsapp" class="form-control" placeholder="رقم واتساب" aria-label="Username"
+                    aria-describedby="basic-addon1">
+                </div> -->
+      
+
+
+
+
+                <div class="contact-info">
+                    <a href="{{employee_profile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
+                    <a href="{{employee_profile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                    <a href="{{employee_profile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+
+                </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
+    </div>
+
+      
+</div>
+
+<style>
+    .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
+    .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
+    .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select,
+    .input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  
+    .input-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  
+
+    .bg-f1 {
+        background-color: #f1f1f1;
+    }
+    .main-info {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-direction: row-reverse;
+    }
+    .main-info-item {
+        display: flex;
+        color: #555;
+        font-size: 14px;
+        
+    }
+
+    .main-info-item i {
+        margin-left: 5px;
+    }
+    .main-info-item p {
+        margin-left: 15px;
+    }
+
+
+    .contents-box p{
+        background-color: #ffffff82;
+        border: 1px solid #ffffff; padding: 10px; border-radius: 10px; margin-left: 20px; margin-top: 15px;
+    }
+
+    .contents-box .questtion, .contents-box .answer{
+        display: block;
+        text-align: center;
+        font-weight: 100;
+    }
+
+    .contents-box .answer{
+        color: rgb(105, 105, 252);
+        font-weight: bold;
+    }
+
+    .contents-box {
+        display: flex; flex-wrap: wrap;
+    }
+
+    @media only screen and (max-width: 768px) {
+    .contents-box {
+        justify-content: center;
+        }
+    }
+
+    .contact-info a {
+        margin-left: 5px;
+        margin-top: 5px;
+        display: flex;
+    }
+
+    .contact-info {
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px;
+
+}
+
+.contact-info i {
+        background-color: #f1f1f1;
+        color: rgb(48, 48, 48);
+        padding: 15px;
+        margin-left: 5px;
+        margin-top: 5px;
+        font-size: 22px;
+        border-radius: 10px;
+        box-shadow: inset rgb(100, 100, 100) 0px 0px 6px ;
+
+}
+
+.contact-info i:hover {
+
+        transition: all .13s linear;
+        box-shadow: rgb(100, 100, 100) 0px 0px 6px ;
+        color: rgb(87, 87, 255);
+
+}
+
+</style>
+{%endblock%}

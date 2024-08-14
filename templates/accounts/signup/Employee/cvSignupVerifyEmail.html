@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+
+{% endblock links %}
+
+
+{% block sheri %}
+
+<div class="pt-5 main-box-flex" style="display: flex;" dir="rtl">
+    <div class="bg-light p-5 progress-box">
+        <h4>خطوات انشاء الحساب</h4>
+
+        <div class="pt-5"></div>
+        <div class="progress-content pt-2" >
+            <div class="progress-steps-box">
+                <div class="progress-steps">
+                    <i class="bi bi-person-plus-fill"></i>
+                    <p>
+                        إنشاء حساب
+                    </p>
+                </div>
+
+
+                <i class="bi bi-check2"></i>
+            </div>
+        </div>
+
+
+
+
+        <div class="progress-content pt-2" style="opacity: 1;">
+            <div class="progress-steps-box">
+                <div class="progress-steps">
+                    <i class="bi bi-person-check-fill"></i>
+                    <p>
+                        تاكيد الحساب
+                    </p>
+                </div>
+
+
+                <i class="bi bi-exclamation-circle"></i>
+            </div>
+        </div>
+
+
+
+        <div class="progress-content pt-2">
+            <div class="progress-steps-box">
+                <div class="progress-steps">
+                    <i class="bi bi-person-fill-gear"></i>
+                    <p>
+                        إعداد ملف شخصي
+
+                    </p>
+                </div>
+
+
+                <i class="bi bi-exclamation-circle"></i>
+            </div>
+        </div>
+
+
+
+        <div class="progress-content pt-2">
+            <div class="progress-steps-box">
+                <div class="progress-steps">
+                    <i class="bi bi-person-vcard-fill"></i>
+                    <p>
+                        بناء سيرتك الذاتية
+
+                    </p>
+                </div>
+
+
+                <i class="bi bi-exclamation-circle"></i>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="container mt-5 p-5">
+        <h4>انشاء الحساب</h4>
+        <p>الرجاء إكمال البيانات بالاسفل</p>
+
+        <p class="pt-2">تم ارسال رمز تأكيد عبر البريدالالكتروني</p>
+
+        <div style="max-width: 500px;" dir="rtl">
+            <form method="post" action="{% url 'SignupSetupProcess' alt_id %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">رمز التاكيد</label>
+                  <input required type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+
+                <button type="submit" class="btn btn-primary">الخطوة التالية</button>
+              </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock sheri %}

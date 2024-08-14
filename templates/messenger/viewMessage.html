@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block sheri %}
+<div style="margin-top: 80px;">
+
+
+    <div dir="rtl" class="container" style="width: min(100%, 768px); overflow: hidden; border-radius: 20px; padding: 0;">
+        <div  class="bg-primary text-white" style="padding: 20px;  box-shadow: rgb(177, 177, 177) 0px 0px 3px; margin: auto;">
+    
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center;">
+                    {% if profile_image.1 == 0 %}
+                        <img src="{{profile_image.0}}" alt="" style="width: 50px; border-radius: 100%;">
+                    {% else %}
+                    <img src="{% static '/img/default-profile-img-2.png' %}" alt="" style="width: 50px; border-radius: 100%;">
+                    {% endif %}
+                    <h5 style="margin-right: 10px;">{{receiver.username}}</h5>
+            
+                </div>
+    
+                <a href="#" class="text-white" style="font-size: 25px;"><i class="bi bi-three-dots-vertical"></i></a>
+            </div>
+        </div>
+    
+        <div id="msg-container-box">
+            {% for message in messages %}
+            {% if message.sender == request.user %}
+            <div class="sender" >
+                <p class="bg-primary text-white">{{message.msg}}</p>
+            </div>
+            {% else %}
+            <div class="receiver">
+                <p class="bg-light">{{message.msg}}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+            
+    
+    
+            <div class="sender-form-box">
+                
+                <form onsubmit="{SendMsg();return false}" style="display: contents;">
+                    <input type="text" class="form-control" id="senderMsg">
+    
+    
+                    <button class="btn btn-primary">
+                        <i style="font-size: 20px;" class="bi bi-send-fill"></i>
+                    </button>
+                </form>
+    
+                
+            </div>
+        </div>
+    
+        
+    </div>
+
+</div>
+
+
+<style>
+    .sender {display: flex; flex-direction: row;}
+    .sender p, .receiver p {border-radius: 15px; padding: 10px;}
+
+    .receiver {display: flex; flex-direction: row-reverse;}
+
+    .sender-form-box {padding: 2px 20px; width: 100%; bottom: 0; right: 0;position: absolute; display: flex; align-items: center; justify-content: space-between;flex-direction: row;}
+    .sender-form-box button {border-radius: 100%; transform: rotateZ(225deg); margin: 10px 0;margin-right: 6px;}
+
+    #msg-container-box {position: relative;; box-shadow: inset #6a6a6a 0px 15px 15px -13px !important; background-color: #f1f1f1; padding: 20px;box-shadow: rgb(177, 177, 177) 0px 0px 3px; margin: auto;display: block; padding-bottom: 60px;}
+</style>
+
+<script>
+    const user_id = {{user.id}}
+    let url = `ws://${window.location.host}/ws/socket-server/{{room_id}}/`
+    const chatSocket = new WebSocket(url)
+    
+    chatSocket.onmessage = function(e){
+        let data = JSON.parse(e.data)
+        if (data.user_id != user_id) {
+            ReceiveMsg(data.message)
+        }
+
+    }
+
+    function send(message){
+        chatSocket.send(
+            JSON.stringify({
+                'message': message
+            })
+        )
+    }
+
+
+    function SendMsg(){
+        let msg = document.querySelector('#senderMsg')
+        let msgBox = document.querySelector('#msg-container-box')
+
+        if (!msg.value) {return false}
+
+        let msg_html = `
+        <div class="sender">
+            <p class="bg-primary text-white">${msg.value}</p>
+        </div>
+        `
+        send(msg.value)
+
+        msgBox.insertAdjacentHTML('beforeend', msg_html)
+        msg.value = ""
+        return false
+    }
+
+
+    function ReceiveMsg(msg){
+        let msgBox = document.querySelector('#msg-container-box')
+        let msg_html = `
+        <div class="receiver">
+            <p class="bg-light">${msg}</p>
+        </div>
+        `
+        msgBox.insertAdjacentHTML('beforeend', msg_html)
+    }
+
+
+</script>
+{% endblock sheri %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+
+{% endblock links %}
+
+
+{% block sheri %}
+
+
+<div class="pt-5 main-box-flex" style="display: flex;" dir="rtl">
+    <div class="bg-light p-5 progress-box">
+        <h4>خطوات انشاء الحساب</h4>
+
+        <div class="pt-5"></div>
+        <div class="progress-content pt-2" >
+            <div class="progress-steps-box">
+                <div class="progress-steps">
+                    <i class="bi bi-person-plus-fill"></i>
+                    <p>
+                        إنشاء حساب
+                    </p>
+                </div>
+
+
+                <i class="bi bi-check2"></i>
+            </div>
+        </div>
+
+
+
+
+        <div class="progress-content pt-2">
+            <div class="progress-steps-box">
+                <div class="progress-steps">
+                    <i class="bi bi-person-check-fill"></i>
+                    <p>
+                        تاكيد الحساب
+                    </p>
+                </div>
+
+
+                <i class="bi bi-check2"></i>
+
+            </div>
+        </div>
+
+
+
+        <div class="progress-content pt-2" style="opacity: 1;">
+            <div class="progress-steps-box">
+                <div class="progress-steps">
+                    <i class="bi bi-person-fill-gear"></i>
+                    <p>
+                        إعداد ملف شخصي
+
+                    </p>
+                </div>
+
+
+                <i class="bi bi-exclamation-circle"></i>
+            </div>
+        </div>
+
+
+
+        <div class="progress-content pt-2">
+            <div class="progress-steps-box">
+                <div class="progress-steps">
+                    <i class="bi bi-person-vcard-fill"></i>
+                    <p>
+                        بناء سيرتك الذاتية
+
+                    </p>
+                </div>
+
+
+                <i class="bi bi-exclamation-circle"></i>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="container mt-5 p-5">
+        <h4>انشاء الحساب</h4>
+        <p>الرجاء إكمال البيانات بالاسفل</p>
+
+
+        <div style="max-width: 500px;" dir="rtl">
+            <form method="post" class="pt-3" action="{% url 'SignupSetupProcess' alt_id %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">الاسم كاملا</label>
+                    <input required type="text" name="full_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                  </div>
+  
+  
+                  <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">المسمى الوظيفي</label>
+                      <input required type="text" name="job_title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+
+                    
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">الجنس</label>
+                    <select required name="gender" id="" class="form-control">
+                        {% for i in GenderFields %}
+                        <option value="{{i.0}}">{{i.1}}</option>
+                        {% endfor %}
+                    </select>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">العمر</label>
+                        <input required name="age" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">الخطوة التالية</button>
+              </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock sheri %}
