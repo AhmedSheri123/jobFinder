@@ -1,0 +1,140 @@
+{% if user.is_authenticated %}
+{% if 'messageRoom' not in request.path %}
+<nav class="navbar navbar-expand-lg fixed-bottom glass-eff" id="navbar" data-bs-theme="dark" dir="rtl">
+    <div class="container-fluid">
+      
+
+      <div class=" navbar-collapse" id="navbarSupportedContent2">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin: auto; width: min(100%, 768px); justify-content: space-around; flex-direction: row;">
+          <li class="nav-item">
+                <a href="{% url 'index' %}" class="btn "  role="button"><i class="bi bi-house-door-fill"></i></a>
+          </li>
+          <li class="nav-item">
+                <a id="example" tabindex="0" class="btn "  role="button" data-bs-toggle="popover" title="الرسائل" ><i class="bi bi-chat-dots-fill"></i></a>
+          </li>
+          <li class="nav-item">
+                <a class="btn "  role="button"><i class="bi bi-bell-fill"></i></a>
+          </li>
+          <li class="nav-item">
+                <a href="{% url 'Profile' %}" class="btn "  role="button"><i class="bi bi-person-fill"></i></a>
+          </li>
+        </ul>
+
+
+      </div>
+    </div>
+  </nav>
+
+  
+
+
+
+
+
+
+
+  {% if user.is_authenticated %}
+<div data-name="popover-content" id="popover-content" class="d-none" style="width: min(100%, 400px);">
+  {% include 'messenger/viewMessages.html' %}
+</div>
+
+
+  <script type='text/javascript'>
+    
+            
+    $(document).ready(function() {
+        
+      var options = {
+            sanitize: false,
+            html: true,
+            title: "الرسائل",
+            customClass: 'MessagesPopover',
+            //html element
+            //content: $("#popover-content")
+            content: $('[data-name="popover-content"]').html(),
+            //Doing below won't work. Shows title only
+            //content: $("#popover-content").html()
+            fallbackPlacements : ['top']
+        }
+        var exampleEl = document.getElementById('example')
+        var popover = new bootstrap.Popover(exampleEl, options)
+
+
+    })
+
+    // $(function () {
+    //         $('[data-bs-toggle="popover"]').popover()
+    //     })
+</script>
+{% endif %}
+
+<!-- Modal -->
+<div class="modal fade" id="SignupModal" tabindex="-1" aria-labelledby="SignupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="flex-direction: row-reverse;">
+        <h1 class="modal-title fs-5" id="SignupModalLabel">عملية التسجيل في المنصة</h1>
+        <button type="button" style="margin: 0;margin-right: auto;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="text-align: center; padding: 30px 0px;">
+        <a href="{% url 'companySignup' %}" class="btn btn-outline-primary">حساب صاحب عمل</a>
+
+        <a href="{% url 'cvSignup' %}" class="btn ">حساب الباحث عن عمل</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <!-- <script>
+
+window.onscroll = function() {scrollFunction()};
+const navbar = document.getElementById("navbar")
+function scrollFunction() {
+  if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+    navbar.setAttribute('data-bs-theme', '')
+    navbar.classList.add('glass-eff')
+  } else {
+    navbar.setAttribute('data-bs-theme', 'dark')
+    navbar.classList.remove('glass-eff')
+  }
+}
+  </script> -->
+
+<style>
+  .navbar {
+    border: unset;
+  }
+
+  #navbarSupportedContent2 i {
+    font-size: 22px;
+    text-shadow: #6097b4ce;
+    text-shadow: #00000094 1px 2px 5px;
+  }
+
+  .glass-eff {
+    /* From https://css.glass */
+  background: #6097b4ce;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.126);
+  transition: all .2s linear;
+  }
+
+
+  .MessagesPopover {
+  --bs-popover-max-width: min(100%, 400px);
+  
+  /* --bs-popover-border-color: var(--bd-violet-bg);
+  --bs-popover-header-bg: var(--bd-violet-bg);
+  --bs-popover-header-color: var(--bs-white);
+  --bs-popover-body-padding-x: 1rem;
+  --bs-popover-body-padding-y: .5rem; */
+}
+
+.popover-header {text-align: right;}
+
+</style>
+{% endif %}
+{% endif %}
