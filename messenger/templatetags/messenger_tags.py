@@ -15,11 +15,12 @@ def get_messengers(user_id):
 
 @register.simple_tag
 @stringfilter
-def get_last_msg(messenger_id):
+def get_last_msg(messenger_id, receiver):
     messenger = MessengerModel.objects.get(id = messenger_id)
     messages = MessagesModel.objects.filter(messenger=messenger)
+    messages = messages.exclude(sender=receiver)
     if messages.exists():
-        return messages.order_by('-id').first().msg.replace('\n', '')
+        return messages.order_by('-id').first()
     return ''
 
 @register.simple_tag

@@ -40,7 +40,7 @@
 
     {% get_receiver_user request.user.id messenger.room_id as receiver %}
     {% get_user_profile_img receiver.id as profile_image %}
-    {% get_last_msg messenger.id as last_msg %}
+    {% get_last_msg messenger.id request.user.id as last_msg %}
 
     <div class="msg-main-box">
     {% if profile_image.1 == 0 %}
@@ -54,20 +54,21 @@
 
             <div style="position: relative;">
                 <h6 style="margin: 0;">{{receiver.username}}</h6>
-                <span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
-                    <span class="visually-hidden">New alerts</span>
-                  </span>
+                {% if not last_msg.is_readed %}
+                    <span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
+                        <span class="visually-hidden">New alerts</span>
+                    </span>
+                {% endif %}
             </div>
 
             <div class="msg-msg-box">
                 <div class="row" style="display: grid;" >
                     <div class="text-truncate" style="width:100%;min-width: 200px;">
-                        {{last_msg}}
+                        {{last_msg.msg}}
                     </div>
                 </div>
                   <p dir="rtl" class="msg-msg-time">
-                    5
-                    د
+                    {{last_msg.whenpublished}}
                   </p>
             </div>
         </a>
