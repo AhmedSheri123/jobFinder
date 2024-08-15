@@ -69,6 +69,7 @@ class chatConsumer(WebsocketConsumer):
                     'user_id': user.id,
                     'msg_id': msg_model.id,
                     'message': message,
+                    'creation_date': msg_model.creation_date.strftime('%H:%M'),
                 }
             )
 

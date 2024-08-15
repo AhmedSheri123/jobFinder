@@ -5,7 +5,7 @@
 <div >
 
 
-    <div dir="rtl" id="main" style="overflow-x: hidden; overflow-y: scroll;  padding: 0; height: 100vh;">
+    <div dir="rtl" id="main" style=" padding: 0; height: 100vh;">
         <div  class="bg-primary text-white fixed-top" style="padding:10px 20px;  box-shadow: rgb(177, 177, 177) 0px 0px 3px; margin: auto;">
     
             <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -24,22 +24,29 @@
         </div>
     
         <div id="msg-container-box">
-            <div style="padding-top: 100px;"></div>
-            <div id="msg-container-box2">
-                {% for message in messages %}
+            <div id="msg-container-box2" style="padding-top: 100px;">
+                {% for messages in messages_list %}
+                <p style="padding: 25px 0px; display: block; margin: auto;text-align: center;">{{messages.0|date:'Y-m-d'}}</p>
+                {% for message in messages.1 %}
                 {% if message.sender == request.user %}
-                <div class="sender" >
+                <div class="sender">
                     <div class="bg-primary text-white">
                         <p>{{message.msg}}</p>
+                        <span>{{message.creation_date|date:'H:i'}}</span>
+
                         <i id="msg-status-{{message.id}}" class="bi {% if message.is_readed%}bi-check2-all{%else%}bi-check2{%endif%}"></i>
 
                     </div>
                 </div>
                 {% else %}
                 <div class="receiver">
-                    <p class="bg-light">{{message.msg}}</p>
+                    <div class="bg-light">
+                        <p class="">{{message.msg}}</p>
+                        <span>{{message.creation_date|date:'H:i'}}</span>
+                    </div>
                 </div>
                 {% endif %}
+                {% endfor %}
                 {% endfor %}
 
 
@@ -70,7 +77,7 @@
     .sender {display: flex; flex-direction: row; padding: 4px;}
     .receiver p {border-radius: 15px; padding: 10px; margin: 0 !important;}
 
-    .sender div {
+    .sender div, .receiver div{
         border-radius: 15px;
         display: flex;
         align-items: flex-end;
@@ -81,13 +88,23 @@
 
     }
 
+    .sender span{
+        font-size: 12px;
+        padding: 3px 0px;
+    }
+
+    .receiver span {
+        font-size: 12px;
+        padding: 6px;
+    }
+
     .sender i {padding: 3px; padding-left: 6px;}
 
     .receiver {display: flex; flex-direction: row-reverse; padding: 4px;}
 
     .sender-form-box {width: min(100%, 768px);padding: 2px 20px; margin: auto;
          /* bottom: 0; right: 0;position: absolute; */
-        right: -17px !important;
+        /* right: -17px !important; */
         display: flex; align-items: center; justify-content: space-between;flex-direction: row;
     }
     .sender-form-box button {border-radius: 100%; transform: rotateZ(225deg); margin: 10px 0;margin-right: 6px;}
@@ -100,7 +117,7 @@
 <script>
     function scrollToBottom(){
         let msgBox = document.querySelector('#msg-container-box2')
-        document.querySelector('#main').scrollTo(0, msgBox.scrollHeight);
+        window.scrollTo(0, msgBox.scrollHeight);
     }
 
 
@@ -131,7 +148,7 @@ scrollToBottom()
 
         if (data.user_id != user_id) {
             if (data.method == 'send_msg') {
-                ReceiveMsg(data.message);
+                ReceiveMsg(data);
                 console.log('sss')
                 send({
                     'method': 'msg_readed',
@@ -168,6 +185,7 @@ scrollToBottom()
                     <div class="sender" >
                         <div class="bg-primary text-white">
                             <p>${data.message}</p>
+                            <span>${data.creation_date}</span>
                             <i id="msg-status-${data.msg_id}" class="bi bi-check2"></i>
 
                         </div>
@@ -203,12 +221,15 @@ scrollToBottom()
     }
 
 
-    function ReceiveMsg(msg){
+    function ReceiveMsg(data){
         let msgBox = document.querySelector('#msg-container-box2')
         let msg_html = `
-        <div class="receiver">
-            <p class="bg-light">${msg}</p>
-        </div>
+                <div class="receiver">
+                    <div class="bg-light">
+                        <p>${data.message}</p>
+                        <span>${data.creation_date}</span>
+                    </div>
+                </div>
         `
         msgBox.insertAdjacentHTML('beforeend', msg_html)
         scrollToBottom()

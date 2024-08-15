@@ -28,7 +28,24 @@ def messageRoom(request, room_id):
     messenger = MessengerModel.objects.get(room_id=room_id)
     
     receiver = messenger.messenger_users.exclude(id=request.user.id).first()
+    
+    messages_list = []
+    last_date = None
+    msg_date = []
     messages = MessagesModel.objects.filter(messenger__room_id=room_id)
+    for msg in messages:
+        if last_date == None:
+            
+            last_date=msg.creation_date.date()
+        elif msg.creation_date.date() != last_date:
+            
+            messages_list.append([last_date, msg_date])
+            last_date=msg.creation_date.date()
+            msg_date = []
+            
+        msg_date.append(msg)
+    messages_list.append([last_date, msg_date])
+
 
     profile_image = get_user_img(receiver)
-    return render(request, 'messenger/viewMessage.html', {'messages':messages, 'room_id':room_id, 'receiver':receiver, 'profile_image':profile_image})
+    return render(request, 'messenger/viewMessage.html', {'messages_list':messages_list, 'room_id':room_id, 'receiver':receiver, 'profile_image':profile_image})
