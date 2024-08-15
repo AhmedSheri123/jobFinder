@@ -24,4 +24,6 @@ class MessagesModel(models.Model):
     msg = models.TextField()
 
     messenger = models.ForeignKey(MessengerModel, on_delete=models.CASCADE)
+
+    is_readed = models.BooleanField(default=False)
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")

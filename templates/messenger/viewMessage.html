@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block sheri %}
-<div style="margin-top: 80px;">
+<div >
 
 
-    <div dir="rtl" class="container" style="width: min(100%, 768px); overflow: hidden; border-radius: 20px; padding: 0;">
-        <div  class="bg-primary text-white" style="padding: 20px;  box-shadow: rgb(177, 177, 177) 0px 0px 3px; margin: auto;">
+    <div dir="rtl" id="main" style="overflow-x: hidden; overflow-y: scroll;  padding: 0; height: 100vh;">
+        <div  class="bg-primary text-white fixed-top" style="padding:10px 20px;  box-shadow: rgb(177, 177, 177) 0px 0px 3px; margin: auto;">
     
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center;">
@@ -24,33 +24,40 @@
         </div>
     
         <div id="msg-container-box">
-            {% for message in messages %}
-            {% if message.sender == request.user %}
-            <div class="sender" >
-                <p class="bg-primary text-white">{{message.msg}}</p>
-            </div>
-            {% else %}
-            <div class="receiver">
-                <p class="bg-light">{{message.msg}}</p>
-            </div>
-            {% endif %}
-            {% endfor %}
-            
+            <div style="padding-top: 100px;"></div>
+            <div id="msg-container-box2">
+                {% for message in messages %}
+                {% if message.sender == request.user %}
+                <div class="sender" >
+                    <div class="bg-primary text-white">
+                        <p>{{message.msg}}</p>
+                        <i id="msg-status-{{message.id}}" class="bi {% if message.is_readed%}bi-check2-all{%else%}bi-check2{%endif%}"></i>
+
+                    </div>
+                </div>
+                {% else %}
+                <div class="receiver">
+                    <p class="bg-light">{{message.msg}}</p>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+
+                <div class="sender-form-box fixed-bottom bg-primary">
+                    <form id="form" onsubmit="event.preventDefault();" style="display: contents;">
+                        <input type="text" class="form-control" placeholder="اكتب رسالة" id="senderMsg">
+        
+        
+                        <button class="btn btn-primary">
+                            <i style="font-size: 20px;" class="bi bi-send-fill"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>    
     
-    
-            <div class="sender-form-box">
-                
-                <form onsubmit="{SendMsg();return false}" style="display: contents;">
-                    <input type="text" class="form-control" id="senderMsg">
-    
-    
-                    <button class="btn btn-primary">
-                        <i style="font-size: 20px;" class="bi bi-send-fill"></i>
-                    </button>
-                </form>
-    
-                
-            </div>
+
+
         </div>
     
         
@@ -60,66 +67,151 @@
 
 
 <style>
-    .sender {display: flex; flex-direction: row;}
-    .sender p, .receiver p {border-radius: 15px; padding: 10px;}
+    .sender {display: flex; flex-direction: row; padding: 4px;}
+    .receiver p {border-radius: 15px; padding: 10px; margin: 0 !important;}
 
-    .receiver {display: flex; flex-direction: row-reverse;}
+    .sender div {
+        border-radius: 15px;
+        display: flex;
+        align-items: flex-end;
+    }
+    .sender p {
+        margin: 0 !important;
+        padding: 10px;
 
-    .sender-form-box {padding: 2px 20px; width: 100%; bottom: 0; right: 0;position: absolute; display: flex; align-items: center; justify-content: space-between;flex-direction: row;}
+    }
+
+    .sender i {padding: 3px; padding-left: 6px;}
+
+    .receiver {display: flex; flex-direction: row-reverse; padding: 4px;}
+
+    .sender-form-box {width: min(100%, 768px);padding: 2px 20px; margin: auto;
+         /* bottom: 0; right: 0;position: absolute; */
+        right: -17px !important;
+        display: flex; align-items: center; justify-content: space-between;flex-direction: row;
+    }
     .sender-form-box button {border-radius: 100%; transform: rotateZ(225deg); margin: 10px 0;margin-right: 6px;}
 
-    #msg-container-box {position: relative;; box-shadow: inset #6a6a6a 0px 15px 15px -13px !important; background-color: #f1f1f1; padding: 20px;box-shadow: rgb(177, 177, 177) 0px 0px 3px; margin: auto;display: block; padding-bottom: 60px;}
+    #msg-container-box {box-shadow: inset #6a6a6a 0px 15px 15px -13px !important; background-color: #f1f1f1; box-shadow: rgb(177, 177, 177) 0px 0px 3px;height: 100%; display: contents;}
+    #msg-container-box2 {    box-shadow: rgb(177, 177, 177) 0px 0px 3px; background-color: #f1f1f1; width: min(100%, 768px);position: relative;padding: 20px;margin: auto;display: block; padding-bottom: 75px;}
+
 </style>
 
 <script>
+    function scrollToBottom(){
+        let msgBox = document.querySelector('#msg-container-box2')
+        document.querySelector('#main').scrollTo(0, msgBox.scrollHeight);
+    }
+
+
+scrollToBottom()
+  window.addEventListener("load",init);
+  function init() { 
+    document.getElementById("form").addEventListener("submit",function(e) {
+      e.preventDefault();
+      SendMsg()
+    });
+  }
+
+
+
+
     const user_id = {{user.id}}
     let url = `ws://${window.location.host}/ws/socket-server/{{room_id}}/`
     const chatSocket = new WebSocket(url)
-    
+    function send(query){
+        chatSocket.send(
+            JSON.stringify(query)
+        )
+    }
+
     chatSocket.onmessage = function(e){
         let data = JSON.parse(e.data)
+        console.log(data)
+
         if (data.user_id != user_id) {
-            ReceiveMsg(data.message)
+            if (data.method == 'send_msg') {
+                ReceiveMsg(data.message);
+                console.log('sss')
+                send({
+                    'method': 'msg_readed',
+                    'msg_id':data.msg_id
+                });
+            }
+
+
+            else if (data.method == 'msg_readed') {
+                let msg_obj = document.querySelector(`#msg-status-${data.msg_id}`)
+                msg_obj.classList.remove('bi-check2')
+                msg_obj.classList.add('bi-check2-all')
+            }
+
+
+            else if (data.method == 'msg_read_all') {
+                let msg_objs = document.querySelectorAll(`.sender i`)
+                msg_objs.forEach(msg_obj => {
+                    if (!msg_obj.classList.contains('bi-check2-all')) {
+                        msg_obj.classList.remove('bi-check2')
+                        msg_obj.classList.add('bi-check2-all')
+                    
+                    }
+                })
+
+            }
+        }
+
+        else if (data.user_id == user_id) {
+            if (data.method == 'send_msg') {
+                let msg_html = `
+
+
+                    <div class="sender" >
+                        <div class="bg-primary text-white">
+                            <p>${data.message}</p>
+                            <i id="msg-status-${data.msg_id}" class="bi bi-check2"></i>
+
+                        </div>
+                    </div>
+                `
+                let msgBox = document.querySelector('#msg-container-box2')
+                msgBox.insertAdjacentHTML('beforeend', msg_html)
+                scrollToBottom()
+
+                
+            }
+
+
         }
 
     }
 
-    function send(message){
-        chatSocket.send(
-            JSON.stringify({
-                'message': message
-            })
-        )
-    }
 
 
     function SendMsg(){
         let msg = document.querySelector('#senderMsg')
-        let msgBox = document.querySelector('#msg-container-box')
 
         if (!msg.value) {return false}
 
-        let msg_html = `
-        <div class="sender">
-            <p class="bg-primary text-white">${msg.value}</p>
-        </div>
-        `
-        send(msg.value)
+        
+        send({
+                'method': 'send_msg',
+                'message': msg.value
+            })
 
-        msgBox.insertAdjacentHTML('beforeend', msg_html)
         msg.value = ""
         return false
     }
 
 
     function ReceiveMsg(msg){
-        let msgBox = document.querySelector('#msg-container-box')
+        let msgBox = document.querySelector('#msg-container-box2')
         let msg_html = `
         <div class="receiver">
             <p class="bg-light">${msg}</p>
         </div>
         `
         msgBox.insertAdjacentHTML('beforeend', msg_html)
+        scrollToBottom()
     }
 
 
