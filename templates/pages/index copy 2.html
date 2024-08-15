@@ -49,20 +49,15 @@
 
             <div class="cv-box">
                 <div dir="rtl" class="p-3 cv-content">
+                    <h4 class="text-primary" style="margin-bottom: 20px;">
+                        <i class="bi bi-briefcase"></i>
+                        {{userprofile.employeeprofile.job_title}}
 
+                    </h4>
                     {% get_cv_imgs userprofile.id as profile_images %}
-                    <div style="display: flex;align-items: flex-start;">
-                        <div>
-                            <h6 class="text-primary">
-                                <i class="bi bi-briefcase"></i>
-                                {{userprofile.employeeprofile.job_title}}
-        
-                            </h6>
-                    
-                        <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" style="width: 105px;">
 
-                        
-                        <div class="carousel-indicators" style="margin-bottom: 0;transform: scale(.6);">
+                    <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" >
+                        <div class="carousel-indicators">
                             {% for profile_image in profile_images %}
                             <button type="button" data-bs-target="#carouselExampleIndicators{{forloop.counter|add:-1}}" data-bs-slide-to="{{forloop.counter|add:-1}}" {%if forloop.counter == 1 %} class="active" aria-current="true" {%endif%} aria-label="Slide {{forloop.counter}}"></button>
                 
@@ -91,96 +86,97 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                         </button>
-                        
                     </div>
-                        <p style="font-size: 10px; text-align: center; margin: 0;">
-                            <i class="bi bi-geo-alt "></i>
-                            {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
-                        </p>
 
-                        
-                    <div class="mt-2" style="display: flex; justify-content: space-around; flex-wrap: wrap;font-size: .7em;">
+                    <h6 class="mt-4 ">
+                        <i class="bi bi-stars "></i>
+                        نبذة مختصرة</h6>
+                    <div  style="background-color: #ffffff82; padding: 10px; border-radius: 10px;box-shadow:inset #cecece 0px 0px 6px;">
 
-                        
-                        <div style="display: flex;justify-content: space-around;">
-                            <p style="margin: 0; margin-left: 20px;">
+
+                        <div class="d-inline-block text-truncate pt-2" style="max-width: 100%;">
+                            {{userprofile.employeeprofile.about_me}}
+                        </div>
+
+
+                        <div style="display: flex;justify-content: space-around;margin-top: 20px;">
+                            <p style="margin-left: 20px;">
                                 <i class="bi bi-eye " ></i>
     
                                 1244
                             </p>
     
-                            <p style="margin: 0;">
+                            <p >
                                 <i class="bi bi-hand-thumbs-up "></i>
     
                                 232
                             </p>
                         </div>
                     </div>
-                    </div>
+                    
+                    
 
-                    <div style="width: 100%; margin-right: 6px;">
-                        <p style="font-size: 12px; margin: 0;">
-                            <i class="bi bi-stars"></i>
-                            نبذة مختصرة</p>
-                        <div  style="background-color: #ffffff82; padding: 0px 10px; border-radius: 10px;box-shadow:inset #cecece 0px 0px 6px;">
-    
-    
-                            <div class="d-inline-block text-truncate" style="width: 100%;font-size: .7em;">
-                                {{userprofile.employeeprofile.about_me}}
-                            </div>
-                        </div>
+                    <h6 class="pt-2 ">
+                        <i class="bi bi-info-circle-fill "></i>
+                        معلومات</h6>
 
 
+                    <div class="contents-box" style="position: relative; overflow: hidden;">
 
+                        
+                          <p >
+                            <span class="questtion">الجنسية</span>
 
-                        <p style="font-size: 12px; margin: 0;">
-                            <i class="bi bi-info-circle-fill "></i>
-                            معلومات</p>
-    
-    
-                        <div class="contents-box" style="position: relative; overflow: hidden;font-size:.6em ;">
-    
+                            <span class="answer" >{{userprofile.employeeprofile.get_nationality_display}}</span>
+                        </p >
+
+                        <p >
+                            <span class="questtion">العمر</span>
+                            <span class="answer" >{{userprofile.employeeprofile.age}}</span>
                             
-                              <p >
-                                <span class="questtion">الجنسية</span>
-    
-                                <span class="answer" >{{userprofile.employeeprofile.get_nationality_display}}</span>
-                            </p >
-    
-                            <p >
-                                <span class="questtion">العمر</span>
-                                <span class="answer" >{{userprofile.employeeprofile.age}}</span>
-                                
-                            </p >
-    
-    
-                            <p >
-                                <span class="questtion">الحالة الاجتماعية</span>
-                                <span class="answer" >{{userprofile.employeeprofile.get_marital_status_display}}</span>
-                                
-                            </p >
-    
-    
-                            <p >
-                                <span class="questtion">الحالة الصحية</span>
-    
-                                <span class="answer" >{{userprofile.employeeprofile.get_health_status_display}}</span>
-                            </p >
-    
-    
-                        </div>
+                        </p >
+
+
+
+                        <p >
+                            <span class="questtion">المؤهل</span>
+                            <span class="answer" >{{userprofile.employeeprofile.get_cert_type_display}}</span>
+                            
+                        </p >
+
+                        <p >
+                            <span class="questtion">التخصص</span>
+                            <span class="answer" >{{userprofile.employeeprofile.major}}</span>
+                            
+                        </p >
+
+                        <p >
+                            <span class="questtion">الحالة الاجتماعية</span>
+                            <span class="answer" >{{userprofile.employeeprofile.get_marital_status_display}}</span>
+                            
+                        </p >
+
+
+                        <p >
+                            <span class="questtion">الحالة الصحية</span>
+
+                            <span class="answer" >{{userprofile.employeeprofile.get_health_status_display}}</span>
+                        </p >
+
+
                     </div>
 
-                    
-                </div>
-
-                    
-                    
 
 
 
-
-
+                    <div class="mt-3" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+                        <p style="margin-left: 20px;">
+                            <i class="bi bi-geo-alt "></i>
+                            {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
+                        </p>
+                        
+                        
+                    </div>
                     <div id="more-info-{{forloop.counter|add:-1}}" class="hide" >
                             <nav dir="rtl" class="mt-5">
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -526,7 +522,7 @@
     
 .more-info {
 
-    position: absolute; bottom: -7px; border-radius: 10px; color: white; font-weight: bold;height: 35px; text-align: center; display: flex; align-items: center; justify-content: center;right: 50%; transform: translate(50%, 20%); z-index: 1;font-size: 10px;
+    position: absolute; bottom: -14px; border-radius: 10px; color: white; font-weight: bold; width: 100px; height: 50px; text-align: center; display: flex; align-items: center; justify-content: center;right: 50%; transform: translate(50%, 20%); z-index: 1;
 }
 .contact-info {
     flex-wrap: wrap;
@@ -625,7 +621,7 @@
     background-color: #f1f1f1;
     text-align: center !important;
     border-left: solid 1px #00000033;
-    width: 40px;
+    width: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -634,7 +630,7 @@
 .contents-box {
     display: grid; grid-template-columns: auto auto;
     justify-items: stretch;
-    background-color: #ffffff82; padding: 5px; border-radius: 10px;
+    background-color: #ffffff82; padding: 10px; border-radius: 10px;
     box-shadow:inset #cecece 0px 0px 6px;
 }
 .cv-main-box {
@@ -660,8 +656,8 @@
     font-weight: bold;
 }
 .carousel img {
-    height: 75px !important;
-    width: 75px !important;
+    height: 200px !important;
+    width: 200px !important;
     border-radius: 100%;
     object-fit: cover;
     margin: auto;
@@ -806,7 +802,7 @@ header {
     color: #075E54 !important;
 }
 
-@media only screen and (max-width: 349px) {
+@media only screen and (max-width: 370px) {
     .contents-box {
         
         grid-template-columns: auto;

@@ -75,9 +75,9 @@
             </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; flex-direction: row-reverse; align-items: center; flex-wrap: wrap;">
-            <nav dir="rtl" class="mt-5">
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <div class="profile-nav-main">
+            <nav dir="rtl" class="mt-5 profile-nav">
+                <div class="nav nav-tabs profile-nav-tabs" id="nav-tab" role="tablist">
                   <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">الملف الشخصي</button>
                   <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">المعلومات الشخصية</button>
                   <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">التواصل</button>
@@ -287,11 +287,7 @@
         display: flex; flex-wrap: wrap;
     }
 
-    @media only screen and (max-width: 768px) {
-    .contents-box {
-        justify-content: center;
-        }
-    }
+
 
     .contact-info a {
         margin-left: 5px;
@@ -326,6 +322,28 @@
         color: rgb(87, 87, 255);
 
 }
+
+
+.profile-nav-main {
+    display: flex;
+    justify-content: center;
+    flex-direction: column-reverse;
+    align-items: center;
+    flex-wrap: wrap;
+}
+@media only screen and (max-width: 768px) {
+    .contents-box {
+        justify-content: center;
+        }
+
+        .profile-nav {
+            width:100%
+        }
+        .profile-nav-tabs {
+            flex-direction: column;
+        }
+
+    }
 
 </style>
 {%endblock%}

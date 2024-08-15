@@ -3,6 +3,8 @@
 <nav class="navbar navbar-expand-lg fixed-top bg-primary" id="navbar" data-bs-theme="dark" dir="rtl">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'index' %}" style="font-weight: bold;">CVV</a>
+      
+      
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -28,12 +30,12 @@
           {%else%}
 
 
-          <a id="example" tabindex="0" class="btn btn-light"  role="button" data-bs-toggle="popover" title="الرسائل" ><i class="bi bi-chat-dots-fill"></i></a>
+          <!-- <a id="example" tabindex="0" class="btn btn-light"  role="button" data-bs-toggle="popover" title="الرسائل" ><i class="bi bi-chat-dots-fill"></i></a>
 
 
 
           <a href="{% url 'Profile' %}" class="btn btn-light">حسابي</a>
-          <span style="padding: 0 5px; color: white;">او</span>
+          <span style="padding: 0 5px; color: white;">او</span> -->
           <a href="{% url 'Logout' %}" class="btn btn-outline-light">تسجيل الخروج</a>
 
           {% endif %}
@@ -43,46 +45,6 @@
     </div>
   </nav>
 
-
-
-
-
-
-
-  {% if user.is_authenticated %}
-<div data-name="popover-content" id="popover-content" class="d-none" style="width: min(100%, 400px);">
-  {% include 'messenger/viewMessages.html' %}
-</div>
-
-
-  <script type='text/javascript'>
-    
-            
-    $(document).ready(function() {
-        
-      var options = {
-            sanitize: false,
-            html: true,
-            title: "الرسائل",
-            customClass: 'MessagesPopover',
-            //html element
-            //content: $("#popover-content")
-            content: $('[data-name="popover-content"]').html(),
-            //Doing below won't work. Shows title only
-            //content: $("#popover-content").html()
-            fallbackPlacements : ['bottom']
-        }
-        var exampleEl = document.getElementById('example')
-        var popover = new bootstrap.Popover(exampleEl, options)
-
-
-    })
-
-    // $(function () {
-    //         $('[data-bs-toggle="popover"]').popover()
-    //     })
-</script>
-{% endif %}
 
 <!-- Modal -->
 <div class="modal fade" id="SignupModal" tabindex="-1" aria-labelledby="SignupModalLabel" aria-hidden="true">
