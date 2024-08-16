@@ -29,7 +29,7 @@
 }
 </style>
 
-<div class="bg-f1">
+<div class="bg-f1" dir="rtl">
     <div class="container p-5" style="padding-bottom: 0 !important;">
         <div class="carousel-inner carousel">
             <div class="carousel-item active">
@@ -41,20 +41,29 @@
             </div>
         </div>
 
-        <h4 class="text-center pt-3">{{company_profile.complite_name}}</h4>
+        <div class="text-center mt-3 mb-3" style="display: flex;justify-content: center;flex-direction: row-reverse;">
+            {% if userprofile.is_active %}
+            <span class="badge translate-middle p-2 bg-success border border-light rounded-circle"> </span>
+            {% else %}
+            <span class="badge translate-middle p-2 bg-danger border border-light rounded-circle"> </span>
+            {% endif %}
+            <h4 style="line-height: 0;">{{company_profile.complite_name}}</h4>
+        </div>
+
         <div class="main-info">
+
             <div class="main-info-item">
-                <p>صاحب شركة</p>
-                <i class="bi bi-person-fill"></i>
-            </div>
-            <div class="main-info-item">
-                <p>{{company_profile.company_name}}</p>
                 <i class="bi bi-building-fill"></i>
+                <p>{{company_profile.company_name}}</p>
             </div>
 
             <div class="main-info-item">
-                <p>{{company_profile.country.name}}</p>
                 <i class="bi bi-geo-alt-fill"></i>
+                <p>{{company_profile.country.name}}</p>
+            </div>
+            <div class="main-info-item">
+                <i class="bi bi-person-fill"></i>
+                <p>صاحب شركة</p>
             </div>
         </div>
 
@@ -85,7 +94,7 @@
 
 </div>
 
-<div class="container" style="background-color: #fff; margin-top: 30px;" dir="rtl">
+<div class="container" style="background-color: #fff; margin-top: 30px;text-align: justify;" dir="rtl">
         
     <div class="tab-content p-3" id="nav-tabContent" >
         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
@@ -212,6 +221,7 @@
     }
     .main-info-item p {
         margin-left: 15px;
+        text-align: justify;
     }
 
 
