@@ -4,6 +4,9 @@ pass:gYW547hG31wiEgvJU6
 
 ==============================
 
+
+cd /var/www/jobFinder/
+git pull
 sudo systemctl restart nginx
 sudo systemctl daemon-reload
 sudo systemctl restart daphne
