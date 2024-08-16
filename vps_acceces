@@ -1,3 +1,11 @@
 
 ssh root@203.161.42.87
 pass:gYW547hG31wiEgvJU6
+
+==============================
+
+sudo systemctl restart nginx
+sudo systemctl daemon-reload
+sudo systemctl restart daphne
+
+
