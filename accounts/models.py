@@ -6,6 +6,7 @@ from django.utils import timezone
 import math
 import string
 import random
+from messenger.models import MessengerModel
 
 # Create your models here.
 AdminPermission = (
@@ -67,7 +68,13 @@ class UserProfile(models.Model):
     cv_signup_process = models.CharField(default='1', max_length=255, choices = CVSignupProcessChoices, null=True)
 
     alt_id = models.CharField(max_length=255, default=StrNumCodeGen)
+
+    is_active = models.BooleanField(default=False)
+    last_active_datetime = models.DateTimeField(null=True, blank=True)
     
+    is_in_chat = models.BooleanField(default=False)
+    active_messenger = models.ForeignKey(MessengerModel, on_delete=models.SET_NULL, null=True, blank=True)
+
     def __str__(self):
         return self.user.username
 
@@ -139,6 +146,8 @@ class CompanyProfile(models.Model):
     facebook_profile = models.CharField(max_length=250, null=True, verbose_name="صفحة فيسبوك")
     linkedin = models.CharField(max_length=250, null=True, verbose_name="صفحة لينكداين")
     whatsapp = models.CharField(max_length=250, null=True, verbose_name="واتساب")
+
+
 
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
     def __str__(self):

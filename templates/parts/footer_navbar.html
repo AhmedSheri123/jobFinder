@@ -25,18 +25,49 @@
     </div>
   </nav>
 
-  
-
-
-
-
-
-
-
-  {% if user.is_authenticated %}
 <div data-name="popover-content" id="popover-content" class="d-none" style="width: min(100%, 400px);">
   {% include 'messenger/viewMessages.html' %}
 </div>
+
+<script>
+
+
+
+    const user_id = {{request.user.id}}
+    let url = `ws://${window.location.host}/ws/notifications/${user_id}/`
+    const chatSocket = new WebSocket(url)
+
+    function send(query){
+        chatSocket.send(
+            JSON.stringify(query)
+        )
+    }
+
+    chatSocket.onmessage = function(e){
+        let data = JSON.parse(e.data)
+        console.log(data)
+
+    }
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   <script type='text/javascript'>
@@ -66,40 +97,10 @@
     //         $('[data-bs-toggle="popover"]').popover()
     //     })
 </script>
-{% endif %}
 
-<!-- Modal -->
-<div class="modal fade" id="SignupModal" tabindex="-1" aria-labelledby="SignupModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header" style="flex-direction: row-reverse;">
-        <h1 class="modal-title fs-5" id="SignupModalLabel">عملية التسجيل في المنصة</h1>
-        <button type="button" style="margin: 0;margin-right: auto;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" style="text-align: center; padding: 30px 0px;">
-        <a href="{% url 'companySignup' %}" class="btn btn-outline-primary">حساب صاحب عمل</a>
 
-        <a href="{% url 'cvSignup' %}" class="btn ">حساب الباحث عن عمل</a>
-      </div>
 
-    </div>
-  </div>
-</div>
 
-  <!-- <script>
-
-window.onscroll = function() {scrollFunction()};
-const navbar = document.getElementById("navbar")
-function scrollFunction() {
-  if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-    navbar.setAttribute('data-bs-theme', '')
-    navbar.classList.add('glass-eff')
-  } else {
-    navbar.setAttribute('data-bs-theme', 'dark')
-    navbar.classList.remove('glass-eff')
-  }
-}
-  </script> -->
 
 <style>
   .navbar {

@@ -18,14 +18,15 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'jobFinder.settings')
 
 application = get_asgi_application()
 
-from messenger import routing
+from messenger import routing as messenger_routing
+from notifications import routing as notifications_routing
 
 application = ProtocolTypeRouter(
     {
         'http':get_asgi_application(),
         'websocket':AuthMiddlewareStack(
             URLRouter(
-                routing.websocket_urlpatterns
+                messenger_routing.websocket_urlpatterns + notifications_routing.websocket_urlpatterns
             )
         )
     }

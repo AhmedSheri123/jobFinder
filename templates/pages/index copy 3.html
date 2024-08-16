@@ -48,14 +48,18 @@
 
 
             <div class="cv-box">
-                <div dir="rtl" class="p-2 cv-content">
+                <div dir="rtl" class="p-3 cv-content">
 
                     {% get_cv_imgs userprofile.id as profile_images %}
                     <div style="display: flex;align-items: flex-start;">
                         <div>
-
+                            <h6 class="text-primary">
+                                <i class="bi bi-briefcase"></i>
+                                {{userprofile.employeeprofile.job_title}}
+        
+                            </h6>
                     
-                        <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" style="width: 115px;">
+                        <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" style="width: 105px;">
 
                         
                         <div class="carousel-indicators" style="margin-bottom: 0;transform: scale(.6);">
@@ -89,84 +93,13 @@
                         </button>
                         
                     </div>
-
-
-                        
-
-                    </div>
-
-                    <div style="width: 100%; margin-right: 6px;">
-
-                        <h6 class="text-primary" style="font-size: .8em;">
-                            <i class="bi bi-briefcase"></i>
-                            {{userprofile.employeeprofile.job_title}}
-    
-                        </h6>
-
-
-
-
-
-
-
-                        <p style="font-size: 12px; margin: 0;">
-                            <i class="bi bi-info-circle-fill "></i>
-                            معلومات</p>
-    
-    
-                        <div class="contents-box" style="position: relative; overflow: hidden;font-size:.7em ;">
-    
-                            
-                            <p >
-    
-                                <span class="answer" >{{userprofile.employeeprofile.get_nationality_display}}</span>
-                            </p >
-    
-                            <p >
-                                <span class="answer" >{{userprofile.employeeprofile.age}} سنة</span>
-                                
-                            </p >
-    
-    
-                            <p >
-                                <span class="answer" >{{userprofile.employeeprofile.get_marital_status_display}}</span>
-                                
-                            </p >
-    
-    
-                            <p >
-    
-                                <span class="answer" >{{userprofile.employeeprofile.get_health_status_display}}</span>
-                            </p >
-    
-    
-                        </div>
+                        <p style="font-size: 10px; text-align: center; margin: 0;">
+                            <i class="bi bi-geo-alt "></i>
+                            {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
+                        </p>
 
                         
-                    </div>
-
-                    
-                </div>
-
-                <p style="font-size: 12px; margin: 0;">
-                    <i class="bi bi-stars"></i>
-                    نبذة مختصرة</p>
-                <div  style="background-color: #ffffff82; padding: 0px 10px; border-radius: 10px;box-shadow:inset #cecece 0px 0px 6px;">
-
-
-                    <div class="d-inline-block text-truncate" style="width: 100%;font-size: .7em;">
-                        {{userprofile.employeeprofile.about_me}}
-                    </div>
-                </div>
-
-                <div class="mt-2" style="display: flex; justify-content: space-between;">
-
-                    <p style="font-size: 10px; text-align: center; margin: 0;">
-                        <i class="bi bi-geo-alt "></i>
-                        {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
-                    </p>
-
-                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap;font-size: .7em;">
+                    <div class="mt-2" style="display: flex; justify-content: space-around; flex-wrap: wrap;font-size: .7em;">
 
                         
                         <div style="display: flex;justify-content: space-around;">
@@ -183,8 +116,65 @@
                             </p>
                         </div>
                     </div>
+                    </div>
+
+                    <div style="width: 100%; margin-right: 6px;">
+                        <p style="font-size: 12px; margin: 0;">
+                            <i class="bi bi-stars"></i>
+                            نبذة مختصرة</p>
+                        <div  style="background-color: #ffffff82; padding: 0px 10px; border-radius: 10px;box-shadow:inset #cecece 0px 0px 6px;">
+    
+    
+                            <div class="d-inline-block text-truncate" style="width: 100%;font-size: .7em;">
+                                {{userprofile.employeeprofile.about_me}}
+                            </div>
+                        </div>
+
+
+
+
+                        <p style="font-size: 12px; margin: 0;">
+                            <i class="bi bi-info-circle-fill "></i>
+                            معلومات</p>
+    
+    
+                        <div class="contents-box" style="position: relative; overflow: hidden;font-size:.6em ;">
+    
+                            
+                              <p >
+                                <span class="questtion">الجنسية</span>
+    
+                                <span class="answer" >{{userprofile.employeeprofile.get_nationality_display}}</span>
+                            </p >
+    
+                            <p >
+                                <span class="questtion">العمر</span>
+                                <span class="answer" >{{userprofile.employeeprofile.age}}</span>
+                                
+                            </p >
+    
+    
+                            <p >
+                                <span class="questtion">الحالة الاجتماعية</span>
+                                <span class="answer" >{{userprofile.employeeprofile.get_marital_status_display}}</span>
+                                
+                            </p >
+    
+    
+                            <p >
+                                <span class="questtion">الحالة الصحية</span>
+    
+                                <span class="answer" >{{userprofile.employeeprofile.get_health_status_display}}</span>
+                            </p >
+    
+    
+                        </div>
+                    </div>
+
                     
                 </div>
+
+                    
                     
 
 
@@ -597,14 +587,13 @@
 
 
 .cv-box .contents-box p {
-
     position: relative;
     overflow: hidden;
     z-index: 3;
     border: solid 1px #00000033;
     border-radius: 3px;
     margin: 3px;
-    background-color: #8f3685;
+    background-color: #fff;
 }
 
 .contents-box p{
@@ -613,7 +602,6 @@
     grid-template-columns: auto auto;
     justify-items: stretch;
     align-items: stretch;
-    justify-content: center;
 }
 .contents-box p span {
     padding: 5px;
@@ -633,8 +621,8 @@
 }
 
 .contents-box .answer{
-    color: #fff;
-    font-weight: 900;
+    color: var(--bs-purpul);
+    font-weight: 100;
     display: flex;
     align-items: center;
 }
@@ -677,8 +665,8 @@
     font-weight: bold;
 }
 .carousel img {
-    height: 110px !important;
-    width: 110px !important;
+    height: 75px !important;
+    width: 75px !important;
     border-radius: 100%;
     object-fit: cover;
     margin: auto;

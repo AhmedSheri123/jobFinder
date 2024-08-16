@@ -58,7 +58,14 @@
             </button>
         </div>
 
-        <h4 class="text-center pt-3">{{employee_profile.name}}</h4>
+        <div class="text-center mt-3 mb-3" style="display: flex;justify-content: center;">
+            {% if userprofile.is_active %}
+            <span class="badge translate-middle p-2 bg-success border border-light rounded-circle"> </span>
+            {% else %}
+            <span class="badge translate-middle p-2 bg-danger border border-light rounded-circle"> </span>
+            {% endif %}
+            <h4 style="line-height: 0;">{{employee_profile.name}}</h4>
+        </div>
         <div class="main-info">
             <div class="main-info-item">
                 <p>صاحب سيرة</p>
