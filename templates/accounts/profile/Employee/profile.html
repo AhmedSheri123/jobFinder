@@ -85,10 +85,18 @@
                 </div>
               </nav>
 
-              <a href="{% url 'CVSettingsGernral' %}" class="btn btn-primary m-3">
-                تعديل الملف الشخصي
-                <i class="bi bi-pencil-square"></i>
-            </a>
+
+            {% if request.user.id == userprofile.user.id %}
+            <a href="{% url 'CVSettingsGernral' %}" class="btn btn-primary m-3">
+              تعديل الملف الشخصي
+              <i class="bi bi-pencil-square"></i>
+              </a>
+              {% else %}
+              <a href="{% url 'createMessager' userprofile.user.id %}" class="btn btn-primary m-3">
+                  تواصل معه
+                  <i style="font-size: 20px; margin-left:6px;" class="bi bi-send-fill"></i>
+                  </a>
+              {% endif %}
         </div>
 
 

@@ -16,9 +16,9 @@ urlpatterns = [
     path('login', views.Login, name='Login'),
     path('Logout', views.Logout, name='Logout'),
 
-    path('Profile', views.Profile, name='Profile'),
-    path('CVProfile', views.CVProfile, name='CVProfile'),
-    path('CPProfile', views.CPProfile, name='CompanyProfile'),
+    path('Profile/<int:id>', views.Profile, name='Profile'),
+    path('CVProfile/<int:id>', views.CVProfile, name='CVProfile'),
+    path('CPProfile/<int:id>', views.CPProfile, name='CompanyProfile'),
     path('CompanySettingGernral', views.CompanySettingGernral, name='CompanySettingGernral'),
 
 

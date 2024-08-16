@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import MessagesModel, MessengerModel
 from accounts.models import EmployeeProfileImages
+from django.contrib.auth.models import User
+from django.db.models import Q
 # Create your views here.
 
 def get_user_img(user):
@@ -49,3 +51,27 @@ def messageRoom(request, room_id):
 
     profile_image = get_user_img(receiver)
     return render(request, 'messenger/viewMessage.html', {'messages_list':messages_list, 'room_id':room_id, 'receiver':receiver, 'profile_image':profile_image})
+
+
+def get_messenger_model(sender, receiver):
+    messengers = MessengerModel.objects.filter(messenger_users=sender).filter(messenger_users=receiver)
+    return messengers
+
+def createMessager(request, receiver_id):
+    sender = request.user
+    receiver = User.objects.get(id=receiver_id)
+    
+    messengers = get_messenger_model(sender, receiver)
+
+    if sender != receiver:
+        room_id = None
+        if not messengers.exists():    
+            messenger = MessengerModel.objects.create()
+            messenger.messenger_users.set([sender, receiver])
+            messenger.save()
+            room_id = messenger.room_id
+        else:
+            room_id = messengers.first().room_id
+        return redirect('messageRoom', room_id)
+    else:
+        return redirect('index')

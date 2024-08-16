@@ -67,11 +67,17 @@
                   <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false">احصائيات</button>
                 </div>
               </nav>
-
+              {% if request.user.id == userprofile.user.id %}
               <a href="{% url 'CompanySettingGernral' %}" class="btn btn-primary m-3">
                 تعديل الملف الشخصي
                 <i class="bi bi-pencil-square"></i>
-            </a>
+                </a>
+                {% else %}
+                <a href="{% url 'createMessager' userprofile.user.id %}" class="btn btn-primary m-3">
+                    تواصل معه
+                  <i style="font-size: 20px; margin-left:6px;" class="bi bi-send-fill"></i>
+                </a>
+                {% endif %}
         </div>
 
 

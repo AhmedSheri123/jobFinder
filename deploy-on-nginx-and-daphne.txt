@@ -55,3 +55,5 @@ proxy_redirect off;
 sudo systemctl restart nginx
 sudo systemctl daemon-reload
 sudo systemctl restart daphne
+
+

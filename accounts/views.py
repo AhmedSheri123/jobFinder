@@ -205,28 +205,28 @@ def Logout(request):
     logout(request)
     return redirect('index')
 
-def Profile(request):
-    user = request.user
+def Profile(request, id):
+    user = User.objects.get(id=id)
     userprofile = user.userprofile
 
     if userprofile.is_employee:
-        return CVProfile(request)
+        return CVProfile(request, id)
     elif userprofile.is_company:
-        return CPProfile(request)
+        return CPProfile(request, id)
     else:return redirect('index')
     # return render(request, 'accounts/profile/Employee/profile.html')
 
-def CVProfile(request):
-    user = request.user
+def CVProfile(request, id):
+    user = User.objects.get(id=id)
     userprofile = user.userprofile
     employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
     profile_images = EmployeeProfileImages.objects.filter(user=user)
 
-    return render(request, 'accounts/profile/Employee/profile.html', {'employee_profile':employee_profile, 'profile_images':profile_images})
+    return render(request, 'accounts/profile/Employee/profile.html', {'employee_profile':employee_profile, 'profile_images':profile_images, 'userprofile':userprofile})
 
-def CPProfile(request):
+def CPProfile(request, id):
 
-    user = request.user
+    user = User.objects.get(id=id)
     userprofile = user.userprofile
     company_profile = userprofile.companyprofile
 

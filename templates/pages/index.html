@@ -180,8 +180,10 @@
 
 
 
-
                     <div id="more-info-{{forloop.counter|add:-1}}" class="hide" >
+
+                        <a href="{% url 'Profile' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">عرض الملف الشخصي</a>
+
                             <nav dir="rtl" class="mt-5">
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                 <button class="nav-link active" id="nav-home-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-home{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-home{{forloop.counter|add:-1}}" aria-selected="true">نبذة عني</button>
@@ -252,6 +254,9 @@
                         
                                         </div>
                                     </div>
+
+                                        <a href="{% url 'createMessager' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">تواصل داخلي</a>
+
 
                             </div>
                         </div>
