@@ -21,7 +21,7 @@
             <a class="nav-link" href="#">تواصل معنا</a>
           </li>
         </ul>
-        <div style="margin-left: 30px;">
+        <ul class="navbar-nav">
 
           {% if not user.is_authenticated %}
           <button data-bs-toggle="modal" data-bs-target="#SignupModal" class="btn btn-light">تسجيل</button>
@@ -40,7 +40,7 @@
 
           {% endif %}
 
-        </div>
+        </ul>
       </div>
     </div>
   </nav>
