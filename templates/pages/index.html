@@ -173,7 +173,7 @@
                 <div  style="background-color: #ffffff82; padding: 0px 10px; border-radius: 10px;box-shadow:inset #cecece 0px 0px 6px;">
 
 
-                    <div class="d-inline-block text-truncate" style="width: 100%; padding: 3px;">
+                    <div class="text-truncate" style="width: 100%; padding: 3px;">
                         {{userprofile.employeeprofile.about_me}}
                     </div>
                 </div>
@@ -506,6 +506,14 @@
 
 <br><br><br><br><br><br>
 <style>
+.text-truncate {
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+    
     .cv-main-box .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
     .cv-main-box .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
     .cv-main-box .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select,
