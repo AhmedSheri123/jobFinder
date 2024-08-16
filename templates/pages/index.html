@@ -109,18 +109,19 @@
 
 
 
-                        <p style="font-size: 12px; margin: 0;">
+                        <p style="font-size: 14px; margin: 0;">
                             <i class="bi bi-info-circle-fill "></i>
                             معلومات</p>
     
     
-                        <div class="contents-box" style="position: relative; overflow: hidden;font-size:.7em ;">
+                        <div class="contents-box" style="position: relative; overflow: hidden;font-size:.9em ;">
     
-                            
                             <p >
-    
-                                <span class="answer" >{{userprofile.employeeprofile.get_nationality_display}}</span>
+                                <span class="answer" >{{userprofile.employeeprofile.get_gender_display}}</span>
                             </p >
+
+
+
     
                             <p >
                                 <span class="answer" >{{userprofile.employeeprofile.age}} سنة</span>
@@ -148,25 +149,40 @@
                     
                 </div>
 
+                <div class="contents-box2">
+                    <p >
+                        <span class="answer" >{{userprofile.employeeprofile.get_nationality_display}}</span>
+                    </p >
+                    
+                    <p >
+                        <span class="answer" >{{userprofile.employeeprofile.get_cert_type_display}}</span>
+                    </p >
+
+                    <p >
+                        <span class="answer" >{% if userprofile.is_active %} متصل الان {% else %} غير متصل {% endif %}</span>
+                    </p >
+                </div>
+
+
                 <p style="font-size: 12px; margin: 0;">
                     <i class="bi bi-stars"></i>
                     نبذة مختصرة</p>
                 <div  style="background-color: #ffffff82; padding: 0px 10px; border-radius: 10px;box-shadow:inset #cecece 0px 0px 6px;">
 
 
-                    <div class="d-inline-block text-truncate" style="width: 100%;font-size: .7em;">
+                    <div class="d-inline-block text-truncate" style="width: 100%;font-size: .8em;">
                         {{userprofile.employeeprofile.about_me}}
                     </div>
                 </div>
 
                 <div class="mt-2" style="display: flex; justify-content: space-between;">
 
-                    <p style="font-size: 10px; text-align: center; margin: 0;">
-                        <i class="bi bi-geo-alt "></i>
+                    <p style="font-size: 12px; text-align: center; margin: 0;">
+                        <i class="bi bi-geo-alt "></i>مدينة الاقامة : 
                         {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
                     </p>
 
-                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap;font-size: .7em;">
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap;font-size: .8em;">
 
                         
                         <div style="display: flex;justify-content: space-around;">
@@ -541,7 +557,7 @@
     
 .more-info {
 
-    position: absolute; bottom: -7px; border-radius: 10px; color: white; font-weight: bold;height: 35px; text-align: center; display: flex; align-items: center; justify-content: center;right: 50%; transform: translate(50%, 20%); z-index: 1;font-size: 10px;
+    position: absolute; bottom: -7px; border-radius: 10px; color: white; font-weight: bold;height: 35px; text-align: center; display: flex; align-items: center; justify-content: center;right: 50%; transform: translate(50%, 20%); z-index: 1;font-size: 12px;
 }
 .contact-info {
     flex-wrap: wrap;
@@ -634,9 +650,36 @@
 .contents-box .answer{
     color: var(--bs-purpul);
     font-weight: 100;
-    display: flex;
-    align-items: center;
+
 }
+
+
+.cv-box .contents-box2 p {
+    position: relative;
+    overflow: hidden;
+    z-index: 3;
+    border: solid 1px #00000033;
+    border-radius: 3px;
+    background-color: #fff;
+    padding: 5px;
+    margin: auto;
+    display: block;
+}
+.contents-box2 .answer{
+    color: var(--bs-purpul);
+    font-weight: 600;
+    font-size: 14px;
+
+}
+
+.contents-box2 {
+    margin: 10px 0;
+    display: grid; grid-template-columns: auto auto auto;
+    justify-items: stretch;
+    justify-content: space-between;
+
+}
+
 .questtion {
     background-color: #f1f1f1;
     text-align: center !important;
@@ -653,6 +696,8 @@
     background-color: #ffffff82; padding: 5px; border-radius: 10px;
     box-shadow:inset #cecece 0px 0px 6px;
 }
+
+
 .cv-main-box {
     position: relative;
     width: min(100%, 500px);
