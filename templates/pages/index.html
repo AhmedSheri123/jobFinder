@@ -55,7 +55,7 @@
                         <div>
 
                     
-                        <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" style="width: 150px;">
+                        <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" style="width: 115px;">
 
                         
                         <div class="carousel-indicators" style="margin-bottom: 0;transform: scale(.6);">
@@ -89,19 +89,13 @@
                         </button>
                         
                     </div>
-                    <div class="contents-box2" style="justify-content:center">
-                        <p >
-                            <span class="answer" >{% if userprofile.is_active %} متصل الان {% else %} غير متصل {% endif %}</span>
-                        </p >
-                    </div>
-
                         
 
                     </div>
 
                     <div style="width: 100%; margin-right: 6px;">
 
-                        <h6 class="text-primary" style="font-size: .8em;">
+                        <h6 class="text-primary" >
                             <i class="bi bi-briefcase"></i>
                             {{userprofile.employeeprofile.job_title}}
     
@@ -113,24 +107,19 @@
 
 
 
-                        <p class="text-primary" style="font-size: 14px; margin: 0;">
+                        <!-- <p class="text-primary" style="font-size: 14px; margin: 0;">
                             <i class="bi bi-info-circle-fill "></i>
-                            معلومات</p>
+                            معلومات</p> -->
     
     
                         <div class="contents-box" style="position: relative; overflow: hidden;font-size:.9em ;">
     
                             <p >
-                                
-                                <span class="answer" ><i class="bi bi-gender-ambiguous"></i>{{userprofile.employeeprofile.get_gender_display}}</span>
+                                <span class="answer" ><i class="bi bi-globe"></i>{{userprofile.employeeprofile.get_nationality_display}}</span>
                             </p >
-
-
-
-    
+                            
                             <p >
-                                <span class="answer" ><i class="bi bi-person-arms-up"></i>{{userprofile.employeeprofile.age}} سنة</span>
-                                
+                                <span class="answer" ><i class="bi bi-patch-check-fill"></i>{{userprofile.employeeprofile.get_cert_type_display}}</span>
                             </p >
     
     
@@ -148,44 +137,51 @@
     
                         </div>
 
-                        <div style="position: relative;">
-                            <div style="width: 0%; background-color: black; height: 1px; position: absolute; left: 0; top: 19px;" ></div>
-        
-                            <div class="contents-box2">
-                                <p >
-                                    <span class="answer" >{{userprofile.employeeprofile.get_nationality_display}}</span>
-                                </p >
-                                
-                                <p >
-                                    <span class="answer" >{{userprofile.employeeprofile.get_cert_type_display}}</span>
-                                </p >
-            
-
-                            </div>
-                        </div>
+                        
                         
                     </div>
 
                     
                 </div>
 
+                <div style="position: relative;" class="mt-2">
+                    <div style="width: 0%; background-color: black; height: 1px; position: absolute; left: 0; top: 19px;" ></div>
+
+                    <div class="contents-box" style="grid-template-columns: auto auto auto;">
 
 
-                <p class="text-primary" style="font-size: 12px; margin: 0;">
+                        <p >
+                        
+                            <span class="answer" ><i class="bi bi-gender-ambiguous"></i>{{userprofile.employeeprofile.get_gender_display}}</span>
+                        </p >
+
+                        <p >
+                            <span class="answer" ><i class="bi bi-person-arms-up"></i>{{userprofile.employeeprofile.age}} سنة</span>
+                            
+                        </p >
+
+                        <p >
+                            <span class="answer" ><i class="bi bi-braces"></i>{{userprofile.employeeprofile.major}}</span>
+                            
+                        </p >
+                    </div>
+                </div>
+
+                <p class="text-primary" style="margin: 0; margin-top: 6px;">
                     <i class="bi bi-stars"></i>
                     نبذة مختصرة</p>
                 <div  style="background-color: #ffffff82; padding: 0px 10px; border-radius: 10px;box-shadow:inset #cecece 0px 0px 6px;">
 
 
-                    <div class="d-inline-block text-truncate" style="width: 100%;font-size: .8em;">
+                    <div class="d-inline-block text-truncate" style="width: 100%; padding: 3px;">
                         {{userprofile.employeeprofile.about_me}}
                     </div>
                 </div>
 
                 <div class="mt-2" style="display: flex; justify-content: space-between;">
 
-                    <p style="font-size: 12px; text-align: center; margin: 0;">
-                        <i class="bi bi-geo-alt "></i>مدينة الاقامة : 
+                    <p style="font-size: 14px; text-align: center; margin: 0;">
+                        <i class="bi bi-geo-alt "></i>يقيم في
                         {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
                     </p>
 
@@ -635,7 +631,7 @@
     grid-template-columns: auto auto;
     justify-items: stretch;
     align-items: stretch;
-    justify-content: center;
+
 }
 .contents-box p span {
     padding: 5px;
@@ -662,32 +658,6 @@
 
 .contents-box .answer i{
     margin-left: 4px;
-}
-
-.cv-box .contents-box2 p {
-    position: relative;
-    overflow: hidden;
-    z-index: 3;
-    border: solid 1px #00000033;
-    border-radius: 3px;
-    background-color: #fff;
-    padding: 5px;
-    margin: auto;
-    display: block;
-}
-.contents-box2 .answer{
-    color: #665364;
-    font-weight: 600;
-    font-size: 14px;
-
-}
-
-.contents-box2 {
-    margin: 10px 0;
-    display: grid; grid-template-columns: auto auto auto;
-    justify-items: stretch;
-    justify-content: space-evenly;
-
 }
 
 .questtion {
@@ -731,8 +701,8 @@
     font-weight: bold;
 }
 .carousel img {
-    height: 130px !important;
-    width: 130px !important;
+    height: 110px !important;
+    width: 110px !important;
     border-radius: 100%;
     object-fit: cover;
     margin: auto;
