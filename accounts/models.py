@@ -3,10 +3,10 @@ from .fields import HealthStatusFields, EmployeePostStateFields, citys, StateFie
 from django.contrib.auth.models import User
 from .company_field import CompanyHaveCertFields, CompanySectionFields, CompanySizeFields, CompanyGenderFields, CompanyWorktimeFields, PostStateFields, CertTypeFieldsCompany
 from django.utils import timezone
-import math
 import string
 import random
 from messenger.models import MessengerModel
+from .libs import when_published
 
 # Create your models here.
 AdminPermission = (
@@ -159,3 +159,14 @@ class EmployeeProfileImages(models.Model):
     img = models.ImageField(upload_to="users/profile/imgs/%Y/%m/%d", blank=True, null=True)
     img_base64 = models.TextField(blank=True, null=True)
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+class NotificationsModel(models.Model):
+    sender = models.ForeignKey(User, related_name='noti_sender', on_delete=models.CASCADE)
+    receiver = models.ManyToManyField(User, related_name='noti_receiver')
+    msg = models.TextField()
+    is_readed = models.BooleanField(default=False)
+
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+    def whenpublished(self):
+        return when_published(self.creation_date)

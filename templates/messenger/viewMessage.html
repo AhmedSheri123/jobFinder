@@ -139,7 +139,6 @@ scrollToBottom()
 
 
 
-    const user_id = {{user.id}}
     let url = `ws://${window.location.host}/ws/socket-server/{{room_id}}/`
     const chatSocket = new WebSocket(url)
     function send(query){
@@ -200,6 +199,15 @@ scrollToBottom()
                 let msgBox = document.querySelector('#msg-container-box2')
                 msgBox.insertAdjacentHTML('beforeend', msg_html)
                 scrollToBottom()
+
+                if (data.send_toast) {
+                    send_noti({
+                        'type': 'showToast',
+                        'method':'showToast',
+                        'receiver_id': data.receiver_id,
+                        'msg_id': data.msg_id,
+                    })
+                }
 
                 
             }

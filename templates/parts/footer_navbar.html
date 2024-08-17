@@ -7,16 +7,17 @@
       <div class=" navbar-collapse" id="navbarSupportedContent2">
         <ul class="navbar-nav me-auto mb-lg-0" style="margin: auto; width: min(100%, 768px); justify-content: space-around; flex-direction: row;">
           <li class="nav-item">
-                <a href="{% url 'index' %}" class="btn "  role="button"><i class="bi bi-house-door-fill"></i></a>
+                <a href="{% url 'index' %}" class="btn" role="button"><i class="bi bi-house-door-fill"></i></a>
           </li>
           <li class="nav-item">
-                <a id="example" tabindex="0" class="btn "  role="button" data-bs-toggle="popover" title="الرسائل" ><i class="bi bi-chat-dots-fill"></i></a>
+                <a id="example" tabindex="0" class="btn" role="button" data-bs-toggle="popover" title="الرسائل" ><i class="bi bi-chat-dots-fill"></i></a>
           </li>
           <li class="nav-item">
-                <a class="btn "  role="button"><i class="bi bi-bell-fill"></i></a>
+                <a id="noti" tabindex="0" class="btn" role="button" data-bs-toggle="popover" title="الاشعارات" ><i class="bi bi-bell-fill"></i></a>
           </li>
+
           <li class="nav-item">
-                <a href="{% url 'Profile' user.id %}" class="btn "  role="button"><i class="bi bi-person-fill"></i></a>
+                <a href="{% url 'Profile' user.id %}" class="btn" role="button"><i class="bi bi-person-fill"></i></a>
           </li>
         </ul>
 
@@ -29,32 +30,9 @@
   {% include 'messenger/viewMessages.html' %}
 </div>
 
-<script>
-
-
-
-    const user_id = {{request.user.id}}
-    let url = `ws://${window.location.host}/ws/notifications/${user_id}/`
-    const chatSocket = new WebSocket(url)
-
-    function send(query){
-        chatSocket.send(
-            JSON.stringify(query)
-        )
-    }
-
-    chatSocket.onmessage = function(e){
-        let data = JSON.parse(e.data)
-        console.log(data)
-
-    }
-
-
-
-
-
-
-</script>
+<div data-name="popover-content-noti" id="popover-content-noti" class="d-none" style="width: min(100%, 400px);">
+  {% include 'notifications/viewNotifications.html' %}
+</div>
 
 
 
@@ -87,8 +65,28 @@
             //content: $("#popover-content").html()
             fallbackPlacements : ['top']
         }
+
+
+        var optionsNoti = {
+            sanitize: false,
+            html: true,
+            title: "الاشعارات",
+            customClass: 'MessagesPopover',
+            //html element
+            //content: $("#popover-content")
+            content: $('[data-name="popover-content-noti"]').html(),
+            //Doing below won't work. Shows title only
+            //content: $("#popover-content").html()
+            fallbackPlacements : ['top']
+        }
+
+
+
         var exampleEl = document.getElementById('example')
         var popover = new bootstrap.Popover(exampleEl, options)
+
+        var exampleElnoti = document.getElementById('noti')
+        var popover = new bootstrap.Popover(exampleElnoti, optionsNoti)
 
 
     })

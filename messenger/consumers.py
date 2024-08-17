@@ -16,7 +16,7 @@ class chatConsumer(WebsocketConsumer):
 
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f'{self.room_name}'
+        self.room_group_name = f'chat_{self.room_name}'
         user = self.scope["user"]
         userprofile = UserProfile.objects.get(id=user.userprofile.id)
         userprofile.is_in_chat = True
@@ -58,16 +58,6 @@ class chatConsumer(WebsocketConsumer):
         userprofile.save()
 
     def receive(self, text_data=None, bytes_data=None):
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            f'notifications_{1}',
-            {
-                'type': 'showToast',
-                'message': 'message'
-            }
-        )
-
-
 
 
         text_data_json = json.loads(text_data)
@@ -81,6 +71,15 @@ class chatConsumer(WebsocketConsumer):
         if method == 'send_msg':
             message = text_data_json['message']
             msg_model = MessagesModel.objects.create(msg=message, messenger=room, sender=user)
+            receiver = room.messenger_users.exclude(id=user.id).first()
+            send_toast = False
+            is_active = receiver.userprofile.is_active
+            if is_active:
+                if receiver.userprofile.is_in_chat and receiver.userprofile.active_messenger!=room:
+                    send_toast = True
+                elif not receiver.userprofile.is_in_chat:
+                    send_toast = True
+
             msg_model.save()
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
@@ -88,8 +87,11 @@ class chatConsumer(WebsocketConsumer):
                     'type': 'chat_message',
                     'method':method,
                     'user_id': user.id,
+                    'receiver_id': receiver.id,
                     'msg_id': msg_model.id,
                     'message': message,
+                    'send_toast':send_toast,
+                    'is_active':is_active,
                     'creation_date': msg_model.creation_date.strftime('%H:%M'),
                 }
             )

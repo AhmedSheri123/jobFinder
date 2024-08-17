@@ -51,8 +51,8 @@
       :root {
         --bs-primary: #6096B4;
         --bs-primary-light: #93BFCF;
-        --bs-purpul: #8f3685;
-        --bs-purpul-light: #895082;
+        --bs-purpul: #3f667b;
+        --bs-purpul-light: #3f667b91;
       }
 
       .bg-primary {
@@ -89,9 +89,14 @@
     </style>
   </head>
   <body style="margin-bottom: 80px;">
+
+
+
     {% include "parts/navbar.html" %}
     {% block sheri %}
     {% endblock sheri %}
+
+
     {% include "parts/footer_navbar.html" %}
     <script src="{% static 'bootstrap-5.3.3/js/bootstrap.bundle.min.js' %}" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     {% comment %} <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -108,41 +113,69 @@
       <!-- - `.toast-container` for spacing between toasts -->
       <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
       <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-      <div class="toast-container bottom-0 end-0 p-3" id="toast-box">
+      <div class="toast-container end-0 p-3" style="bottom: 40px;" id="toast-box">
     
 
     
 
       </div>
-    <script>
-    const toastBox = document.querySelector('#toast-box')
-    function showToast(toastID, username, msg, img) {
+    
+      <script>
+        const default_img_profile = `{% static 'img/default-profile-img-2.png' %}`
+        const toastBox = document.querySelector('#toast-box')
+        function showToast(toastID, username, msg, img) {
+            if (img == '') {
+              img = default_img_profile
+            }
+          html = `
+    
+            <!-- Then put toasts within -->
+            <div class="toast" role="alert" id="toast${toastID}" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <img src="${img}" class="rounded me-2" alt="..." width="50" style="border-radius: 100% !important;">
+                <strong class="me-auto">${username}</strong>
+                <small class="text-body-secondary">الان</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                ${msg}
+              </div>
+            </div>
+          `
+    
+    
+          toastBox.insertAdjacentHTML("beforeend", html)
+          $(`#toast${toastID}`).toast('show');
+    
+        };
+    
+    
+          
+        </script>
       
-      html = `
-
-        <!-- Then put toasts within -->
-        <div class="toast" role="alert" id="toast${toastID}" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header">
-            <img src="${img}" class="rounded me-2" alt="...">
-            <strong class="me-auto">${username}</strong>
-            <small class="text-body-secondary">الان</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-          </div>
-          <div class="toast-body">
-            ${msg}
-          </div>
-        </div>
-      `
-
-
-      toastBox.insertAdjacentHTML("beforeend", html)
-      $(`#toast${toastID}`).toast('show');
-
-    };
-
-
+    
+        <script>
+    
+          const user_id = {{user.id}}
       
-    </script>
+      
+          let url_noti = `ws://${window.location.host}/ws/notifications/${user_id}/`
+          const chatSocketNoti = new WebSocket(url_noti)
+      
+          function send_noti(query){
+            chatSocketNoti.send(
+                  JSON.stringify(query)
+              )
+          }
+      
+          chatSocketNoti.onmessage = function(e){
+              let data = JSON.parse(e.data)
+              if (data.method == 'showToast') {
+                showToast(data.toastID, data.username, data.message, data.img)
+              }
+      
+          }
+      </script>
   
   </body>
 </html>

@@ -1,0 +1,76 @@
+{% load static %}
+{% load notifications_tags %}
+
+<style>
+    .msg-main-box {
+        padding: 5px;
+        display: flex;align-items: center;
+        border-radius: 6px;
+    }
+
+    .msg-main-content:hover {
+        background-color: #f1f1f1;
+    }
+
+    .msg-main-content {
+        text-decoration: none;
+        margin-right: 6px; width: 100%;
+        color: #464646;
+        border-radius: 6px;
+        padding: 6px;
+    }
+
+    .msg-msg-box {display: grid;grid-template-columns: auto auto; justify-content: space-between; }
+    .msg-msg-time {text-wrap: nowrap; width: 100%; margin: 0; padding-right: 10px; text-align: left;}
+
+
+    .msgs-main-box {
+        max-height: 600px;
+        padding-left: 10px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+</style>
+
+<div dir="rtl" class="msgs-main-box">
+    {% get_notifications request.user.id as notifications %}
+
+
+    {% for notification in notifications %}
+
+    {% get_user_profile_img notification.sender.id as profile_image %}
+
+    <div class="msg-main-box">
+    {% if profile_image.1 == 0 %}
+    <img src="{{profile_image.0}}" alt="" style="width: 50px; border-radius: 100%;">
+    {% else %}
+    <img src="{% static '/img/default-profile-img-2.png' %}" alt="" style="width: 50px; border-radius: 100%;">
+    {% endif %}
+
+        <div  class="msg-main-content">
+            
+
+            <div style="position: relative;">
+                <h6 style="margin: 0;">{{notification.sender.username}}</h6>
+                {% if not notification.is_readed %}
+                    <span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
+                        <span class="visually-hidden">New alerts</span>
+                    </span>
+                {% endif %}
+            </div>
+
+            <div class="msg-msg-box">
+                <div class="row" style="display: grid;" >
+                    <div  style="width:100%;min-width: 200px;">
+                        {{notification.msg|safe}}
+                    </div>
+                </div>
+                  <p dir="rtl" class="msg-msg-time">
+                    {{notification.whenpublished}}
+                  </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
