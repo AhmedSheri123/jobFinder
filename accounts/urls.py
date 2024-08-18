@@ -28,5 +28,9 @@ urlpatterns = [
     path('CVSettingsGernral', views.CVSettingsGernral, name='CVSettingsGernral'),    
     path('SettingsCV', views.SettingsCV, name='SettingsCV'),
 
-    
+    path('MyReferralLink', views.MyReferralLink, name='MyReferralLink'),
+    path('CreateReferralLinkForMe', views.CreateReferralLinkForMe, name='CreateReferralLinkForMe'),
+    path('DeleteReferralLinkForMe/<str:referral_id>', views.DeleteReferralLinkForMe, name='DeleteReferralLinkForMe'),
+    path('WithdrawReferralLinkBalance/<str:referral_id>', views.WithdrawReferralLinkBalance, name='WithdrawReferralLinkBalance'),
+    path('ref/<str:referral_id>', views.SignUpReferralLink, name='SignUpReferralLink'),
 ]

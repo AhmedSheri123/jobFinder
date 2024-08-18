@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from accounts.models import UserProfile
 from notifications.views import create_notifications
+
 # Create your views here.
 
 def index(request):

@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages
+from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .froms import CompanyProfileForm
+from django.contrib.sites.shortcuts import get_current_site
 # Create your views here.
 
 def cvSignup(request):
@@ -353,3 +354,80 @@ def SettingsCV(request):
     profile_imgs = EmployeeProfileImages.objects.filter(user=user)
     return render(request, 'accounts/settings/Employee/settings-cv.html', {'user':user, 'employee_profile':employee_profile, 'userprofile':userprofile, 'GenderFields':GenderFields, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys, 'profile_imgs':profile_imgs})
 
+
+
+
+def getDomain(request):
+    domain = get_current_site(request).domain
+    return domain
+
+def MyReferralLink(request):
+    domain = getDomain(request)
+    user = request.user
+    userprofile = user.userprofile
+
+    refs = ReferralLinkModel.objects.filter(creator_userprofile = userprofile)
+
+    refs_total_earn = 0
+    refs_all_total_earn = 0
+    total_links = refs.count()
+    total_signin_users = UserProfile.objects.filter(referral__creator_userprofile = userprofile).count()
+    for ref in refs:
+        refs_total_earn += ref.total_earn
+        refs_all_total_earn += ref.all_total_earn
+
+    return render(request, 'ReferralLink/MyReferralLinks.html', {'refs':refs, 'refs_total_earn':refs_total_earn, 'refs_all_total_earn':refs_all_total_earn, 'total_links':total_links, 'total_signin_users':total_signin_users, 'domain':domain})
+
+def CreateReferralLinkForMe(request):
+    user = request.user
+    userprofile = user.userprofile
+
+    link = ReferralLinkModel.objects.create()
+    link.creator_userprofile = userprofile
+    link.percentage_of_withdraw = 20
+    link.save()
+    messages.success(request, 'تم انشاء رابط أحالة بنجاح')
+
+    return redirect('MyReferralLink')
+
+
+def DeleteReferralLinkForMe(request, referral_id):
+    user = request.user
+    userprofile = user.userprofile
+
+    link = ReferralLinkModel.objects.filter(creator_userprofile = userprofile, referral_id=referral_id)
+    if link.exists():
+        referral_id = link.first().referral_id
+        link.first().delete()
+        
+
+        messages.success(request, f'تم حذف رابط أحالة {referral_id} بنجاح')
+
+    else:
+        messages.error(request, 'لن نتمكن من العثور على رابط الأحالة الخاص  بك')
+
+    return redirect('MyReferralLink')
+
+def WithdrawReferralLinkBalance(request, referral_id):
+    user = request.user
+    userprofile = user.userprofile
+
+    links = ReferralLinkModel.objects.filter(creator_userprofile = userprofile, referral_id=referral_id)
+    link = links.first()
+    total_earn = link.total_earn
+    userprofile.money = userprofile.money + total_earn
+    link.total_earn = link.total_earn - total_earn
+    link.withdraw_earn = link.withdraw_earn + total_earn
+    userprofile.save()
+    link.save()
+    
+
+    messages.success(request, f'تم سحب ارباح بقيمة {total_earn} بنجاح')
+        
+    return redirect('MyReferralLink')
+
+
+def SignUpReferralLink(request, referral_id):
+    request.session['referral_id'] = referral_id
+    
+    return redirect('cvSignup')

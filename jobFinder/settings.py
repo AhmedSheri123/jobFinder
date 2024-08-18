@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'daphne',
+    'jobs',
     'notifications',
     'messenger',
     'accounts',

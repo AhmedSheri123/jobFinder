@@ -7,13 +7,17 @@ import string
 import random
 from messenger.models import MessengerModel
 from .libs import when_published
+from django.urls import reverse
 
 # Create your models here.
 AdminPermission = (
     ("0", "المسؤول"),
     ("1", "مسؤول التوظيف"),
     # ("2", "المجند"),
+
 )
+
+
 
 CVSignupProcessChoices = (
     ("0", "ملغي"),
@@ -49,6 +53,13 @@ def StrNumCodeGen():
     res = ''.join(random.choices(string.digits+ string.ascii_letters, k=N))
     return str(res)
 
+def GenrateRefString(len=6):
+    a = ''.join(random.choice(string.ascii_letters) for i in range(len))
+    obj = ReferralLinkModel.objects.filter(referral_id=a)
+    if obj.exists():
+        GenrateRefString(len+1)
+    return a
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -75,6 +86,8 @@ class UserProfile(models.Model):
     is_in_chat = models.BooleanField(default=False)
     active_messenger = models.ForeignKey(MessengerModel, on_delete=models.SET_NULL, null=True, blank=True)
 
+    money = models.DecimalField(max_digits=6, decimal_places=3, default=0.000, verbose_name='الرصيد')
+    referral = models.ForeignKey('ReferralLinkModel', verbose_name="", on_delete=models.SET_NULL, null=True, blank=True)
     def __str__(self):
         return self.user.username
 
@@ -170,3 +183,28 @@ class NotificationsModel(models.Model):
 
     def whenpublished(self):
         return when_published(self.creation_date)
+    
+
+
+
+
+
+class ReferralLinkModel(models.Model):
+    referral_id = models.CharField(default=GenrateRefString, max_length=250, blank=True, null=True)
+    creator_userprofile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, blank=True, null=True)
+    total_earn = models.DecimalField(max_digits=6, decimal_places=3, default=0.000, blank=True, null=True)
+    withdraw_earn = models.DecimalField(max_digits=6, decimal_places=3, default=0.000, blank=True, null=True)
+    all_total_earn = models.DecimalField(max_digits=6, decimal_places=3, default=0.000, blank=True, null=True)
+    percentage_of_withdraw = models.IntegerField(blank=True, null=True)
+    add_balance_for_signup = models.BooleanField(default=False, verbose_name="اضافة رصيد للمنشاء الحساب")
+    add_balance_for_signup_amount = models.DecimalField(max_digits=6, decimal_places=3, default=0.000, verbose_name="كمية اضافة رصيد للمنشاء الحساب", blank=True, null=True)
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+    def __str__(self):
+        return self.referral_id
+    
+    def get_absolute_url(self):
+
+        return reverse("SignUpReferralLink", args=[str(self.referral_id)])
+    
+

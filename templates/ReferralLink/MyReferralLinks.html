@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load referral_tags %}
+
+{% block links %}
+{% endblock %}
+
+
+
+{% block sheri %}
+
+
+<style>
+    .fa-2x {
+        font-size:30px;
+    }
+    .details-card {
+        color: white;
+        padding-top: 20px;
+        display: block;
+        margin: auto;
+        width: -webkit-fill-available;
+        margin-top: 13px;
+        min-height: 100px;
+    }
+
+    .item-box {
+        display: flex;
+        text-align: center;
+        padding-bottom: 40px;
+        align-items: center;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .ico-with-value {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 20px 5px
+    }
+
+    .menu-box {
+        /* max-width: 300px; */
+        width: 100%;
+        display: inline-block;
+        margin: 10px;
+        display: grid;
+        grid-template-columns: auto auto auto;
+    }
+
+    .menu-box button {
+        max-width: 300px;
+        margin: 10px;
+    }
+
+    .box-two {
+        max-width: 500px;
+        width: 100%;
+        display: inline-block;
+        margin: 10px;
+
+        border-radius: 7px;
+        padding: 15px 8px;
+        box-shadow: rgb(231, 231, 231) 1px 2px 3px;
+    }
+
+    .box-two select,
+    .box-two textarea,
+    .box-two input {
+        margin-bottom: 15px;
+        display: block;
+        width: 100%;
+        border: rgb(223, 223, 223) solid 1px;
+        border-radius: 4px;
+        box-shadow: rgb(223, 222, 222) 1px 2px 3px;
+
+    }
+
+    .box-two form {
+        text-align: right;
+    }
+
+    select:focus,
+    textarea:focus {
+        outline: rgb(100, 100, 100) solid 1px;
+    }
+
+    select {
+        padding-right: 30px;
+    }
+
+
+    @media (max-width: 767px) {
+        .menu-box {
+            grid-template-columns: auto auto;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .menu-box {
+            grid-template-columns: auto;
+        }
+    }
+</style>
+
+
+<div class="toast toast2 align-items-center text-white bg-primary border-0" style="position: fixed; right: 0; bottom: 100px; z-index: 2030;" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex" style="flex-direction: row-reverse; align-content: center; align-items: center; justify-content: center;">
+      <div class="toast-body" id="msg-alret">
+        
+      </div>
+      <button type="button" class="btn-close btn-close-white " data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
+
+
+<div class="container" dir="rtl">
+    <header class="ex-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 offset-xl-1">
+                    <h1>روابط الأحالة</h1>
+
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header>
+
+</div>
+<div class="container" dir="rtl">
+{% for message in messages %}
+
+{% if message.tags == 'error' %}
+<div class="alert alert-danger d-flex align-items-center" role="alert" >
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+        <use xlink:href="#exclamation-triangle-fill" />
+    </svg>
+    <div>
+        {{message}}
+    </div>
+
+</div>
+
+{% elif message.tags == 'success' %}
+<div class="alert alert-success d-flex align-items-center" role="alert">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+        <use xlink:href="#check-circle-fill" />
+    </svg>
+    <div>
+        {{message}}
+    </div>
+
+</div>
+{% endif %}
+{% endfor %}
+</div>
+<div dir="rtl" class="item-box">
+    <div class="container">
+            
+        <div class="menu-box">
+
+            <button class="btn btn-warning details-card" id="button-addon1"><strong>الرصيد الحالي</strong>
+                <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i> {{user.userprofile.money}}</strong>
+                    <i class="bi bi-wallet fa-2x"></i>
+                </div>
+            </button>
+
+
+            <button class="btn btn-primary details-card" id="button-addon1"><strong>السحب المتاح</strong>
+                <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i> {{refs_total_earn}}</strong>
+                    <i class="bi bi-coin fa-2x"></i>
+                </div>
+            </button>
+
+            <button class="btn btn-danger details-card" id="button-addon1"><strong>اجمالي السحوبات</strong>
+                <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                        {{refs_all_total_earn}}</strong>
+                    <i class="bi bi-arrows fa-2x"></i>
+                </div>
+            </button>
+
+            <button class="btn btn-success details-card" id="button-addon1"><strong>عدد المسجلين</strong>
+                <div class="ico-with-value"><strong><i class="bi bi-check2"></i>
+                        {{total_signin_users}}</strong>
+
+                        <i class="bi bi-person fa-2x" ></i>
+
+                </div>
+            </button>
+
+            <button class="btn btn-secondary details-card" id="button-addon1"><strong>عدد الروابط</strong>
+                <div class="ico-with-value"><strong><i class="bi bi-check2"></i>
+                        {{total_links}}</strong>
+                    <i class="bi bi-link fa-2x"></i>
+                </div>
+            </button>
+
+
+
+
+            <button class="btn btn-dark details-card" id="button-addon1"><strong>اجمالي ارباح الأحالات</strong>
+                <div class="ico-with-value"><strong><i class="bi bi-currency-dollar"></i>
+                        {{refs_all_total_earn}}</strong>
+                    <i class="bi bi-currency-dollar fa-2x"></i>
+                </div>
+            </button>
+        </div>
+    </div>
+    <div class="container" style="text-align: right; padding: 10px 15px;" >
+        <a href="{% url 'CreateReferralLinkForMe' %}" class="btn btn-primary" >انشاء رابط أحالة</a>
+    </div>
+
+
+    <div class="container" style="overflow: scroll;overflow-y: hidden;">
+
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">عنوان الأحالة</th>
+                    <th scope="col">نسبة عمولتك</th>
+                    <th scope="col">ارباح الحالية</th>
+                    <th scope="col">ارباح المسحوبة</th>
+                    <th scope="col">اجمالي الارباح</th>
+                    <th scope="col">عدد المسجلين</th>
+                    <th scope="col">سحب الرصيد</th>
+                    <th scope="col">تفاصيل</th>
+                    <th scope="col">حذف</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ref in refs %}
+                {% get_referral_user_signin_count ref.id as signin_count %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{ref.referral_id}}</td>
+                    <td>{{ref.percentage_of_withdraw}}%</td>
+                    <td>{{ref.total_earn}}$</td>
+                    <td>{{ref.withdraw_earn}}$</td>
+                    <td>{{ref.all_total_earn}}$</td>
+                    <td>{{signin_count}}</td>
+                    <td><a href="{% url 'WithdrawReferralLinkBalance' ref.referral_id %}" class="btn btn-outline-primary">سحب الرصيد</a></td>
+                    <td>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ref{{ref.referral_id}}">
+                        عرض
+                    </button>
+
+                    </td>
+
+                    <td>
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delref{{ref.referral_id}}">
+                            حذف
+                        </button>
+    
+                    </td>
+
+                </tr>
+
+
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="ref{{ref.referral_id}}" tabindex="-1" aria-labelledby="ref{{ref.referral_id}}Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="ref{{ref.referral_id}}Label">الرابط</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <div class="col-sm-6" style="width: 100%;">
+                                <div class="col-sm-6" style="width: 100%;">
+                                    <div class="input-group" style="align-items: center;flex-direction: row-reverse;"><input type="text" disabled class="form-control input-sm" value="{{request.scheme}}://{{domain}}{{ref.get_absolute_url}}" >
+                                        <i data-a="{{request.scheme}}://{{domain}}{{ref.get_absolute_url}}" onclick="navigator.clipboard.writeText(this.dataset.a);ShowAlret('تم النسخ بنجاح')" class="fa fa-clone btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">إغلاق</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+    
+    
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="delref{{ref.referral_id}}" tabindex="-1" aria-labelledby="delref{{ref.referral_id}}Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="delref{{ref.referral_id}}Label">حذف رابط الأحالة</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                هل انت متأكد من حذف رابط الأحالة سوف يتم حذف الأرباح الحالية الموجودة على هذا الرابط فقط ولن تتمكن من حصول على عمولتك على هذا الرابط فقط مستقبلاََ
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                                    <a href="{% url 'DeleteReferralLinkForMe' ref.referral_id %}"  class="btn btn-danger">حذف</a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+<script>
+    function ShowAlret(msg){
+            a = document.getElementById('msg-alret').innerHTML = msg
+            var toastElList = [].slice.call(document.querySelectorAll('.toast2'))
+            var toastList = toastElList.map(function(toastEl) {
+            // Creates an array of toasts (it only initializes them)
+              return new bootstrap.Toast(toastEl) // No need for options; use the default options
+            });
+           toastList.forEach(toast => toast.show()); // This show them
+        }
+    </script>
+
+{% endblock sheri %}

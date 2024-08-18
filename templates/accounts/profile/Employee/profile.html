@@ -96,10 +96,16 @@
 
 
             {% if request.user.id == userprofile.user.id %}
+            <a href="{% url 'MyReferralLink' %}" class="btn btn-primary m-3">
+                <i class="bi bi-coin"></i>
+                روابط الاحالة للارباح
+                </a>
             <a href="{% url 'CVSettingsGernral' %}" class="btn btn-primary m-3">
               <i class="bi bi-pencil-square"></i>
               تعديل الملف الشخصي
               </a>
+
+
               {% else %}
               <a href="{% url 'createMessager' userprofile.user.id %}" class="btn btn-primary m-3">
                   <i style="font-size: 20px; margin-left:6px;" class="bi bi-send-fill"></i>
