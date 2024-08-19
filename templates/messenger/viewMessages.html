@@ -78,7 +78,7 @@
                     <a href="{% url 'messageRoom' messenger.room_id %}" style="position: relative; text-decoration: none;">
                         <h6 style="margin: 0;">{{receiver.username}}</h6>
                         {% if not last_msg.is_readed %}
-                            <span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
+                            <span class="position-absolute top-0 end-0 translate-middle p-2 bg-danger border border-light rounded-circle">
                                 <span class="visually-hidden">New alerts</span>
                             </span>
                         {% endif %}
@@ -126,7 +126,7 @@
                     <a href="{% url 'messageRoom' messenger.room_id %}" style="position: relative; text-decoration: none;">
                         <h6 style="margin: 0;">{{receiver.username}}</h6>
                         {% if not last_msg.is_readed %}
-                            <span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
+                            <span class="position-absolute top-0 end-0 translate-middle p-2 bg-danger border border-light rounded-circle">
                                 <span class="visually-hidden">New alerts</span>
                             </span>
                         {% endif %}
@@ -178,7 +178,7 @@
             <div style="position: relative;">
                 <h6 style="margin: 0;">{{receiver.username}}</h6>
                 {% if not last_msg.is_readed %}
-                    <span class="position-absolute top-0 start-0 translate-middle p-2 bg-danger border border-light rounded-circle">
+                    <span class="position-absolute top-0 end-0 translate-middle p-2 bg-danger border border-light rounded-circle">
                         <span class="visually-hidden">New alerts</span>
                     </span>
                 {% endif %}
