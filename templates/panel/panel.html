@@ -1,0 +1,265 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+{% comment %} {% load panel_tags %} {% endcomment %}
+
+{% block links %}
+
+{% endblock %}
+
+{% block sheri %}
+<style>
+    .min-box {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+
+    }
+
+    .main-card {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        margin: 20px 10px !important;
+        min-width: 300px;
+        height: 150px;
+        color: rgb(71, 71, 71);
+        border-radius: 5px;
+        {% comment %} border: solid 1px bisque; {% endcomment %}
+        
+    }
+
+    .main-card i {
+        font-size: 50px;
+    }
+
+    .min-chart-box {
+        box-shadow: rgb(204, 204, 204) 1px 2px 3px;
+        background-color: white;
+    }
+
+    .box {
+        box-shadow: rgb(204, 204, 204) 1px 2px 3px;
+        background-color: white;
+    }
+</style>
+<form id="viewsers_count_days_form" action="" method="get" >
+
+
+
+
+<div class="box">
+    <h2 style="padding: 20px 10px; text-align: center;">الملخص التفاعلي</h2>
+
+<div class="min-box ">
+
+        <div style="width: min(400px, 100%);  padding: 50px 0px;">
+            <p style="text-align: center; margin-bottom: 20px;">عدد الزوار</p>
+            <canvas  id="myChart5"></canvas>
+                <select class="form-select" name="viewsers_count_days"  onchange="{document.getElementById('viewsers_count_days_form').submit()}">
+                    <option {% if viewsers_count_days == 7 %} selected {%endif%} value="7">اسبوع</option>
+                    <option {% if viewsers_count_days == 14 %} selected {%endif%} value="14">اسبوعين</option>
+                    <option {% if viewsers_count_days == 30 %} selected {%endif%} value="30">شهر</option>
+                    <option {% if viewsers_count_days == 60 %} selected {%endif%} value="60">3 اشهر</option>
+                </select>
+                <!-- <input type="text" class="btn btn-primary" style="width: 100px;" value="تصفية"> -->
+        </div>
+
+
+
+        <div style="width: min(400px, 100%);  padding: 50px 0px;">
+            <p style="text-align: center; margin-bottom: 20px;">فرص العمل المعلنة وإجمالي عدد المتقدمين</p>
+            <canvas  id="myChart6"></canvas>
+                <select class="form-select" name="announced_count_days"  onchange="{document.getElementById('viewsers_count_days_form').submit()}">
+                    <option {% if announced_count_days == 7 %} selected {%endif%} value="7">اسبوع</option>
+                    <option {% if announced_count_days == 14 %} selected {%endif%} value="14">اسبوعين</option>
+                    <option {% if announced_count_days == 30 %} selected {%endif%} value="30">شهر</option>
+                    <option {% if announced_count_days == 60 %} selected {%endif%} value="60">3 اشهر</option>
+                </select>
+                <!-- <input type="text" class="btn btn-primary" style="width: 100px;" value="تصفية"> -->
+        </div>
+
+</div>
+</div>
+</form>
+<br>
+
+
+<style>
+    .now-numbers-box {
+        width: 200px; border: 1px solid rgba(0, 0, 0, 0.307); border-radius: 25px; padding: 20px 10px;
+        
+    }
+    .now-numbers-box .now-numbers-title {
+        text-align: center;font-size: 20px;
+    }
+
+    .now-numbers-box .now-numbers-section {
+        display: flex; background-color: #f1f1f1; border-radius: 25px;
+        margin-top: 10px;
+        padding-right: 10px;
+    }
+
+    .now-numbers-box .now-numbers-section p {
+        margin: 0;
+        padding: 10px 5px;
+    }
+
+    .now-numbers-box .now-numbers-section .now-numbers-section-title {
+        font-size: 16px;
+    }
+
+    .now-numbers-box .now-numbers-section .now-numbers-section-value {
+        color: purple;
+    } 
+</style>
+<div class="box">
+    <h2 style="padding: 20px 10px; text-align: center;">الأرقام الحالية</h2>
+
+    <div class="min-box" style="align-items: flex-start;">
+
+        <div class="now-numbers-box">
+            <p class="now-numbers-title" >صاحب السير عملية التسجيل</p>
+            <div>
+                <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">المرفوضة:</p>
+                    <p class="now-numbers-section-value">{{all_canseled_jobs}}</p>
+                </div>
+                <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">قيد المراجعة:</p>
+                    <p class="now-numbers-section-value">{{all_under_review_jobs}}</p>
+                </div>
+                <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">المقبولة:</p>
+                    <p class="now-numbers-section-value">{{all_accepted_jobs}}</p>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="now-numbers-box">
+            <p class="now-numbers-title" >صاحب السير</p>
+            <div>
+                <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">الإجمالي:</p>
+                    <p class="now-numbers-section-value">{{all_users_count}}</p>
+                </div>
+
+                <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">الذكور/الأناث:</p>
+                    <p class="now-numbers-section-value">{{all_employee_female_count}}/{{all_employee_male_count}}</p>
+                </div>
+
+                {% comment %} <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">تم توظيفهم:</p>
+                    <p class="now-numbers-section-value">{{accepted_employee_count}}</p>
+                </div> {% endcomment %}
+
+
+            </div>
+        </div>
+
+
+
+
+        <div class="now-numbers-box">
+            <p class="now-numbers-title" >المنظمات</p>
+            <div>
+                <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">الإجمالي:</p>
+                    <p class="now-numbers-section-value">{{all_companys}}</p>
+                </div>
+
+                {% comment %} <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">الراغبة بالتوظيف:</p>
+                    <p class="now-numbers-section-value">{{company_want_publish_job}}</p>
+                </div> {% endcomment %}
+
+                <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">قيد المراجعة:</p>
+                    <p class="now-numbers-section-value">{{completed_companys}}</p>
+                </div>
+
+                <div class="now-numbers-section">
+                    <p class="now-numbers-section-title">مكتمل:</p>
+                    <p class="now-numbers-section-value">{{accepted_companys}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+<br>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+  <script>
+
+
+    const ctx6 = document.getElementById('myChart6');
+
+    const labels6 = [{% for i in announced_count_by_day %} "{{i.0}}", {% endfor %}]
+    const data6 = {
+    labels: labels6,
+    datasets: [
+        {
+            label: 'عدد الشركات المسجلية',
+            data: [{% for i in announced_count_by_day %} {{i.1}}, {% endfor %}],
+            fill: false,
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.1
+        },
+        {
+            label: 'عدد اصحاب السير المسجلين',
+            data: [{% for i in presenters_count_by_day %} {{i.1}}, {% endfor %}],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }
+    ]
+    };
+    const config6 = {
+        type: 'line',
+        data: data6,
+    };
+    new Chart(ctx6, config6);
+  </script>
+
+
+
+  <script>
+
+
+    const ctx5 = document.getElementById('myChart5');
+
+    const labels5 = [{% for i in viewsers_count_by_day %} "{{i.0}}", {% endfor %}]
+    const data5 = {
+    labels: labels5,
+    datasets: [
+        {
+            label: 'الزوار',
+            data: [{% for i in viewsers_count_by_day %} {{i.1}}, {% endfor %}],
+            fill: false,
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.1
+        }
+    ]
+    };
+    const config5 = {
+        type: 'line',
+        data: data5,
+    };
+    new Chart(ctx5, config5);
+  </script>
+
+
+
+
+
+{% endblock %}

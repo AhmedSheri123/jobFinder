@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+
+{% endblock links %}
+
+{% block sheri %}
+<style>
+    h1 {font-size: 1.6em;}
+    
+    .search-main {
+        width: 300px;
+        background-color: #f1f1f1;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .main {
+        display: flex;
+    }
+
+    .cv-flex-main {
+        justify-content: flex-start;
+        padding: 20px;
+    }
+    @media only screen and (max-width: 1200px) {
+        
+    .cv-flex-main {
+        justify-content: center;
+        padding: 0px;
+    }
+        .search-main form{
+            display: grid;
+            grid-template-columns: auto auto auto;
+        }
+        .search-main form div{
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        .search-main{
+            margin: auto;
+            width: 100%;
+        }
+        .main {
+        flex-wrap: wrap;
+
+        }
+    }
+
+
+    @media only screen and (max-width: 500px) {
+        .search-main form{
+            grid-template-columns: auto auto;
+        }
+
+    }
+
+    @media only screen and (max-width: 350px) {
+        .search-main form{
+            grid-template-columns: auto;
+        }
+
+    }
+
+
+</style>
+
+
+<div style="margin-top: 100px;"></div>
+<div  dir="rtl">
+    <p>الرئيسية/ السير/ البحث المتقدم</p>
+    <div class="main">
+
+        <div class="search-main">
+    <h1 class="mt-3" style="text-align: center;">البحث المتقدم</h1>
+<hr>
+            <form action="">
+                <div>
+                <label class="form-label" >المسمى الوظيفي</label>
+                <input type="text" class="form-control">                    
+                </div>
+
+
+
+
+
+                <div>
+                    <label class="form-label" >المهارات</label>
+                    <input type="text" class="form-control">                    
+                    </div>
+
+                <div>
+                                       
+                <label class="form-label" >الرغبات</label>
+                <input type="text" class="form-control">
+                </div>
+
+                <div>
+ 
+                    <label class="form-label" >الجنس</label>
+                    <select class="form-control" name="" id="">
+                        <option value="">السعودية</option>
+                    </select>
+                </div>
+
+                <div>
+ 
+                    <label class="form-label" >الدولة</label>
+                    <select class="form-control" name="" id="">
+                        <option value="">السعودية</option>
+                    </select>
+                </div>
+
+
+
+                <div>
+                    <label class="form-label" >المدينة</label>
+                    <input type="text" class="form-control">
+                </div>
+
+
+                <div>
+                    <label class="form-label" >الحالة الإجتماعية</label>
+                    <select class="form-control" name="" id="">
+                        <option value="">السعودية</option>
+                    </select>
+                </div>
+
+
+                <div>
+                    <label class="form-label" >الحالة الصحية</label>
+                    <select class="form-control" name="" id="">
+                        <option value="">السعودية</option>
+                    </select>
+                </div>
+
+
+                <div>
+                    
+                <label class="form-label" >الجنسية</label>
+                <select class="form-control" name="" id="">
+                    <option value="">السعودية</option>
+                </select>
+                </div>
+
+                <div>
+                    
+                <label class="form-label" >نوع الشهادة</label>
+                <select class="form-control" name="" id="">
+                    <option value="">السعودية</option>
+                </select>
+                </div>
+
+
+
+
+                <div>
+
+                    <label class="form-label" >يمتلك سيارة</label>
+                    <select class="form-control" name="" id="">
+                        <option value="">السعودية</option>
+                    </select>
+
+                </div>
+
+                <button class="btn btn-primary" style="margin: auto; margin-top: 20px; display: block;">بحث</button>
+            </form>
+        </div>
+
+        <div class="cv-flex-main">
+
+            {% for userprofile in userprofiles|slice:6 %}
+            <div class="cv-main-box mt-5">
+    
+    
+                <div class="cv-box">
+                    <div dir="rtl" class="p-2 cv-content">
+    
+                        {% get_cv_imgs userprofile.id as profile_images %}
+                        <div style="display: flex;align-items: flex-start;">
+                            <div>
+    
+                        
+                            <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" style="width: 115px;">
+    
+                            
+                            <div class="carousel-indicators" style="margin-bottom: 0;transform: scale(.6);">
+                                {% for profile_image in profile_images %}
+                                <button type="button" data-bs-target="#carouselExampleIndicators{{forloop.counter|add:-1}}" data-bs-slide-to="{{forloop.counter|add:-1}}" {%if forloop.counter == 1 %} class="active" aria-current="true" {%endif%} aria-label="Slide {{forloop.counter}}"></button>
+                    
+                                {% endfor %}    
+                        
+                        </div>
+                            <div class="carousel-inner">
+    
+                                {% if profile_images %}
+                                {% for profile_image in profile_images %}
+                                <div class="carousel-item {%if forloop.counter == 1 %} active{%endif%}">
+                                    <img src="{{profile_image.img_base64}}" class="d-block w-100" alt="...">
+                                </div>
+                                {% endfor %}
+                                {% else %}
+                                <div class="carousel-item active">
+                                    <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100" alt="...">
+                                </div>
+                                {% endif %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators{{forloop.counter|add:-1}}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators{{forloop.counter|add:-1}}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                            </button>
+                            
+                        </div>
+                            
+    
+                        </div>
+    
+                        <div style="width: 100%; margin-right: 6px;">
+    
+                            <h6 class="text-primary" style="text-align: justify;">
+                                <i class="bi bi-briefcase"></i>
+                                {{userprofile.employeeprofile.job_title}}
+        
+                            </h6>
+    
+    
+    
+    
+    
+    
+    
+                            <!-- <p class="text-primary" style="font-size: 14px; margin: 0;">
+                                <i class="bi bi-info-circle-fill "></i>
+                                معلومات</p> -->
+        
+        
+                            <div class="contents-box" style="position: relative; overflow: hidden;font-size:.9em ;">
+        
+                                <p >
+                                    <span class="answer" ><i class="bi bi-globe"></i>{{userprofile.employeeprofile.get_nationality_display}}</span>
+                                </p >
+                                
+                                <p >
+                                    <span class="answer" ><i class="bi bi-patch-check-fill"></i>{{userprofile.employeeprofile.get_cert_type_display}}</span>
+                                </p >
+        
+        
+                                <p >
+                                    <span class="answer" ><i class="bi bi-link"></i>{{userprofile.employeeprofile.get_marital_status_display}}</span>
+                                    
+                                </p >
+        
+        
+                                <p >
+        
+                                    <span class="answer" ><i class="bi bi-bandaid-fill"></i>{{userprofile.employeeprofile.get_health_status_display}}</span>
+                                </p >
+        
+        
+                            </div>
+    
+                            
+                            
+                        </div>
+    
+                        
+                    </div>
+    
+                    <div style="position: relative;" class="mt-2">
+                        <div style="width: 0%; background-color: black; height: 1px; position: absolute; left: 0; top: 19px;" ></div>
+    
+                        <div class="contents-box" style="grid-template-columns: auto auto auto;">
+    
+    
+                            <p >
+                            
+                                <span class="answer" ><i class="bi bi-gender-ambiguous"></i>{{userprofile.employeeprofile.get_gender_display}}</span>
+                            </p >
+    
+                            <p >
+                                <span class="answer" ><i class="bi bi-person-arms-up"></i>{{userprofile.employeeprofile.age}} سنة</span>
+                                
+                            </p >
+    
+                            <p >
+                                <span class="answer" ><i class="bi bi-braces"></i>{{userprofile.employeeprofile.major}}</span>
+                                
+                            </p >
+                        </div>
+                    </div>
+    
+                    <p class="text-primary" style="margin: 0; margin-top: 6px;">
+                        <i class="bi bi-stars"></i>
+                        نبذة مختصرة</p>
+                    <div  style="background-color: #ffffff82; padding: 0px 10px; border-radius: 10px;box-shadow:inset #cecece 0px 0px 6px;">
+    
+    
+                        <div class="custom-text-truncate" style="width: 100%; padding: 3px;">
+                            {{userprofile.employeeprofile.about_me}}
+                        </div>
+                    </div>
+    
+                    <div class="mt-2" style="display: flex; justify-content: space-between;">
+    
+                        <p style="font-size: 14px; text-align: center; margin: 0;">
+                            <i class="bi bi-geo-alt "></i>يقيم في
+                            {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
+                        </p>
+    
+                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap;font-size: .8em;">
+    
+                            
+                            <div style="display: flex;justify-content: space-around;">
+                                <p style="margin: 0; margin-left: 20px;">
+                                    <i class="bi bi-eye " ></i>
+        
+                                    1244
+                                </p>
+        
+                                <p style="margin: 0;">
+                                    <i class="bi bi-hand-thumbs-up "></i>
+        
+                                    232
+                                </p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                        
+    
+    
+    
+    
+                        <div id="more-info-{{forloop.counter|add:-1}}" class="hide" >
+    
+                            <a href="{% url 'Profile' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">عرض الملف الشخصي</a>
+    
+                                <nav dir="rtl" class="mt-5">
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button class="nav-link active" id="nav-home-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-home{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-home{{forloop.counter|add:-1}}" aria-selected="true">نبذة عني</button>
+                                     <button class="nav-link" id="nav-profile-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-profile{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-profile{{forloop.counter|add:-1}}" aria-selected="false">المؤهل الدراسي</button> 
+                                     <button class="nav-link" id="nav-disabled-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-disabled{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-disabled{{forloop.counter|add:-1}}" aria-selected="false">المهارات</button>
+                                     <button class="nav-link" id="nav-contact-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-contact{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-contact{{forloop.counter|add:-1}}" aria-selected="false">التواصل</button>
+                                    </div>
+                                </nav>
+                            <div class="tab-content p-3" id="nav-tabContent" >
+                                <div class="tab-pane fade show " id="nav-disabled{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-disabled-tab{{forloop.counter|add:-1}}" tabindex="0">
+                                    <h6 class="pt-2 ">
+                                        <i class="bi bi-stars "></i>
+                                        المهارات</h6>
+                
+                                    <div class="contact-info">
+                                        {{userprofile.employeeprofile.skils}}
+    
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade show " id="nav-profile{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-profile-tab{{forloop.counter|add:-1}}" tabindex="0">
+                                    <h6 class="pt-2 ">
+                                        <i class="bi bi-stars "></i>
+                                        المؤهل الدراسي</h6>
+                
+                                    <div class="contact-info">
+                                        {{userprofile.employeeprofile.skils}}
+    
+                                    </div>
+                                </div>
+    
+                                <div class="tab-pane fade show active" id="nav-home{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-home-tab{{forloop.counter|add:-1}}" tabindex="0">
+                                    <h6 class="pt-2 ">
+                                        <i class="bi bi-stars "></i>
+                                        نبذة عن العضو</h6>
+                                        <p class="contact-info">
+                                            {{userprofile.employeeprofile.about_me}}
+                                        </p>
+            
+            
+            
+    
+                                
+                                </div>
+                                
+                                
+                                <div class="tab-pane fade" id="nav-contact{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-contact-tab{{forloop.counter|add:-1}}" tabindex="0" style="max-width:700px;">
+    
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
+                                        <input value="{{userprofile.user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                                      </div>
+                              
+                              
+                                        <div class="input-group mb-3">
+                                          <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
+                                          <input value="{{userprofile.employeeprofile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
+                                            aria-describedby="basic-addon1">
+                                        </div>
+    
+                        
+                        
+                                        <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
+                                            <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
+                                            <div class="contact-info-soshial">
+                                                <a href="{{userprofile.employeeprofile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
+                                                <a href="{{userprofile.employeeprofile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                                                <a href="{{userprofile.employeeprofile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                            
+                                            </div>
+                                        </div>
+    
+                                            <a href="{% url 'createMessager' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">تواصل داخلي</a>
+    
+    
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary more-info" style="width: 105px;" onclick="showHideMoreDetailes('{{forloop.counter|add:-1}}', this)">
+                            تفاصيل اكثر
+                        </button>
+    
+                        <div class="mb-4"></div>
+                    </div>
+    
+                    
+                    
+                
+                </div>
+            </div>
+    
+    
+    
+    
+    
+    
+            {%endfor%}
+        </div>
+    
+    </div>
+
+</div>
+
+<script>
+    function showHideMoreDetailes(id, button) {
+        let obj = document.getElementById('more-info-'+id)
+        if (obj.classList.contains('showDetailes')) {
+            obj.classList.remove('showDetailes')
+            button.innerText = 'تفاصيل اكثر'
+        } else {
+            obj.classList.add('showDetailes')
+            button.innerText = 'تفاصيل اقل'
+        }
+    }
+</script>
+<br><br><br><br><br><br>
+
+
+{% endblock sheri %}

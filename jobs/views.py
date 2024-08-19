@@ -8,3 +8,12 @@ def index(request):
 
 def viewJob(request, id):
     return render(request, 'jobs/viewJob.html')
+
+def companyJobs(request):
+    return render(request, 'jobs/company/Jobs.html')
+
+def companyviewJob(request):
+    return render(request, 'jobs/company/viewJob.html')
+
+def companyCreateJob(request):
+    return render(request, 'jobs/company/CreateJob.html')

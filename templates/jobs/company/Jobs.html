@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block sheri %}
+<style>
+    h1 {font-size: 1.6em;}
+
+    .main {
+        background-color: #fff;
+        max-width: 992px;
+        padding: 10px;
+        margin: auto;
+    }
+
+    .job-details {
+        display: flex;
+    }
+
+    .job-details i{
+        /* margin-right: 10px; */
+    }
+
+    .job-details p{
+        background-color: #fff;
+        margin: 6px;
+        padding: 5px 10px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: .8em;
+    }
+
+    .job-title {
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .title-box {
+        display: flex;
+        justify-content: space-between;
+        padding-left:10px;
+        align-items: flex-start;
+    }
+
+    .job-card-main {
+        background-color: #f1f1f1;
+        padding: 20px 10px;
+        padding-bottom: 0;
+    }
+
+    .custom-text-truncate {
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+    
+</style>
+
+<div style="margin-top: 100px;"></div>
+<div class="container" dir="rtl">
+    <p>الرئيسية/ الوظائف</p>
+    <h1 style="text-align: center;">وظائفي</h1>
+    
+    <div class="main mt-5">
+        <a href="{% url 'companyCreateJob' %}" class="btn btn-primary mb-2">اضافة وظيفية</a>
+
+        {% for i in '1234' %}
+        <div class="job-card-main">
+            <div class="title-box">
+                <div>
+                    <a class="btn btn-warning" style="font-size:10px;">قيد المراجعة</a>
+
+                    <a href="{% url 'viewJob' 1 %}" class="job-title">إعداد ملف عقد امتياز تجاري كامل</a>
+
+                </div>
+                <div style="text-align: left;">
+                    <a href="{% url 'viewJob' 1 %}" class="btn btn-primary mt-2">عرض</a>
+                    <a href="{% url 'viewJob' 1 %}" class="btn btn-danger mt-2">حذف</a>
+
+                </div>
+            </div>
+            <div class="job-details">
+                <p><i class="bi bi-stopwatch-fill"></i>
+                    منذ ساعتين
+                </p>
+                <p>
+                    <i class="bi bi-ticket-fill"></i>
+                    11 عرض
+                </p>
+
+                <p>
+                    <i class="bi bi-joystick"></i>
+                    2 مقبولين
+                </p>
+            </div>
+
+            <p class="custom-text-truncate">
+                السلام عليكم ورحمة الله وبركاته اسعد الله ايامكم بكل خير يوجد لدي نشاط تجاري وارغب عمل امتياز تجاري يشمل على الدليل امتياز تجاري يشمل على الدليل امتياز تجاري يشمل على الدليل التشغيلي وجميع الفصول والبنود
+            </p>
+        <hr>
+
+        </div>
+
+
+        
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock sheri %}

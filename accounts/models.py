@@ -208,3 +208,7 @@ class ReferralLinkModel(models.Model):
         return reverse("SignUpReferralLink", args=[str(self.referral_id)])
     
 
+
+class ViewersCounterByIPADDR(models.Model):
+    ip_addr = models.CharField(max_length=255)
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")

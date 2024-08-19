@@ -32,3 +32,17 @@ class MessagesModel(models.Model):
 
     def whenpublished(self):
         return when_published(self.creation_date)
+    
+
+
+class BlockUserModel(models.Model):
+    creator = models.ForeignKey(User, related_name="block_creator", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="block_user", on_delete=models.CASCADE)
+
+    creation_date = models.DateTimeField(auto_now_add=True, null=True, verbose_name="تاريخ الانشاء")
+
+class FavoriteUserModel(models.Model):
+    creator = models.ForeignKey(User, related_name="favorite_creator", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="favorite_user", on_delete=models.CASCADE)
+
+    creation_date = models.DateTimeField(auto_now_add=True, null=True, verbose_name="تاريخ الانشاء")

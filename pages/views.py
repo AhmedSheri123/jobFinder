@@ -12,3 +12,7 @@ def index(request):
     # aa = create_notifications(request.user.id, receiver_ids=u, msg='sadas as daasd a dsa d')
     # print(aa)
     return render(request, 'pages/index.html', {'userprofiles':userprofiles})
+
+def AdvancedSearch(request):
+    userprofiles = UserProfile.objects.filter(is_employee=True)
+    return render(request, 'pages/AdvancedSearch.html', {'userprofiles':userprofiles})
