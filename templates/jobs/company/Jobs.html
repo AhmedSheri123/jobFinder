@@ -70,25 +70,25 @@
                 <div>
                     <a class="btn btn-warning" style="font-size:10px;">قيد المراجعة</a>
 
-                    <a href="{% url 'viewJob' 1 %}" class="job-title">إعداد ملف عقد امتياز تجاري كامل</a>
+                    <a href="{% url 'companyviewJob' %}" class="job-title">إعداد ملف عقد امتياز تجاري كامل</a>
 
                 </div>
                 <div style="text-align: left;">
-                    <a href="{% url 'viewJob' 1 %}" class="btn btn-primary mt-2">عرض</a>
-                    <a href="{% url 'viewJob' 1 %}" class="btn btn-danger mt-2">حذف</a>
+                    <a href="{% url 'companyviewJob' %}" class="btn btn-primary mt-2">عرض</a>
+                    <a href="{% url 'companyviewJob' %}" class="btn btn-danger mt-2">حذف</a>
 
                 </div>
             </div>
             <div class="job-details">
-                <p><i class="bi bi-stopwatch-fill"></i>
+                <p  class="btn btn-light"><i class="bi bi-stopwatch-fill"></i>
                     منذ ساعتين
                 </p>
-                <p>
+                <p  class="btn btn-light">
                     <i class="bi bi-ticket-fill"></i>
                     11 عرض
                 </p>
 
-                <p>
+                <p  class="btn btn-light">
                     <i class="bi bi-joystick"></i>
                     2 مقبولين
                 </p>
