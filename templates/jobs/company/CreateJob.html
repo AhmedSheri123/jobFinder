@@ -84,7 +84,8 @@
 </style>
 
 <div style="margin-top: 100px;"></div>
-<div class="container" dir="rtl">
+<form class="container" dir="rtl" method='post'>
+    {% csrf_token %}
     <p>الرئيسية/ الوظائف / اضافة</p>
 
     
@@ -95,10 +96,14 @@
         <div class="job-card-main">
             <h2>عنوان الوظيفة</h2>
             <hr>
-            <input class="job-desc form-control" type="text">
+            {{form.job_title}}
             <h2 class="mt-3">وصف الوظيفة</h2>
             <hr>
-            <textarea class="job-desc form-control" rows="6"></textarea>
+            {{form.about_job}}
+
+            <h2 class="mt-3">الخبرات</h2>
+            <hr>
+            {{form.experiences}}
 
         </div>
 
@@ -108,23 +113,20 @@
             <div class="job-details">
                 <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-patch-check-fill"></i></span>
-                <select class="form-control" name="" id="">
-                    <option value="">asasas</option>
-                </select>
+                    {{form.cert_type}}
+                </div>
+
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-gender-ambiguous"></i></span>
+                        {{form.gender}}
                 </div>
 
                 <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><i class="bi bi-gender-ambiguous"></i></span>
-                <select class="form-control" name="" id="">
-                    <option value="">asasas</option>
-                </select>
-                </div>
-
-                <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-arms-up"></i></span>
-                <select class="form-control" name="" id="">
-                    <option value="">asasas</option>
-                </select>
+                <span class="input-group-text" id="basic-addon1">من</span>
+                    {{form.age_from}}
+                <span class="input-group-text">الى</span>
+                    {{form.age_to}}
                 </div>
 
             </div>
@@ -139,16 +141,16 @@
 
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-coin"></i></span>
-                        <input type="text" class="form-control" placeholder="الراتب">
+                        {{form.monthly_salary}}
                     </div>
 
             </div>
         </div>
 
-        <a href="" class="btn btn-primary apply-btn">
+        <button type="submit" class="btn btn-primary apply-btn">
             <i class="bi bi-joystick"></i>
             نشر
-            </a>
+            </button>
 
         <!-- <div class="job-card-main mt-5">
             <h2>المتقدمين</h2>
@@ -190,6 +192,6 @@
             {% endfor %}
         </div> -->
     </div>
-</div>
+</form>
 
 {% endblock sheri %}

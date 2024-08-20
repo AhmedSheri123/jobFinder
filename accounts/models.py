@@ -96,6 +96,8 @@ class CountrysModel(models.Model):
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
     def __str__(self):
         return self.name
+    
+    
 class SkilsModel(models.Model):
     name = models.CharField(max_length=255, null=True, verbose_name="اسم المهارة")
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
@@ -173,6 +175,8 @@ class EmployeeProfileImages(models.Model):
     img_base64 = models.TextField(blank=True, null=True)
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
 
+
+
 class NotificationsModel(models.Model):
     sender = models.ForeignKey(User, related_name='noti_sender', on_delete=models.CASCADE)
     receiver = models.ManyToManyField(User, related_name='noti_receiver')
@@ -182,11 +186,7 @@ class NotificationsModel(models.Model):
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
 
     def whenpublished(self):
-        return when_published(self.creation_date)
-    
-
-
-
+        return when_published(self.creation_date)    
 
 
 class ReferralLinkModel(models.Model):
@@ -206,7 +206,6 @@ class ReferralLinkModel(models.Model):
     def get_absolute_url(self):
 
         return reverse("SignUpReferralLink", args=[str(self.referral_id)])
-    
 
 
 class ViewersCounterByIPADDR(models.Model):

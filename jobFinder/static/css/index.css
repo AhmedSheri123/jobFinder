@@ -6,7 +6,7 @@
     overflow: hidden;
 }
     
-    .cv-main-box .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
+    /* .cv-main-box .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
     .cv-main-box .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
     .cv-main-box .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select,
     .cv-main-box .input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
@@ -21,7 +21,7 @@
       border-bottom-left-radius: 5px;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
-    }
+    } */
 
 .subscriptions-card-details p {
     margin: 0;

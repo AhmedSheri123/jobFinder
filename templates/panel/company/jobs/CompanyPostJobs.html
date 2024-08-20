@@ -1,6 +1,7 @@
 {% extends 'panel_base.html' %}
-{% load panel_tags %}
 {% load static %}
+{% load jobs_tags %}
+
 
 {% block links %}
 <link rel="stylesheet" href="{% static 'css\employee\employeePortal.css' %}">
@@ -8,14 +9,16 @@
 
 {% block sheri %}
 <style>
-  .post_state {
-    color: rgb(255, 255, 255);
-    background-color: rgb(85, 83, 83);
-    font-weight: bold;
-    width: 130px;
-    padding: 5px;
-    border-radius: 4px;
-  }
+
+
+    .post_state {
+        color: rgb(255, 255, 255);
+        background-color: rgb(85, 83, 83);
+        font-weight: bold;
+        display: inline;
+        padding: 5px;
+        border-radius: 4px;
+      }
     
       .filter-input-grid select, .filter-input-grid input{
         margin-top: 30px;
@@ -33,29 +36,32 @@
       
             <div class="filter-input-grid" >
       
-              <select class="form-select item" aria-label="Default select example" name="company_have_cert">
-                <option selected value="">المواءمة</option>
-                {% for city in CompanyHaveCertFields %}
-                <option {%if city.0 == company_have_cert %} selected {% endif %} value="{{city.0}}">{{city.1}}</option>
-                {% endfor %}
-              </select>
-      
 
-              <select class="form-select item" aria-label="Default select example" name="city">
-                <option selected value="">المدينة</option>
-                {% for city in citys %}
-                <option  {%if city.0 == cityy %} selected {% endif %} value="{{city.0}}">{{city.1}}</option>
-                {% endfor %}
-            </select>
+
       
-        <input type="text" value="{{id_code}}" name="id_code" class="form-control item" placeholder="كود الإعلان">
         
-          <input type="text" value="{{search}}" name="search" class="form-control item" placeholder="اسم المنظمة">
+          <input type="text" value="{{search}}" name="search" class="form-control item" placeholder="اسم الشركة">
           <input type="text" value="{{complite_name}}" name="complite_name" class="form-control item" placeholder="اسم الممثل">
+          <input type="text" value="{{job_title}}" name="job_title" class="form-control item" placeholder="عنوان">
+        
+          {% comment %} <select class="form-select item" aria-label="Default select example" name="country">
+            <option selected value="">الدولة</option>
+            {% for country in countrys %}
+            <option {%if country.id|stringformat:"i" == country_id %} selected {% endif %} value="{{country.id}}">{{country.name}}</option>
+            {% endfor %}
+          </select> {% endcomment %}
+
+          <select class="form-select item" aria-label="Default select example" name="state">
+            <option selected value="">الحالة</option>
+            {% for city in JobStateChoices %}
+            <option {%if city.0 == state %} selected {% endif %} value="{{city.0}}">{{city.1}}</option>
+            {% endfor %}
+          </select>
+
 
           <input type="text" value="{{search_email}}" name="search_email" class="form-control item" placeholder="البريد الإلكتروني">
-          <input type="text" value="{{search_phone}}" name="search_phone" class="form-control item" placeholder="رقم الهاتف">
-          <input dir="ltr" value="{% if publish_date %} {{publish_date}}{%else%}{% now 'Y-m-d' %}{%endif%}" type="date" name="publish_date" class="form-control item" >
+          {% comment %} <input type="text" value="{{search_phone}}" name="search_phone" class="form-control item" placeholder="رقم الهاتف"> {% endcomment %}
+          <input dir="ltr" value="{{publish_date}}" type="date" name="publish_date" class="form-control item" >
       
           
       
@@ -63,11 +69,11 @@
             <input type="submit" name="" id="" value="بحث" class="btn btn-primary" style="background-color: purple; color: white !important; margin: 0; margin-left: 10px;">
       
       
-            <button class="btn btn-primary" type="button"
-            onclick="{document.getElementById('is_ExportExcel').value = '3';document.getElementById('FormPortal').submit()}">اكسل</button>
+            {% comment %} <button class="btn btn-primary" type="button"
+            onclick="{document.getElementById('is_ExportExcel').value = '4';document.getElementById('FormPortal').submit()}">اكسل</button>
           
             <button class="btn btn-primary" onclick="selectAll()" style="margin: 10px;" type="button">تحديد الكل</button>
-          
+           {% endcomment %}
           </div>
       
           </div>
@@ -161,9 +167,9 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>الإسم</th>
+                    <th>اسم</th>
                     <th>
-                        <p>المنظمة</p>
+                        <p>الشركة</p>
                         <p>كود الإعلان</p>
                     </th>
                     <th>المسمى الوظيفي</th>
@@ -214,16 +220,14 @@
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">كود الإعلان</th>
-                    <th scope="col">أسم المنظمة</th>
-                    <th scope="col">المدينة</th>
+                    <th scope="col">أسم الشركة</th>
                     <th scope="col">أسم الممثل</th>
-                    <th scope="col">رقم الهاتف</th>
-                    <th scope="col">بريد الإلكتروني</th>
+                    {% comment %} <th scope="col">رقم الهاتف</th> {% endcomment %}
+                    {% comment %} <th scope="col">بريد الإلكتروني</th> {% endcomment %}
+                    <th scope="col">عنوان</th>
+                    <th scope="col">المتقدمين</th>
+                    <th scope="col">ارتباط</th>
                     <th scope="col">الحالة</th>
-                    <th>عدد المقدمين</th>
-                    <th>المقبولين</th>
-                    <th scope="col">رسالة مخصصة</th>
 
                     <th scope="col">عرض</th>
                     <th scope="col">حذف</th>
@@ -232,14 +236,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <form action="{% url 'JobRequestsFormPortal' %}" id="FormPortal" method="post">
+                  <form action="{% url 'index' %}" id="FormPortal" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="is_ExportExcel" id="is_ExportExcel" value="0">
           
                     {% for job in jobs %}
+                    {% get_number_of_apllyers job.id as number_of_apllyers %}
+                    {% get_number_of_accepted_apllyers job.id as number_of_accepted_apllyers %}
 
-                    {% NumberOfPresenters job.id as Presenters %}
-                    {% AcceptedOfPresenters job.id as AcceptedPresenters %}
+
                   <tr >
                     <th scope="row" style="position: relative; padding-right: 20px;">
                       <div style="display: flex;">
@@ -248,20 +253,18 @@
                       {{forloop.counter}}
                   </div>
                     </th>
-                    <td>{{job.id_code}}</td>
-                    <td>{{job.userprofile.companyprofile.company_name}}</td>
-                    <td>{{job.get_company_city_display}}</td>
-                    <td>{{job.userprofile.companyprofile.complite_name}}</td>
-                    <td>{{job.userprofile.companyprofile.phone}}</td>
-                    <td>{{job.userprofile.user.email}}</td>
+                    <td>{{job.user.userprofile.companyprofile.company_name}}</td>
+                    <td>{{job.user.userprofile.companyprofile.complite_name}}</td>
+                    <td>{{job.job_title}}</td>
+                    <td>{{number_of_apllyers}}</td>
+                    <td>{{number_of_accepted_apllyers}}</td>
 
-                    <td><div class="post_state">{{job.get_post_state_display}}</div></td>
-                    <td data-label="Job">{{Presenters}}</td>
-                    <td data-label="Job">{{AcceptedPresenters}}</td>
-                    <td><a href="" style="width: 115px;" class="ui inverted blue button" data-bs-toggle="modal" data-bs-target="#exampleModal{{job.id}}">رسالة مخصصة</a></td>
+                    {% comment %} <td>{{job.user.userprofile.companyprofile.phone}}</td> {% endcomment %}
+                    {% comment %} <td>{{job.user.email}}</td> {% endcomment %}
+                    <td>{{job.get_state_display}}</td>
 
-                    <td><a style="width: 115px;" href="{% url 'ShowCompanyPostJobs' job.id %}" class="ui inverted blue button">عرض</a></td>
-                    <td><a style="width: 115px;" href="{% url 'DeleteCompanyPostJobs' job.id %}" class="ui  red button">حذف</a></td>
+                    <td><a href="{% url 'ViewCompanyPostJobs' job.id %}" class="ui inverted blue button">عرض</a></td>
+                    <td><a href="{% url 'adminDeleteJob' job.id %}" class="ui  red button">حذف</a></td>
                   </tr>
                   {% endfor %}
                 </form>
@@ -273,54 +276,34 @@
 
 
 
-{% for job in jobs %}
-    
-<!-- Modal -->
-<div class="modal fade" id="exampleModal{{job.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{job.id}}" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel{{job.id}}">رسالة مخصصة</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-
-      <form action="{% url 'NetworkBrotcastMsg' %}" method="post">
-        <div class="modal-body">
-            <hr>
-            {% csrf_token %}
-            <input type="hidden" value="2" name="to">
-            <input type="hidden" value="custom" name="companyChooseDIR">
-            <input type="hidden" value="{{job.id}}" name="id">
-        
-          
-            <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">عنوان الرسالة</label>
-                <input class="form-control" name="subject" id="exampleFormControlTextarea1" rows="3" placeholder="أكتب عنوان الرسالة">
-            </div>
-            <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">الرسالة</label>
-                <textarea class="form-control" name="msg" id="exampleFormControlTextarea1" rows="3" placeholder="أدخل الرسالة التي تريد إرسالها"></textarea>
-            </div>
-          
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                <button type="submit" class="btn btn-primary">رسال</button>
-            </div>
-        </div>
-
-      </form>
-
-    </div>
-  </div>
-</div>
-{% endfor %}
-
-
 <script>
+    $(document).ready(function () {
+      var $chkboxes = $('.chkbox');
+      var lastChecked = null;
+  
+      $chkboxes.click(function (e) {
+        if (!lastChecked) {
+          lastChecked = this;
+          return;
+        }
+  
+        if (e.shiftKey) {
+          var start = $chkboxes.index(this);
+          var end = $chkboxes.index(lastChecked);
+  
+          $chkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop('checked', lastChecked.checked);
+        }
+  
+        lastChecked = this;
+      });
+    });
+  
 
-let is_checked = false
+
+
+
+    
+  let is_checked = false
   
   function selectAll() {
     let chkboxs = document.querySelectorAll('.chkbox')
@@ -345,6 +328,5 @@ let is_checked = false
 
 
   }
-  
-</script>
+  </script>
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load jobs_tags %}
 
 {% block sheri %}
 <style>
@@ -20,7 +21,6 @@
     }
 
     .job-details p{
-        background-color: #fff;
         margin: 6px;
         padding: 5px 10px;
         border-radius: 10px;
@@ -63,39 +63,44 @@
     
     <div class="main mt-5">
         <a href="{% url 'companyCreateJob' %}" class="btn btn-primary mb-2">اضافة وظيفية</a>
+        {% for job in jobs %}
+        {% get_number_of_apllyers job.id as number_of_apllyers %}
+        {% get_number_of_accepted_apllyers job.id as number_of_accepted_apllyers %}
 
-        {% for i in '1234' %}
         <div class="job-card-main">
             <div class="title-box">
                 <div>
-                    <a class="btn btn-warning" style="font-size:10px;">قيد المراجعة</a>
+                    <a class="btn {% if job.state == '0' %} btn-warning {% elif job.state == '1' %} btn-success {% elif job.state == '2' %}btn-danger{% endif %}" style="font-size:10px;">{{job.get_state_display}}</a>
 
-                    <a href="{% url 'companyviewJob' %}" class="job-title">إعداد ملف عقد امتياز تجاري كامل</a>
+                    <a href="{% url 'companyviewJob' job.id %}" class="job-title">{{job.job_title}}</a>
 
                 </div>
                 <div style="text-align: left;">
-                    <a href="{% url 'companyviewJob' %}" class="btn btn-primary mt-2">عرض</a>
-                    <a href="{% url 'companyviewJob' %}" class="btn btn-danger mt-2">حذف</a>
-
+                    <a href="{% url 'companyviewJob' job.id %}" class="btn btn-primary mt-2">عرض</a>
+                    {% if job.state == '0' or job.state == '1' %}
+                    <a href="{% url 'companyCloseJob' job.id %}" class="btn btn-danger mt-2">أغلاق</a>
+                    {% elif job.state == '2' %}
+                    <a href="{% url 'companyOpenJob' job.id %}" class="btn btn-success mt-2">فتح</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="job-details">
                 <p  class="btn btn-light"><i class="bi bi-stopwatch-fill"></i>
-                    منذ ساعتين
+                    {{job.whenpublished}}
                 </p>
                 <p  class="btn btn-light">
                     <i class="bi bi-ticket-fill"></i>
-                    11 عرض
+                    {{number_of_apllyers}} متقدم
                 </p>
 
-                <p  class="btn btn-light">
+                {% comment %} <p  class="btn btn-light">
                     <i class="bi bi-joystick"></i>
-                    2 مقبولين
-                </p>
+                    {{number_of_accepted_apllyers}} مقبولين
+                </p> {% endcomment %}
             </div>
 
             <p class="custom-text-truncate">
-                السلام عليكم ورحمة الله وبركاته اسعد الله ايامكم بكل خير يوجد لدي نشاط تجاري وارغب عمل امتياز تجاري يشمل على الدليل امتياز تجاري يشمل على الدليل امتياز تجاري يشمل على الدليل التشغيلي وجميع الفصول والبنود
+                {{job.about_job}}
             </p>
         <hr>
 

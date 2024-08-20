@@ -14,4 +14,10 @@ urlpatterns = [
     path('Company/<int:id>', views.Company, name='Company'),
     path('DeleteCompanys/<int:id>', views.DeleteCompanys, name='DeleteCompanys'),
 
+    #Jobs
+    path('ViewJobsPanel', views.ViewJobsPanel, name='ViewJobsPanel'),
+    path('ViewCompanyPostJobs/<int:id>', views.ViewCompanyPostJobs, name='ViewCompanyPostJobs'),
+    path('adminDeleteAppier/<int:id>', views.adminDeleteAppier, name='adminDeleteAppier'),
+    path('adminDeleteJob/<int:id>', views.adminDeleteJob, name='adminDeleteJob'),
+
 ]

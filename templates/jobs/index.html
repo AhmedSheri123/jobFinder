@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load jobs_tags %}
 {% block sheri %}
 <style>
     h1 {font-size: 1.6em;}
@@ -20,7 +20,6 @@
     }
 
     .job-details p{
-        background-color: #fff;
         margin: 6px;
         padding: 5px 10px;
         border-radius: 10px;
@@ -63,29 +62,34 @@
 
     <div class="main mt-5">
 
-        {% for i in '1234' %}
+        {% for job in jobs %}
+        {% get_number_of_apllyers job.id as number_of_apllyers %}
+
         <div class="job-card-main">
             <div class="title-box">
-                <a href="{% url 'viewJob' 1 %}" class="job-title">إعداد ملف عقد امتياز تجاري كامل</a>
-                <a href="{% url 'viewJob' 1 %}" class="btn btn-primary">تقديم</a>
+                <a href="{% url 'viewJob' job.id %}" class="job-title">{{job.job_title}}</a>
+                <a href="{% url 'viewJob' job.id %}" class="btn btn-primary">
+                {% if job.state == '1' %}تقديم{% elif job.state == '2' %}عرض{% endif %}
+                </a>
+                
             </div>
             <div class="job-details">
-                <p><i class="bi bi-stopwatch-fill"></i>
-                    منذ ساعتين
+                <p class="btn btn-light"><i class="bi bi-stopwatch-fill"></i>
+                    {{job.whenpublished}}
                 </p>
-                <p>
+                <p class="btn btn-light">
                     <i class="bi bi-ticket-fill"></i>
-                    11 عرض
+                    {{number_of_apllyers}} متقدم
                 </p>
 
-                <p>
+                <p class="btn {% if job.state == '0' %} btn-warning {% elif job.state == '1' %} btn-success {% elif job.state == '2' %}btn-danger{% endif %}">
                     <i class="bi bi-joystick"></i>
-                    2 مقبولين
+                    {{job.get_state_display}}
                 </p>
             </div>
 
             <p class="custom-text-truncate">
-                السلام عليكم ورحمة الله وبركاته اسعد الله ايامكم بكل خير يوجد لدي نشاط تجاري وارغب عمل امتياز تجاري يشمل على الدليل امتياز تجاري يشمل على الدليل امتياز تجاري يشمل على الدليل التشغيلي وجميع الفصول والبنود
+                {{job.about_job}}    
             </p>
         <hr>
 

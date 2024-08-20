@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from messenger.models import MessengerModel
 from messenger.views import get_user_img
+from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
+from jobs.forms import JobsModelForm
 
 # Create your views here.
 
@@ -325,3 +327,88 @@ def DeleteCompanys(request, id):
         #     messages.error(request, 'لا يوجد لديك اذونات للوصول الى هذه الخاصية')
         return redirect('Companys')
 
+
+def ViewJobsPanel(request):
+    if request.user.is_superuser:
+
+        jobs = JobsModel.objects.filter().order_by('-id')
+
+        
+
+        search = request.GET.get('search')
+        if search:jobs = jobs.filter(user__userprofile__companyprofile__company_name__contains=search)
+        else:search=''
+
+        job_title = request.GET.get('job_title')
+        if job_title:jobs = jobs.filter(job_title__contains=job_title)
+        else:job_title=''
+
+
+        state = request.GET.get('state')
+        if state:jobs = jobs.filter(state=state)
+
+
+        search_email = request.GET.get('search_email')
+        if search_email:jobs = jobs.filter(user__email=search_email)
+        else:search_email=''
+
+        search_phone = request.GET.get('search_phone')
+        if search_phone:jobs = jobs.filter(user__userprofile__companyprofile__phone=search_phone)
+        else:search_phone=''
+
+        complite_name = request.GET.get('complite_name')
+        if complite_name:jobs = jobs.filter(user__userprofile__companyprofile__complite_name__contains=complite_name)
+        else:complite_name=''
+
+        publish_date = request.GET.get('publish_date')
+        if publish_date:jobs = jobs.filter(creation_date__date=datetime.datetime.strptime(publish_date, '%Y-%m-%d'))
+        else:publish_date=''
+
+
+    
+    fields = {
+            'JobStateChoices':JobStateChoices,
+            'state':state,
+            'search':search,
+            'job_title':job_title,
+            'publish_date':publish_date,
+            'search_email':search_email,
+            'search_phone':search_phone,
+            'complite_name':complite_name,
+            }
+    
+    obj = {'jobs':jobs}
+    obj.update(fields)
+    return render(request, 'panel/company/jobs/CompanyPostJobs.html', obj)
+
+
+def ViewCompanyPostJobs(request, id):
+    user = request.user
+    job = JobsModel.objects.get(id=id)
+    appliers = JobAppliersModel.objects.filter(job=job)
+    state = job.state
+    form = JobsModelForm(instance=job)
+    if request.method == 'POST':
+        state = request.POST.get('state')
+        form = JobsModelForm(request.POST, instance=job)
+        
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.state = state
+            job.save()
+
+    
+    return render(request, 'panel/company/jobs/ViewCompanyPostJobs.html', {'form':form, 'job':job, 'appliers':appliers, 'JobStateChoices':JobStateChoices, 'state':state})
+
+
+def adminDeleteAppier(request, id):
+    applier = JobAppliersModel.objects.get(id=id)
+    job_id = applier.job.id
+    applier.delete()
+    return redirect('ViewCompanyPostJobs', job_id)
+
+
+def adminDeleteJob(request, id):
+    job = JobsModel.objects.get(id=id)
+    job.delete()
+    return redirect('ViewJobsPanel')
