@@ -96,12 +96,13 @@ class chatConsumer(WebsocketConsumer):
                     sender_subscription_passed = True
             else:
                 sender_subscription_end_msg = 'يرجى الاشتراك في باقة لتتمكن من ارسال الرسائل'
-            
-            if receiver_profile.subscription_received_msg_data()[0]:
-                receiver_subscription_passed = True
-                receiver_sub = UserSubscriptionModel.objects.get(id=receiver_profile.subscription.id)
-                receiver_sub.used_number_of_receive_msgs += 1
-                receiver_sub.save()
+            if userprofile.subscription:
+                    
+                if receiver_profile.subscription_received_msg_data()[0]:
+                    receiver_subscription_passed = True
+                    receiver_sub = UserSubscriptionModel.objects.get(id=receiver_profile.subscription.id)
+                    receiver_sub.used_number_of_receive_msgs += 1
+                    receiver_sub.save()
 
             if is_blocked or his_blocked or is_disable_receive_msg:
                 async_to_sync(self.channel_layer.group_send)(
