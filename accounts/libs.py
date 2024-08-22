@@ -1,6 +1,11 @@
 from django.utils import timezone
 import math
 
+def DatetimeNow(user):
+    datetime_now = timezone.now()
+    return datetime_now
+
+
 def when_published(creation_date):
     if not creation_date:
         return ''

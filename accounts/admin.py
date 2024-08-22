@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, EmployeeProfile, CountrysModel, SkilsModel, CompanyProfile, NotificationsModel
+from .models import UserProfile, EmployeeProfile, CountrysModel, SkilsModel, CompanyProfile, NotificationsModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel
 
 # Register your models here.
 
@@ -9,3 +9,6 @@ admin.site.register(CountrysModel)
 admin.site.register(SkilsModel)
 admin.site.register(CompanyProfile)
 admin.site.register(NotificationsModel)
+admin.site.register(SubscriptionsModel)
+admin.site.register(UserSubscriptionModel)
+admin.site.register(UserViewedProfileModel)

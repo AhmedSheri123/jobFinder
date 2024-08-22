@@ -26,9 +26,18 @@
 .subscriptions-card-details p {
     margin: 0;
 }
+
+.subscriptions-card-details p i {
+    font-size: 30px;
+}
+.subscriptions-main-ico i{
+    font-size: 35px;
+}
 .Subscriptions-card {
+    text-align: right;
     margin-top: 20px;
-    padding: 35px; width: 300px; background-color: #f1f1f1; border: 1px solid rgb(207, 207, 207); border-radius: 25px;
+    padding: 35px; width: 300px; 
+    border: 1px solid rgb(207, 207, 207); border-radius: 25px;
 }
 
 .tab-content {

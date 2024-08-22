@@ -7,6 +7,7 @@ from django.utils import timezone
 from channels.layers import get_channel_layer
 from messenger.models import MessagesModel
 from messenger.views import get_user_img
+from messenger.templatetags.messenger_tags import get_count_of_not_readed_msg
 
 
 class chatConsumer(WebsocketConsumer):
@@ -72,6 +73,11 @@ class chatConsumer(WebsocketConsumer):
             msg_id = text_data_json['msg_id']
 
             msg_model = MessagesModel.objects.get(id=msg_id)
+
+            if not msg_model.is_receiver_subscription_passed:
+                msg_model.msg = 'نفذ عدد استقبال الرسائل يرجى ترقية او تجديد العضوية لاظهار الرسالة'
+
+
             channel_layer = get_channel_layer()
             receiver_room_id = f'notifications_{str(receiver_id)}'
 
@@ -84,6 +90,7 @@ class chatConsumer(WebsocketConsumer):
                     'username': user.username,
                     'message': msg_model.msg,
                     'img': img[0],
+                    'count_of_not_readed_msg':get_count_of_not_readed_msg(receiver_id)
 
                 }
             )

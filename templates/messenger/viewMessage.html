@@ -19,7 +19,7 @@
             
                 </div>
     
-                <a href="#" class="text-white" style="font-size: 25px;"><i class="bi bi-three-dots-vertical"></i></a>
+                <a id="MsgSettings" tabindex="0" role="button" data-bs-toggle="popover" title="الرسائل" class="text-white" style="font-size: 25px;"><i class="bi bi-three-dots-vertical"></i></a>
             </div>
         </div>
     
@@ -41,7 +41,7 @@
                 {% else %}
                 <div class="receiver">
                     <div class="bg-light">
-                        <p class="">{{message.msg}}</p>
+                        <p class="">{% if message.is_receiver_subscription_passed %}{{message.msg}}{% else %}نفذ عدد استقبال الرسائل يرجى ترقية او تجديد العضوية لاظهار الرسالة{% endif %}</p>
                         <span>{{message.creation_date|date:'H:i'}}</span>
                     </div>
                 </div>
@@ -72,9 +72,62 @@
 
 </div>
 
+<div data-name="popover-content-msg-settings" id="popover-content-msg-settings" class="d-none" style="width: min(100%, 400px);">
+    <a href="{% url 'Profile' receiver.id %}" class="btn btn-info " style="display: block; width: 100%;">عرض الملف الشخصي</a>
+    
+    {% if not is_favorite %}
+    <a href="{% url 'AddFavorite' receiver.id %}?redir=True" class="btn btn-warning mt-1" style="display: block; width: 100%;">اضافة الى مفضلة</a>
+    {% else %}
+    <a href="{% url 'DeleteFavorite' receiver.id %}?redir=True" class="btn btn-warning mt-1" style="display: block; width: 100%;">ازالة من المفضلة</a>
+    {% endif %}
+
+    {% if not is_blocked %}
+    <a href="{% url 'BlockUserMessenger' receiver.id %}?redir=True" class="btn btn-danger mt-1" style="display: block; width: 100%;">حظر</a>
+    {% else %}
+    <a href="{% url 'DeleteBlockUser' receiver.id %}?redir=True" class="btn btn-danger mt-1" style="display: block; width: 100%;">الغاء الحظر</a>
+    {% endif %}
+</div>
+
+
+
+
+
+<script type='text/javascript'>
+    
+            
+    $(document).ready(function() {
+        
+
+        var optionsMsgSettings = {
+            sanitize: false,
+            html: true,
+            title: "خيارات",
+            customClass: 'MessagesPopover',
+            //html element
+            //content: $("#popover-content")
+            content: $('[data-name="popover-content-msg-settings"]').html(),
+            //Doing below won't work. Shows title only
+            //content: $("#popover-content").html()
+            fallbackPlacements : ['right']
+        }
+
+
+
+
+        var exampleElMsgSettings = document.getElementById('MsgSettings')
+        var popover = new bootstrap.Popover(exampleElMsgSettings, optionsMsgSettings)
+
+
+    })
+
+    // $(function () {
+    //         $('[data-bs-toggle="popover"]').popover()
+    //     })
+</script>
+
 
 <style>
-
+.popover-header {text-align: right;}
 * {
             font-family: Arial, Helvetica, sans-serif !important;
             letter-spacing: .3px;
@@ -116,7 +169,10 @@
     .sender-form-box button {border-radius: 100%; transform: rotateZ(225deg); margin: 10px 0;margin-right: 6px;}
 
     #msg-container-box {box-shadow: inset #6a6a6a 0px 15px 15px -13px !important; background-color: #f1f1f1; box-shadow: rgb(177, 177, 177) 0px 0px 3px;height: 100%; display: contents;}
-    #msg-container-box2 {    box-shadow: rgb(177, 177, 177) 0px 0px 3px; background-color: #f1f1f1; width: min(100%, 768px);position: relative;padding: 20px;margin: auto;display: block; padding-bottom: 75px;}
+    #msg-container-box2 {    box-shadow: rgb(177, 177, 177) 0px 0px 3px; background-color: #f1f1f1; width: min(100%, 768px);position: relative;padding: 20px;margin: auto;display: block; padding-bottom: 75px;min-height: 100vh;}
+    body {
+        margin-bottom:0 !important;
+    }
 
 </style>
 
@@ -150,11 +206,16 @@ scrollToBottom()
     chatSocket.onmessage = function(e){
         let data = JSON.parse(e.data)
         console.log(data)
-
+        console.log(data.user_id, user_id)
         if (data.user_id != user_id) {
             if (data.method == 'send_msg') {
+
+                if (!data.receiver_subscription_passed) {
+                    data.message = data.receiver_subscription_end_msg
+                    showToast(data.toastID, 'النظام', data.receiver_subscription_end_msg, '')
+                }
                 ReceiveMsg(data);
-                console.log('sss')
+                
                 send({
                     'method': 'msg_readed',
                     'msg_id':data.msg_id
@@ -210,11 +271,14 @@ scrollToBottom()
                 }
 
                 
+            } else if (data.method == 'subscription'){
+                console.log(data.method == 'subscription')
+                
+                showToast(data.toastID, 'النظام', data.msg, '')
             }
 
 
         }
-
     }
 
 

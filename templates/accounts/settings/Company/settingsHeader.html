@@ -7,10 +7,10 @@
           <a href="{% url 'CompanySettingGernral' %}" class="nav-link {% if 'CVSettingsGernral' in request.path %} active {%endif%}" id="nav-home-tab2" type="button" role="tab" aria-selected="false">عام</a>
           {% comment %} <a href="{% url 'SettingsCV' %}" class="nav-link {% if 'SettingsCV' in request.path %} active {%endif%}" id="nav-profile-tab2" type="button" role="tab"
             aria-selected="true">السيرة</a> {% endcomment %}
-          <button class="nav-link" id="nav-contact-tab2" type="button" role="tab"
-            aria-selected="false">الاشعارات</button>
-          <button class="nav-link" id="nav-disabled-tab2" type="button" role="tab"
-            aria-selected="false">العضوية</button>
+          <a href="{% url 'CompanyNotificationsSettings' %}" class="nav-link {% if 'CompanyNotificationsSettings' in request.path %} active {%endif%}" id="nav-contact-tab2" type="button" role="tab"
+            aria-selected="false">الاشعارات</a>
+          <a href="{% url 'CompanyUserSubscription' %}" class="nav-link {% if 'CompanyUserSubscription' in request.path %} active {%endif%}" id="nav-disabled-tab2" type="button" role="tab"
+            aria-selected="false">العضوية</a>
         </div>
       </nav>
     </div>

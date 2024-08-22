@@ -143,14 +143,14 @@
             {% get_user_profile_img applier.user.id as profile_image %}
             <div>
                 <div class="title-box">
-                    <div class="applyer-profile">
+                    <a class="applyer-profile" href="{% url 'Profile' applier.user.id %}">
                         {% if profile_image.1 == 0 %}
                         <img src="{{profile_image.0}}" alt="" style="width: 50px; border-radius: 100%;">
                         {% else %}
                         <img src="{% static '/img/default-profile-img-2.png' %}" alt="" style="width: 50px; border-radius: 100%;">
                         {% endif %}
                     <p>{{applier.user.username}}</p>
-                    </div>
+                    </a>
 
                     <div class="job-details">
                         <a href="{% url 'Profile' applier.user.id %}" class="btn btn-warning">

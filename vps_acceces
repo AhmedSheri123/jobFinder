@@ -3,7 +3,9 @@ ssh root@203.161.42.87
 pass:gYW547hG31wiEgvJU6
 
 ==============================
-
+git reset HEAD \* 
+git reset --hard 
+==============================
 
 cd /var/www/jobFinder/
 git pull

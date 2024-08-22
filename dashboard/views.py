@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile
+from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel
 from accounts.fields import GenderFields
 from calendar import monthrange
 import datetime
@@ -9,6 +9,7 @@ from messenger.models import MessengerModel
 from messenger.views import get_user_img
 from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
 from jobs.forms import JobsModelForm
+from accounts.froms import SubscriptionModelForm
 
 # Create your views here.
 
@@ -229,10 +230,13 @@ def PanelShowEmployees(request):
 
 def PanelShowEmployee(request, id):
     if request.user.is_superuser:
-            
+
         employee = EmployeeProfile.objects.get(id=id)
         userprofile = UserProfile.objects.get(employeeprofile=employee)
-        
+        if request.method == 'POST':
+            state = request.POST.get('state')
+            userprofile.cv_signup_process = state
+            userprofile.save()
         return render(request, 'panel/employee/PanelShowEmployee.html', {'employee':employee, 'EmployeeJobStateFields':CVSignupProcessChoices, 'userprofile':userprofile})
 
 
@@ -316,7 +320,12 @@ def Company(request, id):
     if request.user.is_superuser:            
         company = UserProfile.objects.get(id=id)
         img = get_user_img(company.user)
-        return render(request, 'panel/company/company/Company.html', {'company':company, 'img':img})
+
+        if request.method == 'POST':
+            state = request.POST.get('state')
+            company.company_signup_process = state
+            company.save()
+        return render(request, 'panel/company/company/Company.html', {'company':company, 'img':img, 'CompanySignupProcessChoices':CompanySignupProcessChoices})
     
 def DeleteCompanys(request, id):
     if request.user.is_superuser:
@@ -412,3 +421,26 @@ def adminDeleteJob(request, id):
     job = JobsModel.objects.get(id=id)
     job.delete()
     return redirect('ViewJobsPanel')
+
+
+def PanelViewSubscriptions(request):
+    subscriptions = SubscriptionsModel.objects.all()
+    return render(request, 'panel/subscriptions/sub/PanelViewSubscriptions.html', {'subscriptions':subscriptions})
+
+def PanelAddSubscriptions(request):
+    form = SubscriptionModelForm()
+    if request.method == 'POST':
+        form = SubscriptionModelForm(request.POST)
+        form.save()
+        
+    return render(request, 'panel/subscriptions/sub/addSubscriptions.html', {'form':form})
+
+
+def PanelEditSubscriptions(request, id):
+    subscription = SubscriptionsModel.objects.get(id=id)
+    form = SubscriptionModelForm(instance=subscription)
+    if request.method == 'POST':
+        form = SubscriptionModelForm(request.POST, instance=subscription)
+        form.save()
+
+    return render(request, 'panel/subscriptions/sub/addSubscriptions.html', {'form':form})

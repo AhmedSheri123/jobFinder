@@ -1,6 +1,6 @@
 from django import template
 from django.template.defaultfilters import stringfilter
-from messenger.models import MessagesModel, MessengerModel
+from messenger.models import MessagesModel, MessengerModel, BlockUserModel, FavoriteUserModel
 from messenger.views import get_user_img
 from django.contrib.auth.models import User
 
@@ -20,7 +20,11 @@ def get_last_msg(messenger_id, receiver):
     messages = MessagesModel.objects.filter(messenger=messenger)
     messages = messages.exclude(sender=receiver)
     if messages.exists():
-        return messages.order_by('-id').first()
+        msg = messages.order_by('-id').first()
+        if not msg.is_receiver_subscription_passed:
+            msg.msg = 'نفذ عدد استقبال الرسائل يرجى ترقية او تجديد العضوية لاظهار الرسالة'
+
+        return msg
     return ''
 
 @register.simple_tag
@@ -38,3 +42,29 @@ def get_receiver_user(sender_id, room_id):
     receiver = messenger.messenger_users.exclude(id=sender_id).first()
 
     return receiver
+
+@register.simple_tag
+@stringfilter
+def get_favorite_users(user):
+    fav = FavoriteUserModel.objects.filter(creator=user)
+    return fav
+
+@register.simple_tag
+@stringfilter
+def get_blocked_users(user):
+    blockers = BlockUserModel.objects.filter(creator=user)
+    return blockers
+
+@register.simple_tag
+@stringfilter
+def get_count_of_not_readed_msg(user_id):
+    count = 0
+    messengers = MessengerModel.objects.filter(messenger_users__id__in=[user_id])
+    for messenger in messengers:
+        messages = MessagesModel.objects.filter(messenger=messenger, is_readed=False).exclude(sender__id=user_id)
+        count += messages.count()
+    if count >= 99:
+        count  = str(count)+'+'
+    if count <= 0:
+        count = ''
+    return count

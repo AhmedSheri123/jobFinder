@@ -20,4 +20,8 @@ urlpatterns = [
     path('adminDeleteAppier/<int:id>', views.adminDeleteAppier, name='adminDeleteAppier'),
     path('adminDeleteJob/<int:id>', views.adminDeleteJob, name='adminDeleteJob'),
 
+    #Subscriptions
+    path('PanelViewSubscriptions', views.PanelViewSubscriptions, name='PanelViewSubscriptions'),
+    path('PanelAddSubscriptions', views.PanelAddSubscriptions, name='PanelAddSubscriptions'),
+    path('PanelEditSubscriptions/<int:id>', views.PanelEditSubscriptions, name='PanelEditSubscriptions'),
 ]

@@ -211,8 +211,33 @@
             </button>
         </div>
     </div>
+
+
     <div class="container" style="text-align: right; padding: 10px 15px;" >
-        <a href="{% url 'CreateReferralLinkForMe' %}" class="btn btn-primary" >انشاء رابط أحالة</a>
+        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateReferralModal">انشاء رابط أحالة</a>
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="CreateReferralModal" tabindex="-1" aria-labelledby="CreateReferralModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form method="get" action="{% url 'CreateReferralLinkForMe' %}" class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="CreateReferralModalLabel">انشاء رابط احالة</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <label for="" class="form-label">اسم المستعار</label>
+          <input type="text" class="form-control" name="alias_name">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+          <button type="submit" class="btn btn-primary">انشاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
     </div>
 
 
@@ -223,6 +248,7 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
+                    <th scope="col">اسم المستعار</th>
                     <th scope="col">عنوان الأحالة</th>
                     <th scope="col">نسبة عمولتك</th>
                     <th scope="col">ارباح الحالية</th>
@@ -239,6 +265,7 @@
                 {% get_referral_user_signin_count ref.id as signin_count %}
                 <tr>
                     <th scope="row">{{forloop.counter}}</th>
+                    <td>{{ref.alias_name}}</td>
                     <td>{{ref.referral_id}}</td>
                     <td>{{ref.percentage_of_withdraw}}%</td>
                     <td>{{ref.total_earn}}$</td>

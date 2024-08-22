@@ -133,6 +133,25 @@
 
 
     </div>
+
+<br>
+    <div class="ui list styled-box" style="display: grid; justify-content: space-around; grid-template-columns: auto;">
+        <p class="mt-5">الحالة</p>
+        
+        <form method="post" class="input-group mb-3 ">
+
+            {% csrf_token %}
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon1">حفظ</button>
+            <select name="state" class="form-control" id="">
+                {% for city in CompanySignupProcessChoices %}
+                <option {%if city.0 == company.company_signup_process %} selected {% endif %} value="{{city.0}}">{{city.1}}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+<br>
+<hr>
+<br>
     <div>
 
 

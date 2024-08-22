@@ -78,40 +78,45 @@
         <div class="search-main">
     <h1 class="mt-3" style="text-align: center;">البحث المتقدم</h1>
 <hr>
-            <form action="">
-                <div>
-                <label class="form-label" >المسمى الوظيفي</label>
-                <input type="text" class="form-control">                    
-                </div>
+            <form action="" method="get">
 
-
-
-
-
-                <div>
-                    <label class="form-label" >المهارات</label>
-                    <input type="text" class="form-control">                    
-                    </div>
-
-                <div>
-                                       
-                <label class="form-label" >الرغبات</label>
-                <input type="text" class="form-control">
+                <div>              
+                <label class="form-label" >المهنة المطلوبة</label>
+                <input type="text" name="desires" class="form-control">
                 </div>
 
                 <div>
- 
-                    <label class="form-label" >الجنس</label>
-                    <select class="form-control" name="" id="">
-                        <option value="">السعودية</option>
+                    <label class="form-label" >المؤهل الدراسي</label>
+                    <select class="form-control" name="cert_type" id="">
+                        <option value="">غير محدد</option>
+                        {% for countr in CertTypeFields %}
+                        <option {%if countr.0 == cert_type %} selected {% endif %} value="{{countr.0}}">{{countr.1}}</option>
+                        {% endfor %}
                     </select>
                 </div>
+
+                <div>              
+                    <label class="form-label" >التخصص</label>
+                    <input type="text" name="major" class="form-control">
+                </div>
+                <div>
+                    <label class="form-label" >الجنسية</label>
+                    <select class="form-control" name="nationality" id="">
+                        <option value="">غير محدد</option>
+                        {% for countr in NationalityFields %}
+                        <option {%if countr.0 == nationality %} selected {% endif %} value="{{countr.0}}">{{countr.1}}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
 
                 <div>
  
                     <label class="form-label" >الدولة</label>
-                    <select class="form-control" name="" id="">
-                        <option value="">السعودية</option>
+                    <select class="form-control" name="country" id="">
+                        <option value="">غير محدد</option>
+                        {% for countr in countrys %}
+                        <option {%if countr.id|stringformat:"i" == country %} selected {% endif %} value="{{countr.id}}">{{countr.name}}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -119,52 +124,28 @@
 
                 <div>
                     <label class="form-label" >المدينة</label>
-                    <input type="text" class="form-control">
+                    <input type="text" name="employee_city" class="form-control">
                 </div>
 
+                <div>
+ 
+                    <label class="form-label" >الجنس</label>
+                    <select class="form-control" name="gender" id="">
+                        <option value="">غير محدد</option>
+                        {% for countr in GenderFields %}
+                        <option {%if countr.0 == gender %} selected {% endif %} value="{{countr.0}}">{{countr.1}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
                 <div>
                     <label class="form-label" >الحالة الإجتماعية</label>
-                    <select class="form-control" name="" id="">
-                        <option value="">السعودية</option>
+                    <select class="form-control" name="marital_status" id="">
+                        <option value="">غير محدد</option>
+                        {% for countr in StateFields %}
+                        <option {%if countr.0 == marital_status %} selected {% endif %} value="{{countr.0}}">{{countr.1}}</option>
+                        {% endfor %}
                     </select>
-                </div>
-
-
-                <div>
-                    <label class="form-label" >الحالة الصحية</label>
-                    <select class="form-control" name="" id="">
-                        <option value="">السعودية</option>
-                    </select>
-                </div>
-
-
-                <div>
-                    
-                <label class="form-label" >الجنسية</label>
-                <select class="form-control" name="" id="">
-                    <option value="">السعودية</option>
-                </select>
-                </div>
-
-                <div>
-                    
-                <label class="form-label" >نوع الشهادة</label>
-                <select class="form-control" name="" id="">
-                    <option value="">السعودية</option>
-                </select>
-                </div>
-
-
-
-
-                <div>
-
-                    <label class="form-label" >يمتلك سيارة</label>
-                    <select class="form-control" name="" id="">
-                        <option value="">السعودية</option>
-                    </select>
-
                 </div>
 
                 <button class="btn btn-primary" style="margin: auto; margin-top: 20px; display: block;">بحث</button>
@@ -173,7 +154,7 @@
 
         <div class="cv-flex-main">
 
-            {% for userprofile in userprofiles|slice:6 %}
+            {% for userprofile in userprofiles %}
             <div class="cv-main-box mt-5">
     
     
@@ -312,7 +293,7 @@
     
                         <p style="font-size: 14px; text-align: center; margin: 0;">
                             <i class="bi bi-geo-alt "></i>يقيم في
-                            {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
+                            {{userprofile.employeeprofile.countr}}/{{userprofile.employeeprofile.employee_city}}
                         </p>
     
                         <div style="display: flex; justify-content: space-around; flex-wrap: wrap;font-size: .8em;">

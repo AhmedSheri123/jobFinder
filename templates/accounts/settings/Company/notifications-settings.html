@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+
+{% endblock links %}
+
+
+{% block sheri %}
+
+<div class="container" style="display: flex; justify-content: flex-end;">
+
+  <div class=" mt-5 pt-5" dir="rtl" style="width: min(100%, 700px); ">
+    {% include "accounts/settings/Company/settingsHeader.html" %}
+
+
+    <div class="mt-3 bg-f1 p-3">
+        <div>
+
+        {% include "accounts/settings/notifications/notifications-settings.html" %}
+
+        </div>
+    </div>
+
+  </div>
+  
+
+  
+</div>
+<div class="mt-5"></div>
+
+
+
+<style>
+  .bg-f1 {
+    background-color: #f1f1f1;
+  }
+</style>
+{% endblock %}

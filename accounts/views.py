@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel
+from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .froms import CompanyProfileForm
 from django.contrib.sites.shortcuts import get_current_site
+from .libs import DatetimeNow
 # Create your views here.
 
 def cvSignup(request):
@@ -98,6 +99,7 @@ def cvSignupCvCreation(request, alt_id):
         userprofile.cv_signup_process = '5'
         employee_profile.save()
         userprofile.save()
+        EnableDefaultUserSubscription(userprofile.id)
 
         return redirect('Login')
     return render(request, 'accounts/signup/Employee/cvSignupCvCreation.html', {'alt_id':alt_id, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys})
@@ -148,7 +150,8 @@ def companySignupVerifyEmail(request, alt_id):
     if request.method == 'POST':
         userprofile.company_signup_process = '4'
         userprofile.save()
-    
+        EnableDefaultUserSubscription(userprofile.id)
+
         return redirect('Login')
     
     return render(request, 'accounts/signup/Company/companySignupVerifyEmail.html', {'alt_id':alt_id})
@@ -207,14 +210,43 @@ def Logout(request):
     return redirect('index')
 
 def Profile(request, id):
-    user = User.objects.get(id=id)
-    userprofile = user.userprofile
+    viewer_user = request.user
+    viewer_userprofile = UserProfile.objects.get(user=viewer_user)
+    passed = False
 
-    if userprofile.is_employee:
-        return CVProfile(request, id)
-    elif userprofile.is_company:
-        return CPProfile(request, id)
-    else:return redirect('index')
+
+    user = User.objects.get(id=id)
+    userprofile = UserProfile.objects.get(user=user)
+    if request.user != user:
+        viewed_profiles = UserViewedProfileModel.objects.filter(profile_viewer=viewer_user, profile_viewed=user)
+        if not viewed_profiles.exists():
+
+            if viewer_userprofile.subscription:
+                
+                    subscription_viewed_profile_data = viewer_userprofile.subscription_viewed_profile_data()
+                    if subscription_viewed_profile_data[0]:
+                        viewed_profile = UserViewedProfileModel.objects.create(profile_viewer=viewer_user, profile_viewed=user)
+                        viewed_profile.creation_date = DatetimeNow(user.id)
+                        viewed_profile.save()
+                        viewer_sub = UserSubscriptionModel.objects.get(id=viewer_userprofile.subscription.id)
+                        
+                        viewer_sub.used_number_of_view_profiles += 1
+                        viewer_sub.save()
+                        passed =True
+                    else: messages.error(request, 'يرجى تجديد الباقة او ترقيتها حتى تتمكن من الوصول الى الملف الشخصي للمستخدم')
+            else:
+                messages.error(request, 'يرجى الاشتراك حتى تتمكن من الوصول الى الملف الشخصي للمستخدم')
+        else:
+            passed = True
+    else:
+        passed = True
+            
+    if passed:
+        if userprofile.is_employee:
+            return CVProfile(request, id)
+        elif userprofile.is_company:
+            return CPProfile(request, id)
+    return redirect('index')
     # return render(request, 'accounts/profile/Employee/profile.html')
 
 def CVProfile(request, id):
@@ -312,6 +344,9 @@ def SettingsCV(request):
         facebook = request.POST.get('facebook')
         linkedin = request.POST.get('linkedin')
         whatsapp = request.POST.get('whatsapp')
+        instgram = request.POST.get('instgram')
+        snapshat = request.POST.get('snapshat')
+        tiktok = request.POST.get('tiktok')
 
         user = User.objects.get(id=request.user.id)
         userprofile = UserProfile.objects.get(user=user)
@@ -339,6 +374,9 @@ def SettingsCV(request):
         employee_profile.facebook = facebook
         employee_profile.linkedin = linkedin
         employee_profile.whatsapp = whatsapp
+        employee_profile.instgram = instgram
+        employee_profile.snapshat = snapshat
+        employee_profile.tiktok = tiktok
 
         employee_profile.save()
 
@@ -381,8 +419,11 @@ def MyReferralLink(request):
 def CreateReferralLinkForMe(request):
     user = request.user
     userprofile = user.userprofile
+    alias_name = request.GET.get('alias_name')
 
     link = ReferralLinkModel.objects.create()
+    if alias_name:
+        link.alias_name = alias_name
     link.creator_userprofile = userprofile
     link.percentage_of_withdraw = 20
     link.save()
@@ -431,3 +472,97 @@ def SignUpReferralLink(request, referral_id):
     request.session['referral_id'] = referral_id
     
     return redirect('cvSignup')
+
+
+def EnableUserSubscription(request, id):
+    user = request.user
+    userprofile = UserProfile.objects.get(user=user)
+    
+    subscription = SubscriptionsModel.objects.get(id=id)
+
+    user_subscription = UserSubscriptionModel.objects.create(subscription=subscription, price = subscription.price, number_of_days = subscription.number_of_days, number_of_receive_msgs = subscription.number_of_receive_msgs, number_of_send_msgs = subscription.number_of_send_msgs, number_of_view_profiles = subscription.number_of_view_profiles)
+    user_subscription.save()
+
+    if userprofile.subscription:
+        old_user_subscription = UserSubscriptionModel.objects.get(id=userprofile.subscription.id)
+        old_user_subscription.delete()
+
+    userprofile.subscription = user_subscription
+    userprofile.save()
+
+    return redirect('index')
+
+def DisableUserSubscription(request):
+    user = request.user
+    userprofile = UserProfile.objects.get(user=user)
+    userprofile.subscription = None
+    userprofile.save()
+    messages.success(request, 'تم الغاء اشتراك بنجاح')
+    return redirect('Profile', user.id)
+
+def EnableDefaultUserSubscription(userprofile_id):
+    userprofile = UserProfile.objects.get(id=userprofile_id)
+    
+    subscriptions = SubscriptionsModel.objects.filter(is_default_Subscription=True)
+    if subscriptions.exists():
+        subscription = subscriptions.first()
+        user_subscription = UserSubscriptionModel.objects.create(subscription=subscription, price = subscription.price, number_of_days = subscription.number_of_days, number_of_receive_msgs = subscription.number_of_receive_msgs, number_of_send_msgs = subscription.number_of_send_msgs, number_of_view_profiles = subscription.number_of_view_profiles)
+        user_subscription.save()
+        
+        if userprofile.subscription:
+            old_user_subscription = UserSubscriptionModel.objects.get(id=userprofile.subscription.id)
+            old_user_subscription.delete()
+
+        userprofile.subscription = user_subscription
+        userprofile.save()
+
+        return True
+    return False
+
+def EmployeeUserSubscription(request):
+    return render(request, 'accounts/settings/Employee/UserSubscription.html')
+
+def CompanyUserSubscription(request):
+    return render(request, 'accounts/settings/Company/UserSubscription.html')
+
+
+
+def EmployeeNotificationsSettings(request):
+    user = request.user
+    if request.method == 'POST':
+        dont_receive_msg_from_companys = request.POST.get('dont_receive_msg_from_companys')
+        dont_receive_msg_from_employees = request.POST.get('dont_receive_msg_from_employees')
+        userprofile = UserProfile.objects.get(user=user)
+        if dont_receive_msg_from_companys:
+            userprofile.dont_receive_msg_from_companys = True
+        else:
+            userprofile.dont_receive_msg_from_companys = False
+
+        if dont_receive_msg_from_employees:
+            userprofile.dont_receive_msg_from_employees = True
+        else:
+            userprofile.dont_receive_msg_from_employees = False
+
+        userprofile.save()
+
+    return render(request, 'accounts/settings/Employee/notifications-settings.html')
+
+def CompanyNotificationsSettings(request):
+    user = request.user
+    if request.method == 'POST':
+        dont_receive_msg_from_companys = request.POST.get('dont_receive_msg_from_companys')
+        dont_receive_msg_from_employees = request.POST.get('dont_receive_msg_from_employees')
+        userprofile = UserProfile.objects.get(user=user)
+        if dont_receive_msg_from_companys:
+            userprofile.dont_receive_msg_from_companys = True
+        else:
+            userprofile.dont_receive_msg_from_companys = False
+
+        if dont_receive_msg_from_employees:
+            userprofile.dont_receive_msg_from_employees = True
+        else:
+            userprofile.dont_receive_msg_from_employees = False
+            
+        userprofile.save()
+
+    return render(request, 'accounts/settings/Company/notifications-settings.html')

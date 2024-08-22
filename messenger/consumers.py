@@ -1,8 +1,8 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from .models import MessagesModel, MessengerModel
-from accounts.models import UserProfile
+from .models import MessagesModel, MessengerModel, BlockUserModel
+from accounts.models import UserProfile, UserSubscriptionModel, CompanyRandomNumCodeGen
 from django.contrib.auth.models import User
 from channels.layers import get_channel_layer
 
@@ -63,38 +63,98 @@ class chatConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         method = text_data_json['method']
         user = self.scope["user"]
-        
+        userprofile = UserProfile.objects.get(user=user)
         room = MessengerModel.objects.get(room_id=self.room_name)
-
+        sender_subscription_end_msg = 'نفذ عدد ارسال الرسائل يرجى ترقية او تجديد العضوية لارسال الرسالة'
+        receiver_subscription_end_msg = 'نفذ عدد استقبال الرسائل يرجى ترقية او تجديد العضوية لاظهار الرسالة'
         # send chat message event to the room
 
         if method == 'send_msg':
-            message = text_data_json['message']
-            msg_model = MessagesModel.objects.create(msg=message, messenger=room, sender=user)
             receiver = room.messenger_users.exclude(id=user.id).first()
-            send_toast = False
-            is_active = receiver.userprofile.is_active
-            if is_active:
-                if receiver.userprofile.is_in_chat and receiver.userprofile.active_messenger!=room:
-                    send_toast = True
-                elif not receiver.userprofile.is_in_chat:
-                    send_toast = True
+            receiver_profile = UserProfile.objects.get(user=receiver)
 
-            msg_model.save()
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                    'type': 'chat_message',
-                    'method':method,
-                    'user_id': user.id,
-                    'receiver_id': receiver.id,
-                    'msg_id': msg_model.id,
-                    'message': message,
-                    'send_toast':send_toast,
-                    'is_active':is_active,
-                    'creation_date': msg_model.creation_date.strftime('%H:%M'),
-                }
-            )
+            is_blocked = BlockUserModel.objects.filter(creator=receiver, user=user).exists()
+            his_blocked = BlockUserModel.objects.filter(creator=user, user=receiver).exists()
+            is_disable_receive_msg = False
+
+            if userprofile.is_employee:
+                if receiver_profile.dont_receive_msg_from_employees:
+                    is_disable_receive_msg = True
+
+            if userprofile.is_company:
+                if receiver_profile.dont_receive_msg_from_companys:
+                    is_disable_receive_msg = True
+                    
+
+            sender_subscription_passed = False
+            receiver_subscription_passed = False
+            if userprofile.subscription:
+                if userprofile.subscription_send_msg_data()[0]:
+                    user_sub = UserSubscriptionModel.objects.get(id=userprofile.subscription.id)
+                    user_sub.used_number_of_send_msgs += 1
+                    user_sub.save()
+                    sender_subscription_passed = True
+            else:
+                sender_subscription_end_msg = 'يرجى الاشتراك في باقة لتتمكن من ارسال الرسائل'
+            
+            if receiver_profile.subscription_received_msg_data()[0]:
+                receiver_subscription_passed = True
+                receiver_sub = UserSubscriptionModel.objects.get(id=receiver_profile.subscription.id)
+                receiver_sub.used_number_of_receive_msgs += 1
+                receiver_sub.save()
+
+            if is_blocked or his_blocked or is_disable_receive_msg:
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': 'chat_message',
+                        'method':'Blocked',
+                    }
+                )
+            elif not sender_subscription_passed:
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': 'chat_message',
+                        'method':'subscription',
+                        'user_id': user.id,
+                        'sender_subscription_passed':sender_subscription_passed,
+                        'msg':sender_subscription_end_msg,
+                        'toastID': CompanyRandomNumCodeGen(),
+                    }
+                )
+            else:
+
+                message = text_data_json['message']
+                msg_model = MessagesModel.objects.create(msg=message, messenger=room, sender=user)
+
+                send_toast = False
+                is_active = receiver.userprofile.is_active
+                if is_active:
+                    if receiver.userprofile.is_in_chat and receiver.userprofile.active_messenger!=room:
+                        send_toast = True
+                    elif not receiver.userprofile.is_in_chat:
+                        send_toast = True
+
+                msg_model.is_receiver_subscription_passed = receiver_subscription_passed
+                msg_model.save()
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': 'chat_message',
+                        'method':method,
+                        'user_id': user.id,
+                        'receiver_id': receiver.id,
+                        'msg_id': msg_model.id,
+                        'message': message,
+                        'send_toast':send_toast,
+                        'is_active':is_active,
+                        'sender_subscription_passed':sender_subscription_passed,
+                        'receiver_subscription_passed':receiver_subscription_passed,
+                        'receiver_subscription_end_msg':  receiver_subscription_end_msg,
+                        'creation_date': msg_model.creation_date.strftime('%H:%M'),
+                    }
+                )
 
         elif method == 'msg_readed':
             msg_id = text_data_json['msg_id']

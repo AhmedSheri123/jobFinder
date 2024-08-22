@@ -273,14 +273,37 @@
                                   </div>
                           
                           
-                                    <div class="input-group mb-3">
-                                      <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
-                                      <input value="{{userprofile.employeeprofile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
-                                        aria-describedby="basic-addon1">
-                                    </div>
+                                    
+                                  {% if userprofile.subscription.subscription.show_phone %}
+                                  <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
+                                    <input value="{{userprofile.employee_profile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
+                                      aria-describedby="basic-addon1">
+                                  </div>
+                        {% endif %}
 
                     
-                    
+                                    {% if userprofile.subscription.subscription.show_instgram %}
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-instagram"></i></span>
+                                        <input value="{{userprofile.employee_profile.instgram}}" disabled type="text" name="instgram" class="form-control" placeholder="انستغرام" aria-label="Username"
+                                          aria-describedby="basic-addon1">
+                                      </div>
+                            {% endif %}
+                                {% if userprofile.subscription.subscription.show_snap %}
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-snapchat"></i></span>
+                                        <input value="{{userprofile.employee_profile.snapshat}}" disabled type="text" name="snapshat" class="form-control" placeholder="سناب شات" aria-label="Username"
+                                          aria-describedby="basic-addon1">
+                                      </div>
+                            {% endif %}
+                                {% if userprofile.subscription.subscription.show_tiktok %}
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-tiktok"></i></span>
+                                        <input value="{{userprofile.employee_profile.tiktok}}" disabled type="text" name="tiktok" class="form-control" placeholder="تيك توك" aria-label="Username"
+                                          aria-describedby="basic-addon1">
+                                      </div>
+                                      {% endif %}
                                     <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
                                         <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
                                         <div class="contact-info-soshial">
@@ -327,171 +350,166 @@
 
 
     <div class="Subscriptions-main-box" dir="rtl" style="display: flex; justify-content: space-between; flex-wrap: wrap; align-items: flex-start;">
-        <div class="Subscriptions-card">
-            <div>
-                <i style="font-size: 35px;" class="bi bi-asterisk"></i>
+        {% for subscription in subscriptions %}
+        <div class="Subscriptions-card {{subscription.Theem}}">
+            <div class="subscriptions-main-ico">
+                {{subscription.ico|safe}}
             </div>
-            <h4 class="pt-4">المجانية</h4>
-            <p >خطة ممتازة للمبتدئين</p>
+            <h4 class="pt-4">{{subscription.title}}</h4>
+            <p >{{subscription.subtitle}}</p>
 
             <div style="display: flex;align-items: flex-end; margin-top: 50px;" >
                 <div style="display: flex;">
                     <p style="padding: 0; margin: 0;">دولار</p>
-                    <span style="font-size: 100px; padding: 0; margin: 0;line-height: 1;">0</span>
+                    <span style="font-size: 80px; padding: 0; margin: 0;line-height: 1;">{{subscription.price|stringformat:'d'}}</span>
                 </div>
 
-                <p style="padding: 0; margin: 0;">/مجاني</p>
+                <p style="padding: 0; margin: 0;">/لمدة {{subscription.number_of_days}} يوم</p>
             </div>
 
             <hr class="mt-5">
             <div class="subscriptions-card-details">
                 <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد الايام غير محدود
+                    <i class="bi bi-check2 ms-2" ></i>
+                    عدد ارسال الرسائل {{subscription.number_of_send_msgs}}
                 </p>
 
                 <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد استقبال الرسائل اليومية 1
+                    <i class="bi bi-check2 ms-2" ></i>
+                    عدد استقبال الرسائل {{subscription.number_of_receive_msgs}}
+                </p>
+
+                <p style="display: flex; align-items: center;">
+                    <i class="bi bi-check2 ms-2" ></i>
+                    مرات عرض ملف الشخصي {{subscription.number_of_view_profiles}}
+                </p>
+
+
+
+                <p style="display: flex; align-items: center;">
+                    {% if subscription.show_phone %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار رقم الهاتف
                 </p>
 
 
                 <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد الرسائل المسموح بقرائتها خلال ٢٤ ساعه 1
+                    {% if subscription.show_whats %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار رقم الواتساب
+                </p>
+
+                <p style="display: flex; align-items: center;">
+                    {% if subscription.show_facebook %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار حساب الفيسبوك
+                </p>
+                
+                <p style="display: flex; align-items: center;">
+                    {% if subscription.show_linkedin %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار حساب الينكداين
+                </p>
+
+                <p style="display: flex; align-items: center;">
+                    {% if subscription.show_instgram %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار حساب الانستغرام
+                </p>
+
+                <p style="display: flex; align-items: center;">
+                    {% if subscription.show_snap %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار حساب سناب شات
                 </p>
 
 
                 <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد الرسائل المسموح بالرد عليها خلال ٢٤ ساعه 1
+                    {% if subscription.show_tiktok %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار حساب التيك توك
                 </p>
 
 
+                
+
+
                 <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
+                    {% if subscription.referral_link_to_earn %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
                     الحصول على رابط احاله للربح
                 </p>
                 
+
+
+                <p style="display: flex; align-items: center;">
+                    {% if subscription.distinctive_mark %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار علامة مميزة
+                </p>
+
+                <p style="display: flex; align-items: center;">
+                    {% if subscription.distinctive_frame %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار اطار مميز
+                </p>
+                
+                <p style="display: flex; align-items: center;">
+                    {% if subscription.show_number_of_likes %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار عدد المعجبين
+                </p>
+
+                <p style="display: flex; align-items: center;">
+                    {% if subscription.show_number_of_appearances %}
+                    <i class="bi bi-check2 ms-2" ></i>
+                    {% else %}
+                    <i class="bi bi-x ms-2" ></i>
+                    {% endif %}
+                    اظهار عدد الظهور للسيرة
+                </p>
+
                 <div style="display: grid;">
-                    <button class="btn btn-outline-primary mt-5 p-2">الخطة الحالية</button>
+                    <a href="{% url 'EnableUserSubscription' subscription.id %}" class="btn btn-outline-light mt-5 p-2" >الخطة الحالية</a>
 
                 </div>
             </div>
         </div>
+        {% endfor %}
 
-
-
-
-
-        <div class="Subscriptions-card" >
-            <div>
-                <i style="font-size: 35px;" class="bi bi-asterisk"></i>
-            </div>
-            <h4 class="pt-4">البرونزية</h4>
-            <p >خطة ممتازة للمبتدئين</p>
-
-            <div style="display: flex;align-items: flex-end; margin-top: 50px;" >
-                <div style="display: flex;">
-                    <p style="padding: 0; margin: 0;">دولار</p>
-                    <span style="font-size: 100px; padding: 0; margin: 0;line-height: 1;">10</span>
-                </div>
-
-                <p style="padding: 0; margin: 0;">/شهر</p>
-            </div>
-
-            <hr class="mt-5">
-            <div class="subscriptions-card-details">
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد الايام غير محدود
-                </p>
-
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد استقبال الرسائل اليومية 1
-                </p>
-
-
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد الرسائل المسموح بقرائتها خلال ٢٤ ساعه 1
-                </p>
-
-
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد الرسائل المسموح بالرد عليها خلال ٢٤ ساعه 1
-                </p>
-
-
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    الحصول على رابط احاله للربح
-                </p>
-                
-                <div style="display: grid;">
-                    <button class="btn btn-primary mt-5 p-2">اختر الخطة</button>
-
-                </div>
-            </div>
-        </div>
-
-
-
-
-        <div class="Subscriptions-card bg-primary text-white" >
-            <div>
-                <i style="font-size: 35px;" class="bi bi-asterisk"></i>
-            </div>
-            <h4 class="pt-4">المجانية</h4>
-            <p >خطة ممتازة للمبتدئين</p>
-
-            <div style="display: flex;align-items: flex-end; margin-top: 50px;" >
-                <div style="display: flex;">
-                    <p style="padding: 0; margin: 0;">دولار</p>
-                    <span style="font-size: 100px; padding: 0; margin: 0;line-height: 1;">0</span>
-                </div>
-
-                <p style="padding: 0; margin: 0;">/مجاني</p>
-            </div>
-
-            <hr class="mt-5">
-            <div class="subscriptions-card-details">
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد الايام غير محدود
-                </p>
-
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد استقبال الرسائل اليومية 1
-                </p>
-
-
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد الرسائل المسموح بقرائتها خلال ٢٤ ساعه 1
-                </p>
-
-
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    عدد الرسائل المسموح بالرد عليها خلال ٢٤ ساعه 1
-                </p>
-
-
-                <p style="display: flex; align-items: center;">
-                    <i class="bi bi-check2 ms-2" style="font-size: 30px;"></i>
-                    الحصول على رابط احاله للربح
-                </p>
-                
-                <div style="display: grid;">
-                    <button class="btn btn-outline-light mt-5 p-2" >الخطة الحالية</button>
-
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

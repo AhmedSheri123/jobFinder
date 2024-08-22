@@ -1,0 +1,23 @@
+{% load static %}
+{% load custom_tags %}
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+
+{% endblock links %}
+
+{% with userprofile=request.user.userprofile %}
+<form action="" method="post">
+  {% csrf_token %}
+<div class="form-check form-switch">
+    <input class="form-check-input" name="dont_receive_msg_from_companys" value="1" {% if userprofile.dont_receive_msg_from_companys %} checked {% endif %} type="checkbox" role="switch" id="flexSwitchCheckDefault">
+    <label class="form-check-label" for="flexSwitchCheckDefault">عدم استقبال الرسائل من الشركات</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" name="dont_receive_msg_from_employees" value="1" {% if userprofile.dont_receive_msg_from_employees %} checked {% endif %} type="checkbox" role="switch" id="flexSwitchCheckChecked">
+    <label class="form-check-label" for="flexSwitchCheckChecked">عدم استقبال الرسائل من اصحاب السيرة</label>
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-3">حفظ التعديلات</button>
+
+</form>
+  {% endwith %}

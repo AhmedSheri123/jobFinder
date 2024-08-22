@@ -24,7 +24,6 @@ urlpatterns = [
 
 
     path('Settings', views.Settings, name='Settings'),
-
     path('CVSettingsGernral', views.CVSettingsGernral, name='CVSettingsGernral'),    
     path('SettingsCV', views.SettingsCV, name='SettingsCV'),
 
@@ -33,4 +32,14 @@ urlpatterns = [
     path('DeleteReferralLinkForMe/<str:referral_id>', views.DeleteReferralLinkForMe, name='DeleteReferralLinkForMe'),
     path('WithdrawReferralLinkBalance/<str:referral_id>', views.WithdrawReferralLinkBalance, name='WithdrawReferralLinkBalance'),
     path('ref/<str:referral_id>', views.SignUpReferralLink, name='SignUpReferralLink'),
+    
+    #Subscriptions
+    path('EnableUserSubscription/<int:id>', views.EnableUserSubscription, name='EnableUserSubscription'),
+    path('DisableUserSubscription', views.DisableUserSubscription, name='DisableUserSubscription'),
+
+    path('CompanyUserSubscription', views.CompanyUserSubscription, name='CompanyUserSubscription'),
+    path('EmployeeUserSubscription', views.EmployeeUserSubscription, name='EmployeeUserSubscription'),
+
+    path('CompanyNotificationsSettings', views.CompanyNotificationsSettings, name='CompanyNotificationsSettings'),
+    path('EmployeeNotificationsSettings', views.EmployeeNotificationsSettings, name='EmployeeNotificationsSettings'),
 ]

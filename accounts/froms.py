@@ -1,5 +1,5 @@
 from django import forms
-from .models import CompanyProfile
+from .models import CompanyProfile, SubscriptionsModel
 
 class CompanyProfileForm(forms.ModelForm):
 
@@ -17,4 +17,16 @@ class CompanyProfileForm(forms.ModelForm):
             'district': forms.TextInput(attrs={'class': 'form-control'}),
             'img_base64':forms.HiddenInput(),
             
+        }
+
+
+class SubscriptionModelForm(forms.ModelForm):
+
+    class Meta:
+        model = SubscriptionsModel
+        
+        fields = '__all__'
+
+        widgets = {
+            'creation_date':forms.DateTimeInput(attrs={'type':'datetime-local'})
         }

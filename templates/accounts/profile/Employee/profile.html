@@ -191,23 +191,44 @@
             </div>
         </div>
         
-        
-        
+
         
         <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0" style="max-width:700px;">
-                <div class="input-group mb-3">
+            
+            <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
                 <input value="{{user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
               </div>
       
-      
+            {% if userprofile.subscription.subscription.show_phone %}
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
                   <input value="{{employee_profile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
                     aria-describedby="basic-addon1">
                 </div>
+      {% endif %}
       
-      
+            {% if userprofile.subscription.subscription.show_instgram %}
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-instagram"></i></span>
+                    <input value="{{employee_profile.instgram}}" disabled type="text" name="instgram" class="form-control" placeholder="انستغرام" aria-label="Username"
+                      aria-describedby="basic-addon1">
+                  </div>
+        {% endif %}
+            {% if userprofile.subscription.subscription.show_snap %}
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-snapchat"></i></span>
+                    <input value="{{employee_profile.snapshat}}" disabled type="text" name="snapshat" class="form-control" placeholder="سناب شات" aria-label="Username"
+                      aria-describedby="basic-addon1">
+                  </div>
+        {% endif %}
+            {% if userprofile.subscription.subscription.show_tiktok %}
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-tiktok"></i></span>
+                    <input value="{{employee_profile.tiktok}}" disabled type="text" name="tiktok" class="form-control" placeholder="تيك توك" aria-label="Username"
+                      aria-describedby="basic-addon1">
+                  </div>
+                  {% endif %}
                 <!-- <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1"><i class="bi bi-facebook"></i></span>
                   <input value="{{employee_profile.facebook}}" disabled type="text" name="facebook" class="form-control" placeholder="ملف الفيسبوك" aria-label="Username"
@@ -233,9 +254,15 @@
 
 
                 <div class="contact-info">
+            {% if userprofile.subscription.subscription.show_facebook %}
                     <a href="{{employee_profile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
+                    {% endif %}
+            {% if userprofile.subscription.subscription.show_linkedin %}
                     <a href="{{employee_profile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                    {% endif %}
+            {% if userprofile.subscription.subscription.show_whats %}
                     <a href="{{employee_profile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                    {% endif %}
 
                 </div>
         </div>

@@ -1,5 +1,9 @@
+{% load messenger_tags %}
+
 {% if user.is_authenticated %}
 {% if 'messageRoom' not in request.path %}
+
+{% get_count_of_not_readed_msg request.user.id as count_of_not_readed_msg %}
 <nav class="navbar navbar-expand-lg fixed-bottom glass-eff" style="padding: 2px;" id="navbar" data-bs-theme="dark" dir="rtl">
     <div class="container-fluid">
       
@@ -13,7 +17,10 @@
                 <a href="{% url 'companyJobs' %}" class="btn" role="button"><i class="bi bi-boxes"></i></a>
           </li>
           <li class="nav-item">
-                <a id="example" tabindex="0" class="btn" role="button" data-bs-toggle="popover" title="الرسائل" ><i class="bi bi-chat-dots-fill"></i></a>
+                <a style="position: relative;" id="example" tabindex="0" class="btn" role="button" data-bs-toggle="popover" title="الرسائل" >
+                  <span id="msg-main-badge" class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">{{count_of_not_readed_msg}}</span>
+                  <i class="bi bi-chat-dots-fill"></i>
+                </a>
           </li>
           <li class="nav-item">
                 <a id="noti" tabindex="0" class="btn" role="button" data-bs-toggle="popover" title="الاشعارات" ><i class="bi bi-bell-fill"></i></a>

@@ -117,12 +117,23 @@
       <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
       <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
 
-      <div class="toast-container end-0 p-3" style="position: fixed; bottom: 40px;" id="toast-box">
+      <div class="toast-container start-0 p-3" style="position: fixed; bottom: 40px;" id="toast-box" dir="rtl">
       </div>
     
       <script>
+        function randomGen() {
+          let min = 100000
+          let max = 1000000
+          return (Math.floor((Math.random())*(max-min+1))+min).toString();
+         }
+
+
+
+
         const default_img_profile = `{% static 'img/default-profile-img-2.png' %}`
         const toastBox = document.querySelector('#toast-box')
+
+
         function showToast(toastID, username, msg, img) {
             if (img == '') {
               img = default_img_profile
@@ -149,13 +160,13 @@
     
         };
     
-    
-          
+
+
         </script>
       
     
         <script>
-    
+
           const user_id = {{user.id}}
       
       
@@ -173,8 +184,24 @@
               if (data.method == 'showToast') {
                 showToast(data.toastID, data.username, data.message, data.img)
               }
+
+              if (data.count_of_not_readed_msg) {
+                SetMsgMainBadge(data.count_of_not_readed_msg)
+              }
       
           }
+
+
+          function SetMsgMainBadge(text) {
+            let Badge = document.getElementById('msg-main-badge')
+            Badge.innerHTML = text
+          }
+
+          $(document).ready(function() {
+          {% for message in messages %}
+        showToast(randomGen(), 'نظام', '{{message}}', '')
+        {% endfor %}
+          })
       </script>
   
   </body>

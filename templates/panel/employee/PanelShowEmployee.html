@@ -261,13 +261,16 @@
             <a href="" target="_blank">مشهد الإعاقة</a>
         </div> {% endcomment %}
 
-
+        <form method="post" class="input-group mb-3 mt-5">
+            {% csrf_token %}
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon1">حفظ</button>
+            <select name="state" class="form-control" id="">
+                {% for city in EmployeeJobStateFields %}
+                <option {%if city.0 == userprofile.cv_signup_process %} selected {% endif %} value="{{city.0}}">{{city.1}}</option>
+                {% endfor %}
+            </select>
+        </form>
     </div>
-
-</div>
-
-</div>
-<br>
 
 </div>
 
@@ -275,5 +278,10 @@
 <br>
 <hr>
 <br>
+</div>
+<br>
+
+</div>
+
 
 {% endblock %}
