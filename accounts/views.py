@@ -489,7 +489,7 @@ def EnableUserSubscription(request, id):
 
     userprofile.subscription = user_subscription
     userprofile.save()
-
+    messages.success(request, 'تم الاشتراك بنجاح')
     return redirect('index')
 
 def DisableUserSubscription(request):
