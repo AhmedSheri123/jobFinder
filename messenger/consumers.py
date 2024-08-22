@@ -96,7 +96,7 @@ class chatConsumer(WebsocketConsumer):
                     sender_subscription_passed = True
             else:
                 sender_subscription_end_msg = 'يرجى الاشتراك في باقة لتتمكن من ارسال الرسائل'
-            if userprofile.subscription:
+            if receiver_profile.subscription:
                     
                 if receiver_profile.subscription_received_msg_data()[0]:
                     receiver_subscription_passed = True
