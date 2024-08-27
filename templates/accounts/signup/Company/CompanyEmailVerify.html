@@ -89,27 +89,17 @@
 
 
         <div style="max-width: 500px;" dir="rtl">
-            <form method="post" action="{% url 'SignupSetupProcess' alt_id %}">
+            <form method="post" action="">
                 {% csrf_token %}
-                {% if VerifyProccess == '1' %}
                 <div class=" mb-3">
-                    <label for="" class="form-label">الهاتف</label>
+                    <label for="" class="form-label">كود التاكيد</label>
                     <!-- <span class="input-group-text" id="basic-addon1">@</span> -->
-                    <input type="tel" id="tel" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="text" id="code" class="form-control" name="code" placeholder="كود التاكيد" aria-label="Username" aria-describedby="basic-addon1">
                   </div>
 
+
                 <button type="submit" class="btn btn-primary">الخطوة التالية</button>
-                {% elif VerifyProccess == '2' %}
-
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">رمز التاكيد</label>
-                    <input required type="text" name="code" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                </div>
-                <button type="submit" class="btn btn-primary">الخطوة التالية</button>
-                <a href="{% url  'sendEmailCode' alt_id%}" class="btn btn-primary">ارسال رمز التاكيد للبريد الالكتروني</a>
-                {% endif %}
-
-
+                <a href="{% url 'SignupSetupProcess' alt_id %}" class="btn btn-primary">تعديل الرقم</a>
 
               </form>
         </div>
@@ -139,14 +129,4 @@
 
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/intlTelInput.min.js"></script>
-<script>
-  const input = document.querySelector("#tel");
-  window.intlTelInput(input, {
-    initialCountry: "sa",
-    hiddenInput: () => ({ phone: "full_phone", country: "country_code" }),
-
-    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.js",
-  });
-</script>
 {% endblock sheri %}

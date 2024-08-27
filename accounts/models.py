@@ -55,9 +55,19 @@ def EmployeeRandomNumCodeGen():
     return 'i' + str(res)
 
 def CompanyRandomNumCodeGen():
-    N = 4
+    N = 8
     res = ''.join(random.choices(string.digits, k=N))
     return 'o' + str(res)
+
+def payOrderCodeGen():
+    N = 16
+    res = ''.join(random.choices(string.digits, k=N))
+    return 'o' + str(res)
+
+def WhatsappOTPCodeGen():
+    N = 4
+    res = ''.join(random.choices(string.digits, k=N))
+    return str(res)
 
 def StrNumCodeGen():
     N = 13
@@ -339,4 +349,28 @@ class UserViewedProfileModel(models.Model):
     profile_viewer = models.ForeignKey(User, related_name='profile_viewer', on_delete=models.CASCADE)
     profile_viewed = models.ForeignKey(User, related_name='profile_viewed', on_delete=models.CASCADE)
     ignore_subscription = models.BooleanField(default=False)
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+class UserPaymentOrderModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    subscription = models.ForeignKey(SubscriptionsModel, on_delete=models.SET_NULL, null=True)
+    orderID = models.CharField(max_length=250, default=payOrderCodeGen, null=True, verbose_name="الاسم الثلاثي")
+    transactionNo = models.CharField(max_length=250, null=True)
+    is_buyed = models.BooleanField(default=False)
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+
+
+class WhatsappOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    secret = models.CharField(max_length=250, default=WhatsappOTPCodeGen, null=True)
+    is_finshed = models.BooleanField(default=False)
+
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+class EmailOTPModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    secret = models.CharField(max_length=250, default=WhatsappOTPCodeGen, null=True)
+    is_finshed = models.BooleanField(default=False)
+
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")

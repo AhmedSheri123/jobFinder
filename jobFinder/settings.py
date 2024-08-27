@@ -139,6 +139,18 @@ STATICFILES_DIRS = [BASE_DIR / 'jobFinder/static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.privateemail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'admin@ceveve.com'#sender's email-id
+EMAIL_HOST_PASSWORD = 'AHmad11/'#password associated with above email-id
+# EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

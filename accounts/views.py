@@ -1,13 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen
+from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .froms import CompanyProfileForm
 from django.contrib.sites.shortcuts import get_current_site
 from .libs import DatetimeNow
+from .payment import addInvoice, getInvoice
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from .whatsapp import wa_send_msg
+from django.core.mail import send_mail
 # Create your views here.
+from django.conf import settings
+email_from = settings.EMAIL_HOST_USER
 
 def cvSignup(request):
     alt_id = None
@@ -17,7 +24,9 @@ def cvSignup(request):
 
         user = User.objects.create(email=email)
         user.set_password(password)
-        userprofile = UserProfile.objects.create(user=user, is_employee=True)
+        employee_profile = EmployeeProfile.objects.create()
+        employee_profile.save()
+        userprofile = UserProfile.objects.create(user=user, is_employee=True, employeeprofile=employee_profile)
         user.username = userprofile.alt_id
         user.save()
         userprofile.cv_signup_process = '2'
@@ -32,13 +41,55 @@ def cvSignup(request):
 def cvSignupVerifyEmail(request, alt_id):
     userprofile = UserProfile.objects.get(alt_id=alt_id)
     user = userprofile.user
+    VerifyProccess = None
+    
+    if not userprofile.is_phone_verificated:VerifyProccess='1'
+    elif not userprofile.is_email_verificated:VerifyProccess='2'
+    else:VerifyProccess='0'
+
+
+    if VerifyProccess == '2':
+        first_opt = EmailOTPModel.objects.filter(user=user, is_finshed=False)
+        if not first_opt.exists():
+            return sendEmailCode(request, alt_id)
+
 
     if request.method == 'POST':
-        
-        userprofile.cv_signup_process = '3'
-        userprofile.save()
+        if VerifyProccess == '1':
+            full_phone = request.POST.get('full_phone')
+            co = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
+            co.phone = full_phone
+            co.save()
+            OPT = WhatsappOTP.objects.create(user=user)
+            OPT.save()
+            msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
+            wa_send_msg(msg)
+            return redirect('EmployeeSendWhaCodeVerify', alt_id)
+
+
+        elif VerifyProccess == '2':
+            code = request.POST.get('code')
+
+            if code:
+                OPT = EmailOTPModel.objects.filter(user=user, secret=code, is_finshed=False)
+                print('postttttttttttttttt', OPT)
+
+                if OPT.exists():
+
+                    userprofile = UserProfile.objects.get(user=user)
+                    userprofile.is_email_verificated = True
+                    userprofile.save()
+                    messages.success(request, 'تم تأكيد رقم الهاتف بنجاح')
+                    userprofile.cv_signup_process = '3'
+                    userprofile.save()
+                    EnableDefaultUserSubscription(userprofile.id)
+
+                    return redirect('SignupSetupProcess', alt_id)
+                else:
+                    messages.error(request, 'رمز تأكيد رقم الهاتف خاطئ')
+
         return redirect('SignupSetupProcess', userprofile.alt_id)
-    return render(request, 'accounts/signup/Employee/cvSignupVerifyEmail.html', {'alt_id':alt_id})
+    return render(request, 'accounts/signup/Employee/cvSignupVerifyEmail.html', {'alt_id':alt_id, 'VerifyProccess':VerifyProccess})
 
 def cvSignupConf(request, alt_id):
     if request.method == 'POST':
@@ -48,7 +99,11 @@ def cvSignupConf(request, alt_id):
         age = request.POST.get('age')
         userprofile = UserProfile.objects.get(alt_id=alt_id)
         
-        employee_profile = EmployeeProfile.objects.create(name=full_name, job_title=job_title, gender=gender, age=age)
+        employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
+        employee_profile.name = full_name
+        employee_profile.job_title = job_title
+        employee_profile.gender = gender
+        employee_profile.age = age
         employee_profile.save()
         userprofile.employeeprofile = employee_profile
         userprofile.cv_signup_process = '4'
@@ -144,17 +199,128 @@ def companySignupConf(request, alt_id):
     return render(request, 'accounts/signup/Company/companySignupConf.html', {'countrys':countrys, 'alt_id':alt_id})
 
 
+def sendEmailCode(request, alt_id):
+    userprofile = UserProfile.objects.get(alt_id=alt_id)
+    user = userprofile.user
+    OPT = EmailOTPModel.objects.create(user=user)
+    OPT.save()
+    msg = f'رمز تاكيد البريد الالكتروني هو : {OPT.secret}'
+    subject = 'تأكيد البريد الالكتروني'
+    messages.success(request, 'تم ارسال رمز تأكيد عبر البريدالالكتروني')
+    send_mail( subject, msg, email_from, [userprofile.user.email] )
+
+    return redirect('SignupSetupProcess', alt_id)
 
 def companySignupVerifyEmail(request, alt_id):
     userprofile = UserProfile.objects.get(alt_id=alt_id)
-    if request.method == 'POST':
-        userprofile.company_signup_process = '4'
-        userprofile.save()
-        EnableDefaultUserSubscription(userprofile.id)
+    user = userprofile.user
 
-        return redirect('Login')
+    VerifyProccess = None
     
-    return render(request, 'accounts/signup/Company/companySignupVerifyEmail.html', {'alt_id':alt_id})
+    if not userprofile.is_phone_verificated:VerifyProccess='1'
+    elif not userprofile.is_email_verificated:VerifyProccess='2'
+    else:VerifyProccess='0'
+
+    if VerifyProccess == '2':
+        first_opt = EmailOTPModel.objects.filter(user=user, is_finshed=False)
+        if not first_opt.exists():
+            return sendEmailCode(request, alt_id)
+    if request.method == 'POST':
+
+        if VerifyProccess == '1':
+            full_phone = request.POST.get('full_phone')
+            co = CompanyProfile.objects.get(id=userprofile.companyprofile.id)
+            co.phone = full_phone
+            co.save()
+            OPT = WhatsappOTP.objects.create(user=user)
+            OPT.save()
+            msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
+            wa_send_msg(msg)
+            return redirect('SendWhaCodeVerify', alt_id)
+
+        elif VerifyProccess == '2':
+            code = request.POST.get('code')
+
+            if code:
+                OPT = EmailOTPModel.objects.filter(user=user, secret=code, is_finshed=False)
+                print('postttttttttttttttt', OPT)
+
+                if OPT.exists():
+
+                    userprofile = UserProfile.objects.get(user=user)
+                    userprofile.is_email_verificated = True
+                    userprofile.save()
+                    messages.success(request, 'تم تأكيد رقم الهاتف بنجاح')
+                    userprofile.company_signup_process = '4'
+                    userprofile.save()
+                    EnableDefaultUserSubscription(userprofile.id)
+
+                    return redirect('SignupSetupProcess', alt_id)
+                else:
+                    messages.error(request, 'رمز تأكيد رقم الهاتف خاطئ')
+
+        # return redirect('Login')
+        return redirect('companySignupVerifyEmail', alt_id)
+    
+    return render(request, 'accounts/signup/Company/companySignupVerifyEmail.html', {'alt_id':alt_id, 'VerifyProccess':VerifyProccess})
+
+def SendWhaCodeVerify(request, alt_id):
+    userprofile = UserProfile.objects.get(alt_id=alt_id)
+    user=userprofile.user
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        if code:
+            OPT = WhatsappOTP.objects.filter(user=user, secret=code, is_finshed=False)
+            if OPT.exists():
+                userprofile = UserProfile.objects.get(user=user)
+                userprofile.is_phone_verificated = True
+                userprofile.save()
+                messages.success(request, 'تم تأكيد رقم الهاتف بنجاح')
+                return redirect('SignupSetupProcess', alt_id)
+            else:
+                messages.error(request, 'رمز تأكيد رقم الهاتف خاطئ')
+    return render(request, 'accounts/signup/Company/SendWhaCodeVerify.html', {'alt_id':alt_id})
+
+def EmployeeSendWhaCodeVerify(request, alt_id):
+    userprofile = UserProfile.objects.get(alt_id=alt_id)
+    user=userprofile.user
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        if code:
+            OPTS = WhatsappOTP.objects.filter(user=user, secret=code, is_finshed=False)
+            if OPTS.exists():
+                
+                userprofile.is_phone_verificated = True
+                userprofile.save()
+                OPT = OPTS.first()
+                OPT.is_finshed = True
+                OPT.save()
+                messages.success(request, 'تم تأكيد رقم الهاتف بنجاح')
+                return redirect('SignupSetupProcess', alt_id)
+            else:
+                messages.error(request, 'رمز تأكيد رقم الهاتف خاطئ')
+    return render(request, 'accounts/signup/Employee/SendWhaCodeVerify.html', {'alt_id':alt_id})
+
+
+def CompanyEmailVerify(request, alt_id):
+    userprofile = UserProfile.objects.get(alt_id=alt_id)
+    user=userprofile.user
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        if code:
+            OPTS = WhatsappOTP.objects.filter(user=user, secret=code, is_finshed=False)
+            if OPTS.exists():
+                userprofile = UserProfile.objects.get(user=user)
+                userprofile.is_phone_verificated = True
+                userprofile.save()
+                OPT = OPTS.first()
+                OPT.is_finshed = True
+                OPT.save()
+                messages.success(request, 'تم تأكيد رقم الهاتف بنجاح')
+                return redirect('SignupSetupProcess', alt_id)
+            else:
+                messages.error(request, 'رمز تأكيد رقم الهاتف خاطئ')
+    return render(request, 'accounts/signup/Company/CompanyEmailVerify.html', {'alt_id':alt_id})
 
 
 def SignupSetupProcess(request, alt_id):
@@ -167,7 +333,7 @@ def SignupSetupProcess(request, alt_id):
         elif process == '3':
             return companySignupVerifyEmail(request, alt_id)
         else:
-            return redirect('index')
+            return redirect('Login')
         
     elif userprofile.is_employee:
         process = userprofile.cv_signup_process
@@ -179,7 +345,7 @@ def SignupSetupProcess(request, alt_id):
         elif process == '4':
             return cvSignupCvCreation(request, alt_id)
         else:
-            return redirect('index')
+            return redirect('Login')
 
 
 def Login(request):
@@ -475,10 +641,11 @@ def SignUpReferralLink(request, referral_id):
 
 
 def EnableUserSubscription(request, id):
+    order = UserPaymentOrderModel.objects.get(id=id)
     user = request.user
     userprofile = UserProfile.objects.get(user=user)
     
-    subscription = SubscriptionsModel.objects.get(id=id)
+    subscription = SubscriptionsModel.objects.get(id=order.subscription.id)
 
     user_subscription = UserSubscriptionModel.objects.create(subscription=subscription, price = subscription.price, number_of_days = subscription.number_of_days, number_of_receive_msgs = subscription.number_of_receive_msgs, number_of_send_msgs = subscription.number_of_send_msgs, number_of_view_profiles = subscription.number_of_view_profiles)
     user_subscription.save()
@@ -489,6 +656,8 @@ def EnableUserSubscription(request, id):
 
     userprofile.subscription = user_subscription
     userprofile.save()
+    order.is_buyed = True
+    order.save()
     messages.success(request, 'تم الاشتراك بنجاح')
     return redirect('index')
 
@@ -566,3 +735,45 @@ def CompanyNotificationsSettings(request):
         userprofile.save()
 
     return render(request, 'accounts/settings/Company/notifications-settings.html')
+
+def UserPayment(request, subscription_id):
+    user = request.user
+    userprofile = user.userprofile
+    subscription = SubscriptionsModel.objects.get(id=subscription_id)
+
+    if request.method == 'POST':
+        index_url = request.build_absolute_uri('/')
+        callBackUrl = index_url.rsplit('/', 1)[0]
+        order = UserPaymentOrderModel.objects.create(user=user, subscription=subscription)
+        
+
+        orderID = order.orderID
+        
+        clientName = None
+        total_price_amount = float(subscription.price)
+        email = user.email
+        phone = None
+        callBackUrl+=reverse('checkPaymentProcess', kwargs={'orderID': orderID})
+        if userprofile.is_employee:phone=userprofile.employeeprofile.phone;clientName=userprofile.employeeprofile.name
+        else:phone=userprofile.companyprofile.phone;clientName=userprofile.companyprofile.complite_name
+
+        ser_title = subscription.title
+        ser_disc = subscription.subtitle
+
+
+        res = addInvoice(orderID, total_price_amount, email, phone, clientName, ser_title, ser_disc, callBackUrl, index_url)
+        if res.get('success'):
+            order.transactionNo = res.get('transactionNo')
+            order.save()
+            return HttpResponseRedirect(res.get('url'))
+            
+    return render(request, 'payment/pay.html', {'subscription':subscription})
+
+
+def checkPaymentProcess(request, orderID):
+    order = UserPaymentOrderModel.objects.get(orderID=orderID)
+    r = getInvoice(order.transactionNo)
+    if r.get('success'):
+        if r.get('orderStatus') == 'Paid':
+            return EnableUserSubscription(request, order.id)
+    return redirect('index')

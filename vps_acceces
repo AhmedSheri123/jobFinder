@@ -2,6 +2,8 @@
 ssh root@203.161.42.87
 pass:gYW547hG31wiEgvJU6
 
+ssh ahmed@203.161.42.87
+
 ==============================
 git reset HEAD \* 
 git reset --hard 

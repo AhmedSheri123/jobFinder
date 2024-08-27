@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block sheri %}
+<style>
+    .pay-img {
+        width: 75px;
+
+    }
+    .pay-img-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div style="margin-top: 100px;"></div>
+<div style="padding: 20px;">
+<form method="post" dir="rtl" style="max-width: 768px; border-radius: 10px; border: 1px solid rgb(216, 216, 216); margin: auto;">
+        <div class="pay-img-box" style="background-color: #f1f1f1; border-bottom: 1px solid rgb(216, 216, 216);padding: 10px;">
+            <img class="pay-img" src="https://static.vecteezy.com/system/resources/previews/020/975/567/original/visa-logo-visa-icon-transparent-free-png.png" alt="">
+            <img class="pay-img" src="https://cdn.icon-icons.com/icons2/1178/PNG/512/mastercard_82049.png" alt="">
+            <img class="pay-img" src="https://alkahhal.com.sa/web/assets/images/Archive/mada-logo.png" alt="">
+        </div>
+        <div style="padding: 10px;">
+            <div class="mt-3 mb-3">
+                <p><strong>عنوان الخدمة :</strong> {{subscription.title}}</p>
+                <p><strong>سعر شراء الخدمة :</strong> {{subscription.price}}$</p>
+            </div>
+            {% csrf_token %}
+{% comment %}             
+            <div class="mb-3">
+                <label for="" class="form-label">اسم مالك البطاقة</label>
+                <input name="clientName" type="text" class="form-control" placeholder="مثال : Zaid Matooq">
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">رقم البطاقة</label>
+                <input name="cardNumber" type="text" class="form-control" placeholder="مثال : 4111111111111111">
+            </div>
+            <label for="" class="form-label">تاريخ انتهاء البطاقة</label>
+
+            <div class="row gy-3 mb-3">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="year" placeholder="YYYY">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" name="month" placeholder="MM">
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="" class="form-label">كود CVC</label>
+                
+                <input name="securityCode" type="text" class="form-control" placeholder="CVC">
+            </div> {% endcomment %}
+
+
+
+        </div>
+
+        <div  style=" padding: 20px;  background-color: #f1f1f1; border-top: 1px solid rgb(216, 216, 216);">
+            <button class="btn btn-warning" style="margin: auto; display: block;">
+                <i class="bi bi-shield-fill-check"></i>
+                
+                اتمام عملية الدفع</button>
+            
+            <p class="mt-3 text-center">
+                <i class="bi bi-shield-lock-fill"></i>
+                جميع عمليات الدفع يتم بشكل إمن</p>
+        </div>
+    </form>
+</div>
+
+
+{% endblock sheri %}

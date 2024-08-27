@@ -10,8 +10,13 @@ urlpatterns = [
     path('companySignup', views.companySignup, name='companySignup'),
     path('companySignupConf/<str:alt_id>', views.companySignupConf, name='companySignupConf'),
     path('companySignupVerifyEmail/<str:alt_id>', views.companySignupVerifyEmail, name='companySignupVerifyEmail'),
-    
+    path('SendWhaCodeVerify/<str:alt_id>', views.SendWhaCodeVerify, name='SendWhaCodeVerify'),
+    path('EmployeeSendWhaCodeVerify/<str:alt_id>', views.EmployeeSendWhaCodeVerify, name='EmployeeSendWhaCodeVerify'),
+     
     path('SignupSetupProcess/<str:alt_id>', views.SignupSetupProcess, name='SignupSetupProcess'),
+    path('sendEmailCode/<str:alt_id>', views.sendEmailCode, name='sendEmailCode'),
+
+    
 
     path('login', views.Login, name='Login'),
     path('Logout', views.Logout, name='Logout'),
@@ -42,4 +47,7 @@ urlpatterns = [
 
     path('CompanyNotificationsSettings', views.CompanyNotificationsSettings, name='CompanyNotificationsSettings'),
     path('EmployeeNotificationsSettings', views.EmployeeNotificationsSettings, name='EmployeeNotificationsSettings'),
+    
+    path('UserPayment/<int:subscription_id>', views.UserPayment, name='UserPayment'),
+    path('checkPaymentProcess/<str:orderID>', views.checkPaymentProcess, name='checkPaymentProcess'),
 ]
