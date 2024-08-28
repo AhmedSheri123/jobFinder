@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 
 <!doctype html>
 <html lang="en">
@@ -169,8 +170,8 @@
 
           const user_id = {{user.id}}
       
-      
-          let url_noti = `ws://${window.location.host}/ws/notifications/${user_id}/`
+          {% get_ws_type 1 as ws_type %}
+          let url_noti = `{{ws_type}}://${window.location.host}/ws/notifications/${user_id}/`
           const chatSocketNoti = new WebSocket(url_noti)
       
           function send_noti(query){

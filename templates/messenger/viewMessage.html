@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load custom_tags %}
 
 {% block sheri %}
 <div >
@@ -194,8 +195,8 @@ scrollToBottom()
 
 
 
-
-    let url = `ws://${window.location.host}/ws/socket-server/{{room_id}}/`
+    {% get_ws_type 1 as ws_type %}
+    let url = `{{ws_type}}://${window.location.host}/ws/socket-server/{{room_id}}/`
     const chatSocket = new WebSocket(url)
     function send(query){
         chatSocket.send(

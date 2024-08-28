@@ -139,7 +139,7 @@ STATICFILES_DIRS = [BASE_DIR / 'jobFinder/static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
+WS_TYPE = 'wss'
 
 
 

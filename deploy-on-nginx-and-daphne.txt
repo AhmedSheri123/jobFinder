@@ -24,7 +24,7 @@ WantedBy=multi-user.target
 =====================================
 for ssl:
 ExecStart=/var/www/jobFinder/env/bin/daphne -e ssl:443:privateKey=ssl/ceveve.com.key:certKey=ssl/ceveve_com/ceveve_com.crt jobFinder.asgi:application
-
+ExecStart=/var/www/jobFinder/env/bin/daphne -e ssl:8000:privateKey=ssl/ceveve.com.key:certKey=ssl/ceveve_com/ceveve_com.crt -b www.ceveve.com -p 8001 jobFinder.asgi:application
 =====================================
 
 
@@ -35,7 +35,7 @@ upstream channels-backend {server localhost:8000;}
 
 server {
 listen 80;
-server_name 203.161.42.87;
+server_name www.ceveve.com;
 location = /favicon.ico { access_log off; log_not_found off; }
 location /static/ {
 root /var/www/jobFinder;
@@ -59,10 +59,15 @@ upstream channels-backend {server localhost:8000;}
 
 server {
     listen 443 ssl;
+    server_name domain-name.com; # Your website's domain name
+    ssl_certificate /var/www/jobFinder/ssl/ceveve_com/ceveve_com.crt; # Path to the full chain of your SSL certificate
+    ssl_certificate_key /var/www/jobFinder/ssl/ceveve.com.key; # Path to the private k
+
+    listen 443 ssl;
     listen [::]:443 ssl;
     include /var/www/jobFinder/ssl/self-signed.conf;
     include /var/www/jobFinder/ssl/ssl-params.conf;
-server_name 203.161.42.87;
+server_name www.ceveve.com;
 location = /favicon.ico { access_log off; log_not_found off; }
 location /static/ {
 root /var/www/jobFinder;

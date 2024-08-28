@@ -2,6 +2,7 @@ from django import template
 from django.template.defaultfilters import stringfilter
 from accounts.models import UserProfile, EmployeeProfileImages
 register = template.Library()
+from django.conf import settings
 
 @register.simple_tag
 @stringfilter
@@ -30,3 +31,9 @@ def get_sended_msg(user_id):
 def get_received_msg(user_id):
     # a = GetReceivedMsgSubscriptionData(user_id)
     return 'a'
+
+@register.simple_tag
+@stringfilter
+def get_ws_type(ss):
+    a = settings.WS_TYPE
+    return a
