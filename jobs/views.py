@@ -53,14 +53,17 @@ def companyOpenJob(request, id):
     return redirect('companyJobs')
 
 def applyJob(request, job_id):
-    user = request.user
-    if request.method == 'POST':
-        job = JobsModel.objects.get(id=job_id)
-        msg = request.POST.get('msg')
-        appliers = JobAppliersModel.objects.filter(user=user, job=job)
-        if not appliers.exists():
-            applier = JobAppliersModel.objects.create(user=user, job=job, msg=msg)
-            applier.creation_date = timezone.now()
-            applier.save()
+    if request.user.is_authenticated:
+            
+        user = request.user
+        if request.method == 'POST':
+            job = JobsModel.objects.get(id=job_id)
+            msg = request.POST.get('msg')
+            appliers = JobAppliersModel.objects.filter(user=user, job=job)
+            if not appliers.exists():
+                applier = JobAppliersModel.objects.create(user=user, job=job, msg=msg)
+                applier.creation_date = timezone.now()
+                applier.save()
 
-        return redirect('viewJob', job_id)
+            return redirect('viewJob', job_id)
+    else:return redirect('Login')   

@@ -1,6 +1,6 @@
 from django import template
 from django.template.defaultfilters import stringfilter
-from accounts.models import UserProfile, EmployeeProfileImages
+from accounts.models import UserProfile, EmployeeProfileImages, UserLikeModel, UserViewedProfileModel
 register = template.Library()
 from django.conf import settings
 
@@ -31,6 +31,18 @@ def get_sended_msg(user_id):
 def get_received_msg(user_id):
     # a = GetReceivedMsgSubscriptionData(user_id)
     return 'a'
+
+@register.simple_tag
+@stringfilter
+def get_user_likes(user_id):
+    a = UserLikeModel.objects.filter(liked__id=user_id).count()
+    return a
+
+@register.simple_tag
+@stringfilter
+def get_user_views(user_id):
+    a = UserViewedProfileModel.objects.filter(profile_viewed__id=user_id).count()
+    return a
 
 @register.simple_tag
 @stringfilter

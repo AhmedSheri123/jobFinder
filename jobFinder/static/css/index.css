@@ -1,3 +1,8 @@
+.nav-tabs .nav-link {
+    font-size: 15px;
+    padding: 9px;
+}
+
 .custom-text-truncate {
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -274,6 +279,12 @@ header {
 		background-color: #fff;
 	}
 
+    .input-group .hideed {
+        display: none;
+    }
+    .input-group .no-border {
+        border-radius: 0px !important;
+    }
 
     @media only screen and (max-width: 768px) {
     .cv-main-box {
@@ -321,6 +332,14 @@ header {
         border-top-right-radius: 15px !important;
         border-top-left-radius: 15px !important;
         text-align: center;
+        margin-bottom: 7px;
+    }
+    .input-group select {
+
+        margin-bottom: 7px;
+    }
+    .input-group .hideed {
+        display: block;
     }
 
     .input-group button {

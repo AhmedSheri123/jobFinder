@@ -107,10 +107,21 @@
 
 
               {% else %}
+              <div style="display: flex; flex-wrap: wrap;">
+                <button class="btn btn{% if not is_liked %}-outline{%endif%}-primary m-1" id="like" type="button" onclick="UserLike()">
+                    <i class="bi bi-hand-thumbs-up-fill"></i>
+                </button>
+                <button class="btn btn{% if not is_fav %}-outline{%endif%}-warning m-1" id="fav" type="button" onclick="AddDeleteFavorite()">
+                    <i class="bi  bi-star-fill"></i>
+                </button>
+              </div>
+
               <a href="{% url 'createMessager' userprofile.user.id %}" class="btn btn-primary m-3">
                   <i style="font-size: 20px; margin-left:6px;" class="bi bi-send-fill"></i>
                   تواصل معه
                   </a>
+
+                
               {% endif %}
         </div>
 
@@ -150,12 +161,12 @@
                 <p >
                     <span class="questtion">الجنسية:</span>
 
-                    <span class="answer" style="width: 85px;">{{employee_profile.get_nationality_display}}</span>
+                    <span class="answer" >{{employee_profile.get_nationality_display}}</span>
                 </p >
 
                 <p >
                     <span class="questtion">العمر:</span>
-                    <span class="answer" style="width: 85px;">{{employee_profile.age}}</span>
+                    <span class="answer" >{{employee_profile.age}}</span>
                     
                 </p >
 
@@ -163,19 +174,19 @@
 
                 <p >
                     <span class="questtion">المؤهل:</span>
-                    <span class="answer" style="width: 85px;">{{employee_profile.get_cert_type_display}}</span>
+                    <span class="answer" >{{employee_profile.get_cert_type_display}}</span>
                     
                 </p >
 
                 <p >
                     <span class="questtion">التخصص:</span>
-                    <span class="answer" style="width: 85px;">{{employee_profile.major}}</span>
+                    <span class="answer" >{{employee_profile.major}}</span>
                     
                 </p >
 
                 <p >
                     <span class="questtion">الحالة الاجتماعية:</span>
-                    <span class="answer" style="width: 85px;">{{employee_profile.get_marital_status_display}}</span>
+                    <span class="answer" >{{employee_profile.get_marital_status_display}}</span>
                     
                 </p >
 
@@ -183,7 +194,7 @@
                 <p >
                     <span class="questtion">الحالة الصحية:</span>
 
-                    <span class="answer" style="width: 85px;">{{employee_profile.get_health_status_display}}</span>
+                    <span class="answer" >{{employee_profile.get_health_status_display}}</span>
                 </p >
 
 
@@ -273,7 +284,49 @@
 
       
 </div>
+<script>
+    function UserLike() {
+        fetch('{{UserLikeURL}}')
+        .then((response) => {
 
+            return response.json();
+        })
+        .then((myJson) => {
+            let blockObj = document.querySelector('#like')
+                
+            if (myJson.status === true) {
+                blockObj.classList.remove('btn-outline-primary')
+                blockObj.classList.add('btn-primary')
+            } else if (myJson.status === false) {
+                
+                blockObj.classList.remove('btn-primary')
+                blockObj.classList.add('btn-outline-primary')
+            }
+    
+        });
+    }
+    function AddDeleteFavorite() {
+        fetch('{{UserFavURL}}')
+        .then((response) => {
+
+            return response.json();
+        })
+        .then((myJson) => {
+            let blockObj = document.querySelector('#fav')
+                
+            if (myJson.status === true) {
+                blockObj.classList.remove('btn-outline-warning')
+                blockObj.classList.add('btn-warning')
+            } else if (myJson.status === false) {
+                
+                blockObj.classList.remove('btn-warning')
+                blockObj.classList.add('btn-outline-warning')
+            }
+    
+        });
+    }
+        
+    </script>
 <style>
     .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
     .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
@@ -385,6 +438,7 @@
 @media only screen and (max-width: 768px) {
     .contents-box {
         justify-content: center;
+        flex-direction: column;
         }
 
         .profile-nav {
@@ -392,9 +446,16 @@
         }
         .profile-nav-tabs {
             flex-direction: column;
+            box-shadow: inset #cecece 0px 0px 6px;
+            background-color: #ffffff82;
+            padding: 5px;
+            border-radius: 10px;
         }
+
 
     }
 
 </style>
+
+
 {%endblock%}

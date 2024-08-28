@@ -103,6 +103,23 @@ def AddFavorite(request, receiver_id):
 
     return redirect('messageRoom', room.room_id)
 
+
+
+def AddDeleteFavorite(request, receiver_id):
+    creator = request.user
+    receiver = User.objects.get(id=receiver_id)
+
+    if FavoriteUserModel.objects.filter(creator=creator, user=receiver).exists():
+        fav = FavoriteUserModel.objects.filter(creator=creator, user=receiver)
+        for f in fav:
+            f.delete()
+            return JsonResponse({'status':False})
+    else:
+        fav = FavoriteUserModel.objects.create(creator=creator, user=receiver)
+        fav.save()
+        return JsonResponse({'status':True})
+
+
 def DeleteFavorite(request, fav_id):
     sender = request.user
     if request.GET.get('redir'):

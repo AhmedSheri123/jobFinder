@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
 {% load custom_tags %}
+{% load messenger_tags %}
 
 {% block sheri %}
+
+
 <div >
 
 
     <div dir="rtl" id="main" style=" padding: 0; height: 100vh;">
         <div  class="bg-primary text-white fixed-top" style="padding:10px 20px;  box-shadow: rgb(177, 177, 177) 0px 0px 3px; margin: auto;">
+            {% get_user_full_name receiver.id as receiver_full_name %}
     
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center;">
@@ -16,7 +20,7 @@
                     {% else %}
                     <img src="{% static '/img/default-profile-img-2.png' %}" alt="" style="width: 50px; border-radius: 100%;">
                     {% endif %}
-                    <h5 style="margin-right: 10px;">{{receiver.username}}</h5>
+                    <h5 style="margin-right: 10px;">{{receiver_full_name}}</h5>
             
                 </div>
     

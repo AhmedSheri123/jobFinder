@@ -68,12 +68,15 @@
         <div class="job-card-main">
             <div class="title-box">
                 <a href="{% url 'viewJob' job.id %}" class="job-title">{{job.job_title}}</a>
-                <a href="{% url 'viewJob' job.id %}" class="btn btn-primary">
-                {% if job.state == '1' %}تقديم{% elif job.state == '2' %}عرض{% endif %}
-                </a>
+
                 
             </div>
             <div class="job-details">
+                <p class="btn {% if job.state == '0' %} btn-warning {% elif job.state == '1' %} btn-success {% elif job.state == '2' %}btn-danger{% endif %}">
+                    <i class="bi bi-joystick"></i>
+                    {{job.get_state_display}}
+                </p>
+
                 <p class="btn btn-light"><i class="bi bi-stopwatch-fill"></i>
                     {{job.whenpublished}}
                 </p>
@@ -82,15 +85,15 @@
                     {{number_of_apllyers}} متقدم
                 </p>
 
-                <p class="btn {% if job.state == '0' %} btn-warning {% elif job.state == '1' %} btn-success {% elif job.state == '2' %}btn-danger{% endif %}">
-                    <i class="bi bi-joystick"></i>
-                    {{job.get_state_display}}
-                </p>
+
             </div>
 
             <p class="custom-text-truncate">
                 {{job.about_job}}    
             </p>
+            <a href="{% url 'viewJob' job.id %}" class="btn btn-primary" style="margin-right: auto; display: table;">
+                {% if job.state == '1' %}تقديم{% elif job.state == '2' %}عرض{% endif %}
+                </a>
         <hr>
 
         </div>

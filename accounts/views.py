@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel
+from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -9,9 +9,10 @@ from django.contrib.sites.shortcuts import get_current_site
 from .libs import DatetimeNow
 from .payment import addInvoice, getInvoice
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from .whatsapp import wa_send_msg
 from django.core.mail import send_mail
+from messenger.models import FavoriteUserModel
 # Create your views here.
 from django.conf import settings
 email_from = settings.EMAIL_HOST_USER
@@ -376,52 +377,62 @@ def Logout(request):
     return redirect('index')
 
 def Profile(request, id):
-    viewer_user = request.user
-    viewer_userprofile = UserProfile.objects.get(user=viewer_user)
-    passed = False
+    if request.user.is_authenticated: 
+        
+        viewer_user = request.user
+        viewer_userprofile = UserProfile.objects.get(user=viewer_user)
+        passed = False
 
 
-    user = User.objects.get(id=id)
-    userprofile = UserProfile.objects.get(user=user)
-    if request.user != user:
-        viewed_profiles = UserViewedProfileModel.objects.filter(profile_viewer=viewer_user, profile_viewed=user)
-        if not viewed_profiles.exists():
+        user = User.objects.get(id=id)
+        userprofile = UserProfile.objects.get(user=user)
+        if request.user != user:
+            viewed_profiles = UserViewedProfileModel.objects.filter(profile_viewer=viewer_user, profile_viewed=user)
+            if not viewed_profiles.exists():
 
-            if viewer_userprofile.subscription:
-                
-                    subscription_viewed_profile_data = viewer_userprofile.subscription_viewed_profile_data()
-                    if subscription_viewed_profile_data[0]:
-                        viewed_profile = UserViewedProfileModel.objects.create(profile_viewer=viewer_user, profile_viewed=user)
-                        viewed_profile.creation_date = DatetimeNow(user.id)
-                        viewed_profile.save()
-                        viewer_sub = UserSubscriptionModel.objects.get(id=viewer_userprofile.subscription.id)
-                        
-                        viewer_sub.used_number_of_view_profiles += 1
-                        viewer_sub.save()
-                        passed =True
-                    else: messages.error(request, 'يرجى تجديد الباقة او ترقيتها حتى تتمكن من الوصول الى الملف الشخصي للمستخدم')
+                if viewer_userprofile.subscription:
+                    
+                        subscription_viewed_profile_data = viewer_userprofile.subscription_viewed_profile_data()
+                        if subscription_viewed_profile_data[0]:
+                            viewed_profile = UserViewedProfileModel.objects.create(profile_viewer=viewer_user, profile_viewed=user)
+                            viewed_profile.creation_date = DatetimeNow(user.id)
+                            viewed_profile.save()
+                            viewer_sub = UserSubscriptionModel.objects.get(id=viewer_userprofile.subscription.id)
+                            
+                            viewer_sub.used_number_of_view_profiles += 1
+                            viewer_sub.save()
+                            passed =True
+                        else: messages.error(request, 'يرجى تجديد الباقة او ترقيتها حتى تتمكن من الوصول الى الملف الشخصي للمستخدم')
+                else:
+                    messages.error(request, 'يرجى الاشتراك حتى تتمكن من الوصول الى الملف الشخصي للمستخدم')
             else:
-                messages.error(request, 'يرجى الاشتراك حتى تتمكن من الوصول الى الملف الشخصي للمستخدم')
+                passed = True
         else:
             passed = True
-    else:
-        passed = True
-            
-    if passed:
-        if userprofile.is_employee:
-            return CVProfile(request, id)
-        elif userprofile.is_company:
-            return CPProfile(request, id)
-    return redirect('index')
+                
+        if passed:
+            if userprofile.is_employee:
+                return CVProfile(request, id)
+            elif userprofile.is_company:
+                return CPProfile(request, id)
+        return redirect('index')
+    else:messages.error(request, 'يرجى الاشتراك حتى تتمكن من الوصول الى الملف الشخصي للمستخدم');return redirect('Login')   
     # return render(request, 'accounts/profile/Employee/profile.html')
 
 def CVProfile(request, id):
+    UserLikeURL = reverse('UserLike', kwargs={'liked_id':id})
+    UserFavURL = reverse('AddDeleteFavorite', kwargs={'receiver_id':id})
+    
+
+    is_liked = UserLikeModel.objects.filter(liker=request.user, liked__id=id).exists()
+    is_fav = FavoriteUserModel.objects.filter(creator=request.user, user__id=id).exists()
+
     user = User.objects.get(id=id)
     userprofile = user.userprofile
     employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
     profile_images = EmployeeProfileImages.objects.filter(user=user)
 
-    return render(request, 'accounts/profile/Employee/profile.html', {'employee_profile':employee_profile, 'profile_images':profile_images, 'userprofile':userprofile})
+    return render(request, 'accounts/profile/Employee/profile.html', {'is_fav':is_fav, 'is_liked':is_liked, 'UserFavURL':UserFavURL, 'UserLikeURL':UserLikeURL, 'employee_profile':employee_profile, 'profile_images':profile_images, 'userprofile':userprofile})
 
 def CPProfile(request, id):
 
@@ -432,6 +443,10 @@ def CPProfile(request, id):
     return render(request, 'accounts/profile/Company/profile.html', {'company_profile':company_profile, 'userprofile':userprofile})
 
 def CompanySettingGernral(request):
+    index_url = request.build_absolute_uri('/')
+    callBackUrl = index_url.rsplit('/', 1)[0]
+    callBackUrl+=reverse('Profile', kwargs={'id': request.user.id})
+
     user = User.objects.get(id=request.user.id)
     form = CompanyProfileForm(instance=user.userprofile.companyprofile)
     if request.method == 'POST':
@@ -449,13 +464,16 @@ def CompanySettingGernral(request):
             form2 = form.save(commit=False)
             form2.img_base64 = img_base64
             form2.save()
-    return render(request, 'accounts/settings/Company/settings.html', {'form':form})
+    return render(request, 'accounts/settings/Company/settings.html', {'form':form, 'callBackUrl':callBackUrl})
 
 
 def Settings(request):
     return render(request, 'accounts/settings/Employee/settings.html')
 
 def CVSettingsGernral(request):
+    index_url = request.build_absolute_uri('/')
+    callBackUrl = index_url.rsplit('/', 1)[0]
+    callBackUrl+=reverse('Profile', kwargs={'id': request.user.id})
     if request.method == 'POST':
         email = request.POST.get('email')
         username = request.POST.get('username')
@@ -476,7 +494,7 @@ def CVSettingsGernral(request):
     userprofile = UserProfile.objects.get(user=user)
     employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
 
-    return render(request, 'accounts/settings/Employee/settings.html', {'user':user, 'employee_profile':employee_profile})
+    return render(request, 'accounts/settings/Employee/settings.html', {'user':user, 'employee_profile':employee_profile, 'callBackUrl':callBackUrl})
 
 def SettingsCV(request):
     countrys = CountrysModel.objects.all()
@@ -737,36 +755,37 @@ def CompanyNotificationsSettings(request):
     return render(request, 'accounts/settings/Company/notifications-settings.html')
 
 def UserPayment(request, subscription_id):
-    user = request.user
-    userprofile = user.userprofile
-    subscription = SubscriptionsModel.objects.get(id=subscription_id)
+    if request.user.is_authenticated:   
+        user = request.user
+        userprofile = user.userprofile
+        subscription = SubscriptionsModel.objects.get(id=subscription_id)
 
-    if request.method == 'POST':
-        index_url = request.build_absolute_uri('/')
-        callBackUrl = index_url.rsplit('/', 1)[0]
-        order = UserPaymentOrderModel.objects.create(user=user, subscription=subscription)
-        
-
-        orderID = order.orderID
-        
-        clientName = None
-        total_price_amount = float(subscription.price)
-        email = user.email
-        phone = None
-        callBackUrl+=reverse('checkPaymentProcess', kwargs={'orderID': orderID})
-        if userprofile.is_employee:phone=userprofile.employeeprofile.phone;clientName=userprofile.employeeprofile.name
-        else:phone=userprofile.companyprofile.phone;clientName=userprofile.companyprofile.complite_name
-
-        ser_title = subscription.title
-        ser_disc = subscription.subtitle
-
-
-        res = addInvoice(orderID, total_price_amount, email, phone, clientName, ser_title, ser_disc, callBackUrl, index_url)
-        if res.get('success'):
-            order.transactionNo = res.get('transactionNo')
-            order.save()
-            return HttpResponseRedirect(res.get('url'))
+        if request.method == 'POST':
+            index_url = request.build_absolute_uri('/')
+            callBackUrl = index_url.rsplit('/', 1)[0]
+            order = UserPaymentOrderModel.objects.create(user=user, subscription=subscription)
             
+
+            orderID = order.orderID
+            
+            clientName = None
+            total_price_amount = float(subscription.price)
+            email = user.email
+            phone = None
+            callBackUrl+=reverse('checkPaymentProcess', kwargs={'orderID': orderID})
+            if userprofile.is_employee:phone=userprofile.employeeprofile.phone;clientName=userprofile.employeeprofile.name
+            else:phone=userprofile.companyprofile.phone;clientName=userprofile.companyprofile.complite_name
+
+            ser_title = subscription.title
+            ser_disc = subscription.subtitle
+
+
+            res = addInvoice(orderID, total_price_amount, email, phone, clientName, ser_title, ser_disc, callBackUrl, index_url)
+            if res.get('success'):
+                order.transactionNo = res.get('transactionNo')
+                order.save()
+                return HttpResponseRedirect(res.get('url'))
+    else:return redirect('Login')         
     return render(request, 'payment/pay.html', {'subscription':subscription})
 
 
@@ -777,3 +796,17 @@ def checkPaymentProcess(request, orderID):
         if r.get('orderStatus') == 'Paid':
             return EnableUserSubscription(request, order.id)
     return redirect('index')
+
+
+def UserLike(request, liked_id):
+    liker = request.user
+    liked = User.objects.get(id=liked_id)
+    likes = UserLikeModel.objects.filter(liker=liker, liked=liked)
+    if likes.exists():
+        for i in likes:i.delete()
+        return JsonResponse({'status':False})
+    else:
+        like = UserLikeModel.objects.create(liker=liker, liked=liked)
+        like.save()
+        return JsonResponse({'status':True})
+    

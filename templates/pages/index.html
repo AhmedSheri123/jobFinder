@@ -19,21 +19,43 @@
                 <p class="arial title_desc">وظف افضل المواهب واشخاص ذوي الاختصاصات العلية</p>
                 <br><br>
             </div>
-<form action="">
+<form action="{% url 'AdvancedSearch' %}" method="get">
 
     <div class="input-group mb-3">
 
         
-            <button style="padding: 15px 25px;font-size: 20px;" type="submit" class="input-group-text btn btn-primary" >
+            <button style="padding: 15px 25px;font-size: 20px;border-radius: 0;" type="submit" class="input-group-text btn btn-primary rounded-end" >
                 <i class="bi bi-search-heart"></i>
             </button>
-            <select name="" id="" class="input-group-text" >
-                <option value="">السعودية</option>
+            <select name="gender" id="" class="input-group-text mb-2 hideed last">
+                <option value="">الجنس</option>
+                {% for countr in GenderFields %}
+                <option {%if countr.id|stringformat:"i" == country %} selected {% endif %} value="{{countr.0}}">{{countr.1}}</option>
+                {% endfor %}
+            </select>
+
+            <select name="nationality" id="" class="input-group-text hideed no-border">
+                <option value="">الجنسية</option>
+                {% for countr in NationalityFields %}
+                <option {%if countr.id|stringformat:"i" == country %} selected {% endif %} value="{{countr.0}}">{{countr.1}}</option>
+                {% endfor %}
+            </select>
+
+            <select name="country" id="" class="input-group-text no-border" style="border-radius: 0px !important;">
+                <option value="">الدولة</option>
+                {% for countr in countrys %}
+                <option {%if countr.id|stringformat:"i" == country %} selected {% endif %} value="{{countr.id}}">{{countr.name}}</option>
+                {% endfor %}
             </select>
 
 
-        <input type="text" dir="rtl" class="form-control" placeholder="الرغبات او المسمى الوظيفي او المهارات" aria-label="Username" aria-describedby="basic-addon1">
+        <input type="text" dir="rtl" name="desires" style="border-radius: 0;" class="form-control rounded-start" placeholder="الرغبات او المسمى الوظيفي او المهارات" aria-label="Username" aria-describedby="basic-addon1">
       </div>
+      <a href="{% url 'AdvancedSearch' %}" style="padding: 15px 25px;font-size: 20px;border-radius: 0;" type="submit" class="input-group-text btn btn-primary rounded" >
+        البحث المتقدم
+        <i class="bi bi-badge-ad-fill"></i>
+
+      </a>
 
 
 </form>
@@ -59,7 +81,7 @@
 
                     {% get_cv_imgs userprofile.id as profile_images %}
                     <div style="display: flex;align-items: flex-start;">
-                        <div>
+                        <div style=" display: flex; flex-direction: column;align-items: center;">
 
                     
                         <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" style="width: 115px;">
@@ -97,16 +119,18 @@
                         
                     </div>
                         
+                    <a href="{% url 'Profile' userprofile.user.id %}" class="btn btn-primary mt-1" style="font-size: 12px; font-weight: bold; padding: 5px;">سيرتي</a>
 
                     </div>
 
                     <div style="width: 100%; margin-right: 6px;">
-
+                        <a href="{% url 'Profile' userprofile.user.id %}" style="text-decoration: none;">
                         <h6 class="text-primary" style="text-align: justify;">
                             <i class="bi bi-briefcase"></i>
                             {{userprofile.employeeprofile.job_title}}
     
                         </h6>
+                    </a>
 
 
 
@@ -185,9 +209,9 @@
                     </div>
                 </div>
 
-                <div class="mt-2" style="display: flex; justify-content: space-between;">
+                <div class="mt-1" style="display: flex; justify-content: space-between;flex-direction: column; font-weight: bold;">
 
-                    <p style="font-size: 14px; text-align: center; margin: 0;">
+                    <p style="font-size: 14px; text-align: center; margin: 0;" class="mb-2">
                         <i class="bi bi-geo-alt "></i>يقيم في
                         {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
                     </p>
@@ -198,14 +222,14 @@
                         <div style="display: flex;justify-content: space-around;">
                             <p style="margin: 0; margin-left: 20px;">
                                 <i class="bi bi-eye " ></i>
-    
-                                1244
+                                {% get_user_views userprofile.user.id as views_count %}
+                                {{views_count}}
                             </p>
     
                             <p style="margin: 0;">
                                 <i class="bi bi-hand-thumbs-up "></i>
-    
-                                232
+                                {% get_user_likes userprofile.user.id as likes_count %}
+                                {{likes_count}}
                             </p>
                         </div>
                     </div>
@@ -218,7 +242,6 @@
 
                     <div id="more-info-{{forloop.counter|add:-1}}" class="hide" >
 
-                        <a href="{% url 'Profile' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">عرض الملف الشخصي</a>
 
                             <nav dir="rtl" class="mt-5">
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -503,7 +526,7 @@
                 </p>
 
                 <div style="display: grid;">
-                    <a href="{% url 'UserPayment' subscription.id %}" class="btn btn-outline-light mt-5 p-2" >الخطة الحالية</a>
+                    <a href="{% url 'UserPayment' subscription.id %}" class="btn btn-outline-light mt-5 p-2" >الاشتراك</a>
 
                 </div>
             </div>

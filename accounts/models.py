@@ -374,3 +374,9 @@ class EmailOTPModel(models.Model):
     is_finshed = models.BooleanField(default=False)
 
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+
+class UserLikeModel(models.Model):
+    liker = models.ForeignKey(User, related_name='liker', on_delete=models.SET_NULL, null=True)
+    liked = models.ForeignKey(User, related_name='liked', on_delete=models.SET_NULL, null=True)
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")

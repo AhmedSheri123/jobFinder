@@ -68,3 +68,15 @@ def get_count_of_not_readed_msg(user_id):
     if count <= 0:
         count = ''
     return count
+
+@register.simple_tag
+@stringfilter
+def get_user_full_name(user_id):
+    user = User.objects.get(id=user_id)
+    full_name = ''
+    if user.userprofile.is_employee:
+        full_name = user.userprofile.employeeprofile.name
+    elif user.userprofile.is_company:
+        full_name = user.userprofile.companyprofile.complite_name
+
+    return full_name

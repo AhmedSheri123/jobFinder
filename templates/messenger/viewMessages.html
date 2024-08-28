@@ -46,11 +46,11 @@
 <div dir="rtl" class="msgs-main-box">
 
 
-    <button class="btn btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="background-color: rgb(42, 42, 42)!important;">
+    <button class="btn btn-danger mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
         <i class="bi bi-ban"></i>
     </button>
 
-    <button class="btn btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2" style="background-color: rgb(42, 42, 42)!important;">
+    <button class="btn btn-warning mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
         <i class="bi bi-star-fill"></i>
     </button>
 
@@ -73,9 +73,10 @@
         
                 <div  class="msg-main-content">
                     
-        
+                        
                     <a href="{% url 'Profile' messenger.user.id %}" style="position: relative; text-decoration: none;">
-                        <h6 style="margin: 0;">{{messenger.user.username}}</h6>
+                        {% get_user_full_name messenger.user.id as receiver_full_name %}
+                        <h6 style="margin: 0;">{{receiver_full_name}}</h6>
                     </a>
         
                     <div class="msg-msg-box">
@@ -117,7 +118,8 @@
                     
         
                     <a href="{% url 'Profile' messenger.user.id %}" style="position: relative; text-decoration: none;">
-                        <h6 style="margin: 0;">{{messenger.user.username}}</h6>
+                        {% get_user_full_name messenger.user.id as receiver_full_name %}
+                        <h6 style="margin: 0;">{{receiver_full_name}}</h6>
 
                         </a>
         
@@ -165,7 +167,8 @@
             
 
             <div style="position: relative;">
-                <h6 style="margin: 0;">{{receiver.username}}</h6>
+                {% get_user_full_name receiver.id as receiver_full_name %}
+                <h6 style="margin: 0;">{{receiver_full_name}}</h6>
                 {% if not last_msg.is_readed %}
                     <span class="position-absolute top-0 end-0 translate-middle p-2 bg-danger border border-light rounded-circle">
                         <span class="visually-hidden">New alerts</span>

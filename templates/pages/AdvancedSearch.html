@@ -163,7 +163,7 @@
     
                         {% get_cv_imgs userprofile.id as profile_images %}
                         <div style="display: flex;align-items: flex-start;">
-                            <div>
+                            <div style=" display: flex; flex-direction: column;align-items: center;">
     
                         
                             <div id="carouselExampleIndicators{{forloop.counter|add:-1}}" class="carousel slide carousel-dark" style="width: 115px;">
@@ -201,16 +201,18 @@
                             
                         </div>
                             
+                        <a href="{% url 'Profile' userprofile.user.id %}" class="btn btn-primary mt-1" style="font-size: 12px; font-weight: bold; padding: 5px;">سيرتي</a>
     
                         </div>
     
                         <div style="width: 100%; margin-right: 6px;">
-    
+                            <a href="{% url 'Profile' userprofile.user.id %}" style="text-decoration: none;">
                             <h6 class="text-primary" style="text-align: justify;">
                                 <i class="bi bi-briefcase"></i>
                                 {{userprofile.employeeprofile.job_title}}
         
                             </h6>
+                        </a>
     
     
     
@@ -289,13 +291,14 @@
                         </div>
                     </div>
     
-                    <div class="mt-2" style="display: flex; justify-content: space-between;">
-    
-                        <p style="font-size: 14px; text-align: center; margin: 0;">
+
+                    <div class="mt-1" style="display: flex; justify-content: space-between;flex-direction: column; font-weight: bold;">
+
+                        <p style="font-size: 14px; text-align: center; margin: 0;" class="mb-2">
                             <i class="bi bi-geo-alt "></i>يقيم في
-                            {{userprofile.employeeprofile.countr}}/{{userprofile.employeeprofile.employee_city}}
+                            {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
                         </p>
-    
+
                         <div style="display: flex; justify-content: space-around; flex-wrap: wrap;font-size: .8em;">
     
                             
@@ -322,7 +325,7 @@
     
                         <div id="more-info-{{forloop.counter|add:-1}}" class="hide" >
     
-                            <a href="{% url 'Profile' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">عرض الملف الشخصي</a>
+                            {% comment %} <a href="{% url 'Profile' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">عرض الملف الشخصي</a> {% endcomment %}
     
                                 <nav dir="rtl" class="mt-5">
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -416,8 +419,8 @@
     
     
     
-    
-    
+            {% empty %}
+            <p style="display: block;margin: auto;" class="mt-5">لم يتم العثورة على النتائج</p>
     
             {%endfor%}
         </div>

@@ -6,6 +6,7 @@ from notifications.views import create_notifications
 # Create your views here.
 
 def index(request):
+    countrys = CountrysModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True)
     subscriptions = SubscriptionsModel.objects.all()
     # u = []
@@ -13,7 +14,7 @@ def index(request):
     #     u.append(i.user.id)
     # aa = create_notifications(request.user.id, receiver_ids=u, msg='sadas as daasd a dsa d')
     # print(aa)
-    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions})
+    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFields, 'NationalityFields':NationalityFields})
 
 
 def AdvancedSearch(request):
@@ -33,10 +34,12 @@ def AdvancedSearch(request):
     if desires:
         filtered = []
         for i in userprofiles:
-            field = i.employeeprofile.desires.get('desires')
-            if field:
-                if desires in str(field):
-                    filtered.append(i.id)
+            emp = i.employeeprofile
+            if emp:
+                field = emp.desires.get('desires')
+                if field:
+                    if desires in str(field):
+                        filtered.append(i.id)
         userprofiles = userprofiles.filter(id__in=filtered)
     else:desires=''
 

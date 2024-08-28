@@ -168,7 +168,7 @@
     
         <script>
 
-          const user_id = {{user.id}}
+          const user_id = '{{user.id}}'
       
           {% get_ws_type 1 as ws_type %}
           let url_noti = `{{ws_type}}://${window.location.host}/ws/notifications/${user_id}/`

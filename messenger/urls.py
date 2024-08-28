@@ -6,6 +6,7 @@ urlpatterns = [
     path('createMessager/<int:receiver_id>', views.createMessager, name="createMessager"),
     
     path('AddFavorite/<int:receiver_id>', views.AddFavorite, name="AddFavorite"),
+    path('AddDeleteFavorite/<int:receiver_id>', views.AddDeleteFavorite, name="AddDeleteFavorite"),
     path('BlockUserMessenger/<int:receiver_id>', views.BlockUserMessenger, name="BlockUserMessenger"),
     
     path('DeleteFavorite/<int:fav_id>', views.DeleteFavorite, name="DeleteFavorite"),
