@@ -28,6 +28,7 @@ def wa_send_msg(msg, num):
         "message": msg,
     }
     r = s.post(url=url, json=payload)
+    print(r.json())
     if r.json().get('status') == 'success':
         return True
     return False
