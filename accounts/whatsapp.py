@@ -1,5 +1,4 @@
-import requests
-import urllib.parse
+import requests, json
 
 wa_webhook_secret = '88zByXkTh4Qy3z09XLmJOQWxRYAq3hDD'
 wa_instances = 18590
@@ -20,7 +19,7 @@ def get_session():
 def wa_send_msg(msg, num):
     if '+' in num:
         num = num.replace('+', '')
-    msg = urllib.parse.quote(msg)
+
     url = f'https://waapi.app/api/v1/instances/{wa_instances}/client/action/send-message'
 
     s = get_session()
@@ -28,7 +27,8 @@ def wa_send_msg(msg, num):
         "chatId": f"{num}@c.us",
         "message": msg,
     }
-    r = s.post(url=url, json=payload)
+    payload_str = json.dumps(payload).encode('UTF-8')
+    r = s.post(url=url, data=payload_str)
 
     if r.json().get('status') == 'success':
         return True
