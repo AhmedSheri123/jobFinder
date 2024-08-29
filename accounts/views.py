@@ -64,7 +64,7 @@ def cvSignupVerifyEmail(request, alt_id):
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
             msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
-            wa_send_msg(msg)
+            wa_send_msg(msg, full_phone)
             return redirect('EmployeeSendWhaCodeVerify', alt_id)
 
 
@@ -236,7 +236,7 @@ def companySignupVerifyEmail(request, alt_id):
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
             msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
-            wa_send_msg(msg)
+            wa_send_msg(msg, full_phone)
             return redirect('SendWhaCodeVerify', alt_id)
 
         elif VerifyProccess == '2':

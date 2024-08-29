@@ -16,12 +16,12 @@ def get_session():
     return s
 
 
-def wa_send_msg(msg):
+def wa_send_msg(msg, num):
     url = f'https://waapi.app/api/v1/instances/{wa_instances}/client/action/send-message'
 
     s = get_session()
     payload = {
-        "chatId": "963988603800@c.us",
+        "chatId": f"{num}@c.us",
         "message": msg,
     }
     r = s.post(url=url, json=payload)
