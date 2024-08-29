@@ -17,6 +17,9 @@ def get_session():
 
 
 def wa_send_msg(msg, num):
+    if '+' in num:
+        num = num.replace('+', '')
+
     url = f'https://waapi.app/api/v1/instances/{wa_instances}/client/action/send-message'
 
     s = get_session()
