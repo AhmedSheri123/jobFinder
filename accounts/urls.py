@@ -15,6 +15,8 @@ urlpatterns = [
      
     path('SignupSetupProcess/<str:alt_id>', views.SignupSetupProcess, name='SignupSetupProcess'),
     path('sendEmailCode/<str:alt_id>', views.sendEmailCode, name='sendEmailCode'),
+    path('EmployeeSendEmailCodeVerify/<str:alt_id>', views.EmployeeSendEmailCodeVerify, name='EmployeeSendEmailCodeVerify'),
+    path('CompanySendEmailCodeVerify/<str:alt_id>', views.CompanySendEmailCodeVerify, name='CompanySendEmailCodeVerify'),
 
     
 

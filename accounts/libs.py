@@ -1,5 +1,6 @@
 from django.utils import timezone
-import math
+import math, requests, json
+
 
 def DatetimeNow(user):
     datetime_now = timezone.now()
@@ -75,3 +76,65 @@ def when_published(creation_date):
         else:
             return str(years) + " سنوات"
 
+
+def get_ip_info(ip):
+    if ip == '127.0.0.1':
+        ip = '185.255.46.235'
+        
+    u = f'https://proxycheck.io/v2/{ip}?vpn=1&asn=1'
+    r = requests.get(u)
+    j = r.json()
+    jj = j.get(ip)
+
+    
+    if j.get('status'):
+        proxy = False
+        
+        if jj.get('proxy') != 'no':
+            proxy = True
+        obj = {
+            'ip':ip,
+            'country':jj.get('country'),
+            'isocode':jj.get('isocode'),
+            'country':jj.get('country'),
+            'continent':jj.get('continent'),
+            'continentcode':jj.get('continentcode'),
+            'vpn': proxy,
+        }
+
+        return obj
+    else:
+        return {}
+
+
+def add_get_user_ip(request):
+    ip = request.META.get('REMOTE_ADDR')
+    ip_info = None
+
+    ip_info = request.session.get('ip_info')
+    if not ip_info:
+        ip_info = get_ip_info(ip)
+        request.session['ip_info'] = ip_info
+    else:
+        if ip_info.get('vpn'):
+                ip_info = get_ip_info(ip)
+    return ip_info
+
+def filter_sub_price(request, subs):
+    from .models import SubscriptionPriceByCountry as SubsPriceByCountry
+    
+    ip_info = add_get_user_ip(request)
+
+
+    if not ip_info:
+        return subs
+    
+    subsc = SubsPriceByCountry.objects.all()
+
+    for sub in subs:
+        for subc in subsc:
+            if sub == subc.subscription:
+                if subc.country == ip_info.get('isocode'):
+                    sub.price = subc.price
+                    sub.currency = subc.currency
+    return subs

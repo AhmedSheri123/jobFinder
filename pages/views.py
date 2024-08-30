@@ -1,14 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel
 from accounts.fields import CertTypeFields, GenderFields, StateFields, NationalityFields
 from notifications.views import create_notifications
-
+from accounts.libs import filter_sub_price
+from .models import ContactUsModel
+from django.contrib import messages
+from django.utils import timezone
 # Create your views here.
 
 def index(request):
+
     countrys = CountrysModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True)
-    subscriptions = SubscriptionsModel.objects.all()
+    subscriptions = filter_sub_price(request, SubscriptionsModel.objects.all())
     # u = []
     # for i in userprofiles:
     #     u.append(i.user.id)
@@ -82,3 +86,26 @@ def AdvancedSearch(request):
     objs.update(inputs)
 
     return render(request, 'pages/AdvancedSearch.html', objs)
+
+
+def PrivacyPolicy(request):
+
+    return render(request, 'pages/PrivacyPolicy.html')
+
+
+def TermsConditions(request):
+
+    return render(request, 'pages/TermsConditions.html')
+
+
+def ContactUs(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        msg = request.POST.get('msg')
+
+        obj = ContactUsModel.objects.create(name=name, email=email, msg=msg, creation_date=timezone.now())
+        obj.save()
+        messages.success(request, 'شكرًا على تواصلك معنا سيتم الرد عليك في أقرب وقت')
+    return redirect('index')
+

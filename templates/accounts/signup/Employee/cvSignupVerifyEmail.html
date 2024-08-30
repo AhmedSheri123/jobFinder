@@ -103,11 +103,13 @@
                     {% comment %} <p class="pt-2">تم ارسال رمز تأكيد عبر البريدالالكتروني</p> {% endcomment %}
 
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">رمز التاكيد</label>
-                    <input required type="text" name="code" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
+                    <input required type="text" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <div id="emailHelp" class="form-text"><strong>مهم!</strong> لاكمال عملية التسجيل يتوجب عليك ادخال ايميل صحيح وفعال لاستلام رمز التحقق وتوثيق حسابك</div>
+
                 </div>
                 <button type="submit" class="btn btn-primary">الخطوة التالية</button>
-                <a href="{% url  'sendEmailCode' alt_id%}" class="btn btn-primary">ارسال رمز التاكيد للبريد الالكتروني</a>
+                {% comment %} <a href="{% url  'sendEmailCode' alt_id%}" class="btn btn-primary">ارسال رمز التاكيد للبريد الالكتروني</a> {% endcomment %}
                 {% endif %}
 
 

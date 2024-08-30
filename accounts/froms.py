@@ -1,5 +1,5 @@
 from django import forms
-from .models import CompanyProfile, SubscriptionsModel
+from .models import CompanyProfile, SubscriptionsModel, SubscriptionPriceByCountry
 
 class CompanyProfileForm(forms.ModelForm):
 
@@ -30,3 +30,10 @@ class SubscriptionModelForm(forms.ModelForm):
         widgets = {
             'creation_date':forms.DateTimeInput(attrs={'type':'datetime-local'})
         }
+
+
+class SubscriptionPriceByCountryModelForm(forms.ModelForm):
+
+    class Meta:
+        model = SubscriptionPriceByCountry
+        fields = ['subscription', 'country', 'price', 'currency']

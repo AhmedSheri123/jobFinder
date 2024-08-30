@@ -29,20 +29,6 @@
         </div>
 
 
-        <div class="progress-content pt-2">
-            <div class="progress-steps-box">
-                <div class="progress-steps">
-                    <i class="bi bi-person-fill-gear"></i>
-                    <p>
-                        إعداد ملف شخصي
-
-                    </p>
-                </div>
-
-
-                <i class="bi bi-check2"></i>
-            </div>
-        </div>
 
 
 
@@ -64,6 +50,20 @@
 
 
 
+        <div class="progress-content pt-2">
+            <div class="progress-steps-box">
+                <div class="progress-steps">
+                    <i class="bi bi-person-fill-gear"></i>
+                    <p>
+                        إعداد ملف شخصي
+
+                    </p>
+                </div>
+
+
+                <i class="bi bi-check2"></i>
+            </div>
+        </div>
         {% comment %} <div class="progress-content pt-2">
             <div class="progress-steps-box">
                 <div class="progress-steps">
@@ -97,9 +97,13 @@
                     <input type="text" id="code" class="form-control" name="code" placeholder="كود التاكيد" aria-label="Username" aria-describedby="basic-addon1">
                   </div>
 
+                <input type="hidden" name="resend" value="" id="resend">
 
-                <button type="submit" class="btn btn-primary">الخطوة التالية</button>
-                <a href="{% url 'SignupSetupProcess' alt_id %}" class="btn btn-primary">تعديل الرقم</a>
+
+                <button type="submit" class="btn btn-primary mb-2">الخطوة التالية</button>
+                <button type="button" onclick="{document.querySelector('#resend').value='1';document.querySelector('form').submit()}" class="btn btn-primary mb-2">اعادة ارسال رمز التاكيد</button>
+                
+                <a href="{% url 'SignupSetupProcess' alt_id %}" class="btn btn-primary mb-2">تعديل الرقم</a>
 
               </form>
         </div>

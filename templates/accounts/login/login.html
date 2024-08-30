@@ -27,7 +27,11 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">كلمة مرور الحساب</label>
-                  <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+
+                  <div style="position: relative;">
+                    <input type="password" name="password" id="password" class="form-control" id="exampleInputPassword1">
+                    <i class="bi bi-eye-fill" style="position: absolute; top: 7px; left: 10px;" onclick="checkPassword()"></i>
+                  </div>
                 </div>
    
                 <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
@@ -43,4 +47,16 @@
 
 </div>
 
+
+<script>
+  function checkPassword(){
+    let obj = document.querySelector('#password');
+    if (obj.type=='text') {
+      obj.type = 'password'
+    } else {
+      obj.type = 'text'
+    }
+    
+  }
+</script>
 {% endblock sheri %}

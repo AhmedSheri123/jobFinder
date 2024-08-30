@@ -13,9 +13,13 @@
           <li class="nav-item">
                 <a href="{% url 'index' %}" class="btn" role="button"><i class="bi bi-house-door-fill"></i></a>
           </li>
+
+          {% if request.user.userprofile.is_company %}
           <li class="nav-item">
                 <a href="{% url 'companyJobs' %}" class="btn" role="button"><i class="bi bi-boxes"></i></a>
           </li>
+          {% endif %}
+
           <li class="nav-item">
                 <a style="position: relative;" id="example" tabindex="0" class="btn" role="button" data-bs-toggle="popover" title="الرسائل" >
                   <span id="msg-main-badge" class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">{{count_of_not_readed_msg}}</span>

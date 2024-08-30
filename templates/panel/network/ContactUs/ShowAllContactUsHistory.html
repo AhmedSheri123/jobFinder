@@ -76,7 +76,7 @@
 
           <td>{{job.creation_date}}</td>
 
-          <td><a href="{% url 'ViewAllEmployeeMsgHistory' job.id %}" class="ui inverted blue button" data-bs-toggle="modal" data-bs-target="#exampleModal{{job.id}}">عرض</a></td>
+          <td><a href="{% url 'index' %}" class="ui inverted blue button" data-bs-toggle="modal" data-bs-target="#exampleModal{{job.id}}">عرض</a></td>
 
           <!-- Modal -->
           <div class="modal fade" id="exampleModal{{job.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{job.id}}" aria-hidden="true">
@@ -93,35 +93,13 @@
                   </div>
                 </div>
 
-                <form action="" method="post">
-                  <div class="modal-body">
-                        <hr>
-                      {% csrf_token %}
-                      <input type="hidden" value="{{job.id}}" name="job_id">
-                        <p style="text-align: center;">إرسال رسالة</p>
-                      <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">عنوان الرسالة</label>
-                        <input class="form-control" name="subject" id="exampleFormControlTextarea1" rows="3placeholder="أكتب عنوان الرسالة">
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">الرسالة</label>
-                        <textarea class="form-control" name="msg" id="exampleFormControlTextarea1" rows="3" placeholder="أدخل الرسالة التي تريد إرسالها"></textarea>
-                      </div>
-                  </div>
-
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">إرسال</button>
-                  </div>
-
-                </form>
 
               </div>
             </div>
           </div>
 
 
-          <td><a href="{% url 'ViewAllEmployeeMsgHistory' job.id %}" class="ui  red button">حذف</a></td>
+          <td><a href="{% url 'DeleteContactUs' job.id %}" class="ui  red button">حذف</a></td>
         </tr>
         {% endfor %}
       </tbody>

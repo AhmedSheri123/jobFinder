@@ -1,9 +1,9 @@
 <h4 class="mt-5">الاعدادات</h4>
     <p>الرئيسية/ الاعدادت</p>
 
-    <div>
-      <nav dir="rtl" class="mt-5">
-        <div class="nav nav-tabs" id="nav-tab2" role="tablist">
+    <div class="profile-nav-main">
+      <nav dir="rtl" class="mt-5 profile-nav">
+        <div class="nav nav-tabs profile-nav-tabs" id="nav-tab2" role="tablist">
           <a href="{% url 'CVSettingsGernral' %}" class="nav-link {% if 'CVSettingsGernral' in request.path %} active {%endif%}" id="nav-home-tab2" type="button" role="tab" aria-selected="false">عام</a>
           <a href="{% url 'SettingsCV' %}" class="nav-link {% if 'SettingsCV' in request.path %} active {%endif%}" id="nav-profile-tab2" type="button" role="tab"
             aria-selected="true">السيرة</a>
@@ -14,3 +14,28 @@
         </div>
       </nav>
     </div>
+
+
+
+
+    <style>
+
+      @media only screen and (max-width: 768px) {
+          .contents-box {
+              justify-content: center;
+              }
+      
+              .profile-nav {
+                  width:100%
+              }
+              .profile-nav-tabs {
+                  flex-direction: column;
+                  box-shadow: inset #cecece 0px 0px 6px;
+                  background-color: #ffffff82;
+                  padding: 5px;
+                  border-radius: 10px;
+              }
+      
+          }
+      
+      </style>

@@ -13,7 +13,7 @@ def auth():
     return r.json()
 
 
-def addInvoice(orderID, total_price_amount, email, phone, clientName, ser_title, ser_disc, callBackUrl, cancelUrl):
+def addInvoice(orderID, total_price_amount, email, phone, clientName, ser_title, ser_disc, callBackUrl, cancelUrl, currency='USD'):
         
     id_token = auth().get('id_token')
     if id_token:
@@ -27,7 +27,7 @@ def addInvoice(orderID, total_price_amount, email, phone, clientName, ser_title,
             "clientName": clientName,
             "clientEmail": email,
             "clientMobile": phone,
-            "currency": "SAR",
+            "currency": currency,
             "products": [
                 {
                 "title": ser_title,

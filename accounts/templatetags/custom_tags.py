@@ -49,3 +49,8 @@ def get_user_views(user_id):
 def get_ws_type(ss):
     a = settings.WS_TYPE
     return a
+
+@register.simple_tag
+@stringfilter
+def get_sub_price(req):
+    print(req)

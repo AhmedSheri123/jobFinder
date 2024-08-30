@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel
+from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry
 from accounts.fields import GenderFields
 from calendar import monthrange
 import datetime
@@ -9,8 +9,8 @@ from messenger.models import MessengerModel
 from messenger.views import get_user_img
 from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
 from jobs.forms import JobsModelForm
-from accounts.froms import SubscriptionModelForm
-
+from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm
+from pages.models import ContactUsModel
 # Create your views here.
 
 
@@ -444,3 +444,54 @@ def PanelEditSubscriptions(request, id):
         form.save()
 
     return render(request, 'panel/subscriptions/sub/addSubscriptions.html', {'form':form})
+
+
+def ManageSubscriptionPriceByCountry(request):
+    objs = SubscriptionPriceByCountry.objects.all()
+
+    return render(request, 'panel/subscriptions/SubscriptionPriceByCountry/ManageSubscriptionPriceByCountry.html', {'objs':objs})
+
+def AddSubscriptionPriceByCountry(request):
+    form = SubscriptionPriceByCountryModelForm()
+    if request.method == 'POST':
+        form = SubscriptionPriceByCountryModelForm(request.POST)
+        form.save()
+        return redirect('ManageSubscriptionPriceByCountry')
+    return render(request, 'panel/subscriptions/SubscriptionPriceByCountry/AddSubscriptionPriceByCountry.html', {'form':form})
+
+def EditSubscriptionPriceByCountry(request, id):
+    subscription = SubscriptionPriceByCountry.objects.get(id=id)
+    form = SubscriptionPriceByCountryModelForm(instance=subscription)
+    if request.method == 'POST':
+        form = SubscriptionPriceByCountryModelForm(request.POST, instance=subscription)
+        form.save()
+        return redirect('ManageSubscriptionPriceByCountry')
+    return render(request, 'panel/subscriptions/SubscriptionPriceByCountry/EditSubscriptionPriceByCountry.html', {'form':form})
+
+
+def DeleteSubscriptionPriceByCountry(request, id):
+    subscription = SubscriptionPriceByCountry.objects.get(id=id)
+    subscription.delete()
+    return redirect('ManageSubscriptionPriceByCountry')
+
+def PanelDeleteSubscriptions(request, id):
+    subscription = SubscriptionPriceByCountry.objects.get(id=id)
+    subscription.delete()
+    return redirect('ManageSubscriptionPriceByCountry')
+
+
+
+def ShowAllContactUsHistory(request):
+    if request.user.is_superuser:
+            
+        contact_us = ContactUsModel.objects.all().order_by('-id')
+
+        return render(request, 'panel/network/ContactUs/ShowAllContactUsHistory.html', {'contact_us':contact_us})
+    
+def DeleteContactUs(request, id):
+    if request.user.is_superuser:
+            
+        contact_us = ContactUsModel.objects.get(id=id)
+        contact_us.delete()
+
+        return redirect('ShowAllContactUsHistory')    

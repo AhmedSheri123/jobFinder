@@ -3,6 +3,7 @@
 
 {% block links %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/css/intlTelInput.css">
 
 {% endblock links %}
 
@@ -91,16 +92,25 @@
         <div style="max-width: 500px;" dir="rtl">
             <form method="post" class="pt-3">
                 {% csrf_token %}
-                <div class="mb-3">
+                {% comment %} <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
                   <input required type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div> {% endcomment %}
+
+                <div class=" mb-3">
+                    <label for="" class="form-label">الهاتف</label>
+                    <input type="tel" id="tel" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
+                    <div id="emailHelp" class="form-text"><strong>مهم!</strong> يرجى ادخل رقم هاتف يتواجد عليه حساب واتس اب</div>
+
                 </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">كلمة مرور الحساب</label>
-                  <input required type="password" name="password" class="form-control" id="exampleInputPassword1">
-                </div>
+
+                
+                <div style="position: relative;">
+                    <input required type="password" name="password" id="password" class="form-control" id="exampleInputPassword1">
+                    <i class="bi bi-eye-fill" style="position: absolute; top: 7px; left: 10px;" onclick="checkPassword()"></i>
+                  </div>
    
-                <button type="submit" class="btn btn-primary">الخطوة التالية</button>
+                <button type="submit" class="btn btn-primary mt-3">الخطوة التالية</button>
               </form>
         </div>
 
@@ -109,4 +119,51 @@
 
 </div>
 
+
+
+<style>
+
+    .intl-tel-input {
+      display: table-cell;
+    }
+    .intl-tel-input .selected-flag {
+      z-index: 4;
+    }
+    .intl-tel-input .country-list {
+      z-index: 5;
+    }
+    #tel {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 0;
+    }
+    .iti  {
+        width:100%;
+    }
+    </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/intlTelInput.min.js"></script>
+    <script>
+      const input = document.querySelector("#tel");
+      window.intlTelInput(input, {
+        
+        initialCountry: "sa",
+        hiddenInput: () => ({ phone: "full_phone", country: "country_code" }),
+    
+        utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.js",
+      });
+    </script>
+
+    <script>
+        function checkPassword(){
+          let obj = document.querySelector('#password');
+          if (obj.type=='text') {
+            obj.type = 'password'
+          } else {
+            obj.type = 'text'
+          }
+          
+        }
+      </script>
 {% endblock sheri %}

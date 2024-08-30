@@ -24,4 +24,16 @@ urlpatterns = [
     path('PanelViewSubscriptions', views.PanelViewSubscriptions, name='PanelViewSubscriptions'),
     path('PanelAddSubscriptions', views.PanelAddSubscriptions, name='PanelAddSubscriptions'),
     path('PanelEditSubscriptions/<int:id>', views.PanelEditSubscriptions, name='PanelEditSubscriptions'),
+    path('PanelDeleteSubscriptions/<int:id>', views.PanelDeleteSubscriptions, name='PanelDeleteSubscriptions'),
+
+
+    path('ManageSubscriptionPriceByCountry', views.ManageSubscriptionPriceByCountry, name='ManageSubscriptionPriceByCountry'),
+    path('AddSubscriptionPriceByCountry', views.AddSubscriptionPriceByCountry, name='AddSubscriptionPriceByCountry'),
+    path('EditSubscriptionPriceByCountry/<int:id>', views.EditSubscriptionPriceByCountry, name='EditSubscriptionPriceByCountry'),
+    path('DeleteSubscriptionPriceByCountry/<int:id>', views.DeleteSubscriptionPriceByCountry, name='DeleteSubscriptionPriceByCountry'),
+    
+
+
+    path('ShowAllContactUsHistory', views.ShowAllContactUsHistory, name='ShowAllContactUsHistory'),
+    path('DeleteContactUs/<int:id>', views.DeleteContactUs, name='DeleteContactUs'),
 ]

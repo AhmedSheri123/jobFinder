@@ -62,6 +62,12 @@
               إدارة الاشتراكات
             </a>
           </li>
+          <li>
+            <a href="{% url 'ManageSubscriptionPriceByCountry' %}" class="nav-link text-white nav-strings">
+              <i class="bi bi-shuffle"></i>
+              تخصيص الاشتراكات
+            </a>
+          </li>
           {% comment %} <li>
             <a href="{% url 'index' %}" class="nav-link text-white nav-strings">
               <i class="bi bi-suitcase-lg-fill"></i>
@@ -105,7 +111,7 @@
                 <!-- <li><a class="dropdown-item" href="#">الإتصالات</a></li> -->
                 <li><a class="dropdown-item " href="{% url 'index' %}" aria-current="true">تعديل التذييل</a></li>
                 <li><a class="dropdown-item " style="cursor: pointer;" onclick="{document.getElementById('ChangeHeaderImage').click()}" aria-current="true">تعديل الصورة</a></li>
-                {% comment %} <li><a class="dropdown-item" href="#">النماذج غير المكتملة</a></li> {% endcomment %}
+                <li><a class="dropdown-item" href="{% url 'ShowAllContactUsHistory' %}">نماذج التواصل</a></li>
               </div>
             </ul>
           </div>

@@ -1,7 +1,7 @@
 from django.db import models
-from .fields import HealthStatusFields, EmployeePostStateFields, citys, StateFields, YesNoFields, NationalityFields, GenderFields, HowHearFields, CertTypeFields, JobTypeFields, JobPropertiesFields, LanguageLevelFields, LearningDomainFields
+from .fields import CountrysChoices, HealthStatusFields, EmployeePostStateFields, citys, StateFields, YesNoFields, NationalityFields, GenderFields, HowHearFields, CertTypeFields, JobTypeFields, JobPropertiesFields, LanguageLevelFields, LearningDomainFields
 from django.contrib.auth.models import User
-from .company_field import CompanyHaveCertFields, CompanySectionFields, CompanySizeFields, CompanyGenderFields, CompanyWorktimeFields, PostStateFields, CertTypeFieldsCompany
+from .company_field import CompanyWorktimeFields, PostStateFields, CertTypeFieldsCompany
 from django.utils import timezone
 import string, datetime
 import random
@@ -18,6 +18,20 @@ AdminPermission = (
 )
 
 
+CurrencyChoices = (
+    ("SAR", "ريال سعودي"),
+    ("USD", "دولار"),
+    ("EUR", "يورو"),
+)
+
+# CountryChoices = (
+#     ("SA", "السعودية"),
+#     ("USA", "ولايات المتحدة الامريكية"),
+#     ("SY", "سوريا"),
+#     ("EG", "مصر"),
+# )
+
+
 
 CVSignupProcessChoices = (
     ("0", "ملغي"),
@@ -32,8 +46,8 @@ CVSignupProcessChoices = (
 CompanySignupProcessChoices = (
     ("0", "ملغي"),
     ("1", "إنشاء حساب"),
-    ("2", "إعداد ملف شخصي"),
-    ("3", "تاكيد الحساب"),
+    ("2", "تاكيد الحساب"),
+    ("3", "إعداد ملف شخصي"),
     ("4", "قيد المراجعة"),
     ("5", "مكتمل"),
 )
@@ -115,6 +129,8 @@ class UserProfile(models.Model):
     dont_receive_msg_from_companys = models.BooleanField(default=False)
     dont_receive_msg_from_employees = models.BooleanField(default=False)
     
+
+    ip_info = models.JSONField(default=dict)
     def __str__(self):
         return self.user.username
 
@@ -304,6 +320,7 @@ class SubscriptionsModel(models.Model):
 
     number_of_days = models.IntegerField(default=30)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    currency = models.CharField(max_length=250, choices=CurrencyChoices, default='USD', null=True)
 
     number_of_receive_msgs = models.IntegerField(default=1)
     number_of_send_msgs = models.IntegerField(default=1)
@@ -334,6 +351,7 @@ class UserSubscriptionModel(models.Model):
     subscription = models.ForeignKey('SubscriptionsModel', on_delete=models.CASCADE)
     number_of_days = models.IntegerField(default=30)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    
     number_of_receive_msgs = models.IntegerField(default=1)
     used_number_of_receive_msgs = models.IntegerField(default=0)
     number_of_send_msgs = models.IntegerField(default=1)
@@ -379,4 +397,24 @@ class EmailOTPModel(models.Model):
 class UserLikeModel(models.Model):
     liker = models.ForeignKey(User, related_name='liker', on_delete=models.SET_NULL, null=True)
     liked = models.ForeignKey(User, related_name='liked', on_delete=models.SET_NULL, null=True)
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+
+
+
+class SubscriptionPriceByCountry(models.Model):
+    subscription = models.ForeignKey(SubscriptionsModel, on_delete=models.SET_NULL, null=True)
+    country = models.CharField(max_length=250, choices=CountrysChoices, null=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    currency = models.CharField(max_length=250, choices=CurrencyChoices, null=True)
+
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+
+class AdminADSModel(models.Model):
+    img = models.ImageField(upload_to='ADS/%Y/%m/')
+    redirect_url = models.CharField(max_length=254)
+    country = models.CharField(max_length=250, choices=CountrysChoices, null=True)
+    available_num_of_days = models.IntegerField()
+
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
