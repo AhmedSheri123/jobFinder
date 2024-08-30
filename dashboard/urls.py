@@ -36,4 +36,12 @@ urlpatterns = [
 
     path('ShowAllContactUsHistory', views.ShowAllContactUsHistory, name='ShowAllContactUsHistory'),
     path('DeleteContactUs/<int:id>', views.DeleteContactUs, name='DeleteContactUs'),
+
+
+    #ADS
+    path('ManageAdminADS', views.ManageAdminADS, name='ManageAdminADS'),
+    path('AddAdminADS', views.AddAdminADS, name='AddAdminADS'),
+    path('EditAdminADS/<int:id>', views.EditAdminADS, name='EditAdminADS'),
+    path('DeleteAdminADS/<int:id>', views.DeleteAdminADS, name='DeleteAdminADS'),
+    
 ]

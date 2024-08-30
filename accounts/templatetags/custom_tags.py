@@ -1,8 +1,10 @@
 from django import template
 from django.template.defaultfilters import stringfilter
-from accounts.models import UserProfile, EmployeeProfileImages, UserLikeModel, UserViewedProfileModel
-register = template.Library()
+from accounts.models import UserProfile, EmployeeProfileImages, UserLikeModel, UserViewedProfileModel, AdminADSModel
 from django.conf import settings
+import random, json
+
+register = template.Library()
 
 @register.simple_tag
 @stringfilter
@@ -54,3 +56,17 @@ def get_ws_type(ss):
 @stringfilter
 def get_sub_price(req):
     print(req)
+
+@register.simple_tag
+@stringfilter
+def get_random_ad_by_country(ip_info):
+    if ip_info:
+        ip_info = json.loads(ip_info)
+        ads = AdminADSModel.objects.filter(country=ip_info.get('isocode'), is_enabled=True)
+        for ad in ads:
+            if ad.reminding_days() <= 0:
+                ads = ads.exclude(id=ad.id)
+        if ads:
+            ad = random.choice(ads)
+            return ad
+    return {}

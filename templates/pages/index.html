@@ -10,9 +10,18 @@
 {% block sheri %}
 
 
-<header >
+<header style="height: auto;">
+
 	<div class="overlay" style="display: flex; align-items: center; justify-content: center;">
-        <div >
+        
+        
+        <div>
+
+            {% get_random_ad_by_country request.session.ip_info as ad %}
+            <a href="{{ad.redirect_url}}" target="_blank" class="ad-main-box mb-3 mt-3">
+                <img style="width: 100%;" src="{{ad.img.url}}" alt="">
+            </a>
+
             <h1 >البحث عن أصحاب المهارات</h1>
             <div style="margin-top: 10px;">
                 <p class="arial title_desc">وظف افضل المواهب واشخاص ذوي الاختصاصات العلية</p>
@@ -62,9 +71,12 @@
 	</div>
 </header>
 
-
-
 <div class="container" style="margin-top: 40px;">
+    {% get_random_ad_by_country request.session.ip_info as ad %}
+    <a href="{{ad.redirect_url}}" target="_blank" class="ad-main-box mb-3 mt-3">
+        <img style="width: 100%;" src="{{ad.img.url}}" alt="">
+    </a>
+
     <h2 style="text-align: center; padding: 70px 0;">
         بعض الباحثين عن العمل
     </h2>
@@ -357,7 +369,12 @@
 
 
 
-
+    {% if forloop.counter|divisibleby:4 %}
+        {% get_random_ad_by_country request.session.ip_info as ad %}
+        <a href="{{ad.redirect_url}}" target="_blank" class="ad-main-box  mt-5">
+            <img style="width: 100%;" src="{{ad.img.url}}" alt="">
+        </a>
+    {% endif %}
 
 
         {%endfor%}

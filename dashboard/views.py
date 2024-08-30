@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry
+from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel
 from accounts.fields import GenderFields
 from calendar import monthrange
 import datetime
@@ -9,8 +9,9 @@ from messenger.models import MessengerModel
 from messenger.views import get_user_img
 from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
 from jobs.forms import JobsModelForm
-from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm
+from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm
 from pages.models import ContactUsModel
+from django.utils import timezone
 # Create your views here.
 
 
@@ -495,3 +496,39 @@ def DeleteContactUs(request, id):
         contact_us.delete()
 
         return redirect('ShowAllContactUsHistory')    
+    
+
+
+
+    
+def ManageAdminADS(request):
+    objs = AdminADSModel.objects.all()
+
+    return render(request, 'panel/ADS/ManageAdminADS.html', {'objs':objs})
+
+def AddAdminADS(request):
+    form = AdminADSModelForm()
+    if request.method == 'POST':
+        form = AdminADSModelForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            ob = form.save()
+            ob.creation_date = timezone.now()
+            ob.save()
+            return redirect('ManageAdminADS')
+    return render(request, 'panel/ADS/AddAdminADS.html', {'form':form})
+
+def EditAdminADS(request, id):
+    subscription = AdminADSModel.objects.get(id=id)
+    form = AdminADSModelForm(instance=subscription)
+    if request.method == 'POST':
+        form = AdminADSModelForm(data=request.POST, files=request.FILES, instance=subscription)
+        if form.is_valid():
+            form.save()
+            return redirect('ManageAdminADS')
+    return render(request, 'panel/ADS/EditAdminADS.html', {'form':form})
+
+
+def DeleteAdminADS(request, id):
+    subscription = AdminADSModel.objects.get(id=id)
+    subscription.delete()
+    return redirect('ManageAdminADS')

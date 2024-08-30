@@ -110,11 +110,14 @@ def get_ip_info(ip):
 def add_get_user_ip(request):
     ip = request.META.get('REMOTE_ADDR')
     ip_info = None
+    str_ip_info = request.session.get('ip_info')
+    if str_ip_info:
+        ip_info = json.loads(str_ip_info)
 
-    ip_info = request.session.get('ip_info')
     if not ip_info:
         ip_info = get_ip_info(ip)
-        request.session['ip_info'] = ip_info
+        if ip_info:
+            request.session['ip_info'] = json.dumps(ip_info)
     else:
         if ip_info.get('vpn'):
                 ip_info = get_ip_info(ip)

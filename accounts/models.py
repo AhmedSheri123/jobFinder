@@ -416,5 +416,15 @@ class AdminADSModel(models.Model):
     redirect_url = models.CharField(max_length=254)
     country = models.CharField(max_length=250, choices=CountrysChoices, null=True)
     available_num_of_days = models.IntegerField()
-
+    is_enabled = models.BooleanField(default=True)
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+    def reminding_days(self):
+        datetime_now = DatetimeNow(None)
+        date_now = datetime_now.date()
+        subscription_date = self.creation_date.date()
+        end_date = (datetime.timedelta(days=self.available_num_of_days) + subscription_date)
+        reminding_days = (end_date - date_now).days
+        if reminding_days <=0:
+            reminding_days = 0
+        return reminding_days

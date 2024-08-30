@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel
+from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel, AdminADSModel
 from accounts.fields import CertTypeFields, GenderFields, StateFields, NationalityFields
 from notifications.views import create_notifications
 from accounts.libs import filter_sub_price
 from .models import ContactUsModel
 from django.contrib import messages
 from django.utils import timezone
+from accounts.libs import add_get_user_ip
+import random
 # Create your views here.
 
 def index(request):
@@ -13,6 +15,7 @@ def index(request):
     countrys = CountrysModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True)
     subscriptions = filter_sub_price(request, SubscriptionsModel.objects.all())
+
     # u = []
     # for i in userprofiles:
     #     u.append(i.user.id)

@@ -417,7 +417,12 @@
                 </div>
             </div>
     
-    
+            {% if forloop.counter|divisibleby:4 %}
+            {% get_random_ad_by_country request.session.ip_info as ad %}
+                <a href="{{ad.redirect_url}}" target="_blank" class="ad-main-box  mt-5">
+                    <img style="width: 100%;" src="{{ad.img.url}}" alt="">
+                </a>
+            {% endif %}
     
             {% empty %}
             <p style="display: block;margin: auto;" class="mt-5">لم يتم العثورة على النتائج</p>
