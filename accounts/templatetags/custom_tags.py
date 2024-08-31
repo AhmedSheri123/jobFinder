@@ -59,13 +59,54 @@ def get_sub_price(req):
 
 @register.simple_tag
 @stringfilter
-def get_random_ad_by_country(ip_info):
+def get_random_ad_cv(ip_info):
     if ip_info:
         ip_info = json.loads(ip_info)
-        ads = AdminADSModel.objects.filter(country=ip_info.get('isocode'), is_enabled=True)
+        ads = AdminADSModel.objects.filter(is_enabled=True, show_in_cv=True)
         for ad in ads:
             if ad.reminding_days() <= 0:
                 ads = ads.exclude(id=ad.id)
+
+            elif not ad.show_on_all_countrys:
+                if ad.country!=ip_info.get('isocode'):
+                    ads = ads.exclude(id=ad.id)
+        if ads:
+            ad = random.choice(ads)
+            return ad
+    return {}
+
+@register.simple_tag
+@stringfilter
+def get_random_ad_main(ip_info):
+    if ip_info:
+        ip_info = json.loads(ip_info)
+        ads = AdminADSModel.objects.filter(is_enabled=True, is_main_ad=True)
+        for ad in ads:
+
+            if ad.reminding_days() <= 0:
+                ads = ads.exclude(id=ad.id)
+            elif not ad.show_on_all_countrys:
+                
+
+                if ad.country!=ip_info.get('isocode'):
+                    ads = ads.exclude(id=ad.id)
+        if ads:
+            ad = random.choice(ads)
+            return ad
+    return {}
+
+@register.simple_tag
+@stringfilter
+def get_random_ad_others(ip_info):
+    if ip_info:
+        ip_info = json.loads(ip_info)
+        ads = AdminADSModel.objects.filter(is_enabled=True, show_in_others=True)
+        for ad in ads:
+            if ad.reminding_days() <= 0:
+                ads = ads.exclude(id=ad.id)
+            elif not ad.show_on_all_countrys:
+                if ad.country!=ip_info.get('isocode'):
+                    ads = ads.exclude(id=ad.id)
         if ads:
             ad = random.choice(ads)
             return ad

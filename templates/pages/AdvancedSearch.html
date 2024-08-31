@@ -418,10 +418,12 @@
             </div>
     
             {% if forloop.counter|divisibleby:4 %}
-            {% get_random_ad_by_country request.session.ip_info as ad %}
-                <a href="{{ad.redirect_url}}" target="_blank" class="ad-main-box  mt-5">
-                    <img style="width: 100%;" src="{{ad.img.url}}" alt="">
-                </a>
+            {% get_random_ad_cv request.session.ip_info as ad %}
+                {% if ad %}
+                    <a href="{{ad.redirect_url}}" target="_blank" class="ad-main-box  mt-5">
+                        <img style="width: 100%;" src="{{ad.img.url}}" alt="">
+                    </a>
+                {% endif %}
             {% endif %}
     
             {% empty %}

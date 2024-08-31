@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel
+from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -13,8 +13,9 @@ from django.http import HttpResponseRedirect, JsonResponse
 from .whatsapp import wa_send_msg
 from django.core.mail import send_mail
 from messenger.models import FavoriteUserModel
-# Create your views here.
 from django.conf import settings
+from django.db.models import Q
+# Create your views here.
 email_from = settings.EMAIL_HOST_USER
 
 def cvSignup(request):
@@ -23,6 +24,11 @@ def cvSignup(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         phone = request.POST.get('full_phone')
+
+        employee_profiles = EmployeeProfile.objects.filter(phone=phone)
+        if employee_profiles.exists():
+            messages.error(request, 'الرقم مسجل من قبل الرجاء تسجيل الدخول')
+            return redirect('Login')
 
         user = User.objects.create()
         user.set_password(password)
@@ -83,7 +89,10 @@ def cvSignupVerifyEmail(request, alt_id):
 
         elif VerifyProccess == '2':
             email = request.POST.get('email')
-
+            users = User.objects.filter(email=email)
+            if users.exists():
+                messages.error(request, 'البريد الالكتروني مسجل من قبل الرجاء اختيار بريد اخر')
+                return redirect('SignupSetupProcess', userprofile.alt_id)
             if email:
                 user.email = email
                 user.save()
@@ -171,6 +180,10 @@ def companySignup(request):
         password = request.POST.get('password')
         phone = request.POST.get('full_phone')
 
+        company_profiles = CompanyProfile.objects.filter(phone=phone)
+        if company_profiles.exists():
+            messages.error(request, 'الرقم مسجل من قبل الرجاء تسجيل الدخول')
+            return redirect('Login')
         user = User.objects.create()
         user.set_password(password)
         company_profile = CompanyProfile.objects.create()
@@ -267,7 +280,11 @@ def companySignupVerifyEmail(request, alt_id):
 
         elif VerifyProccess == '2':
             email = request.POST.get('email')
-
+            users = User.objects.filter(email=email)
+            if users.exists():
+                messages.error(request, 'البريد الالكتروني مسجل من قبل الرجاء اختيار بريد اخر')
+                return redirect('SignupSetupProcess', userprofile.alt_id)
+            
             if email:
                 user.email = email
                 user.save()
@@ -441,26 +458,37 @@ def SignupSetupProcess(request, alt_id):
 
 def Login(request):
     if request.method == 'POST':
+        type = request.POST.get('type')
         email = request.POST.get('email')
+        full_phone = request.POST.get('full_phone')
         password = request.POST.get('password')
+        if type == '2':
+            email = full_phone
 
-        users = User.objects.filter(email=email)
-        user = users.first()
-
-        user = authenticate(username=user.username, password=password)
-
-        if user is None:
-            messages.error(request, "Invalid Password")
-            return redirect('Login')
-        else:
-            # userprofile = UserProfile.objects.get(user=user)
-            # ip = request.META.get('REMOTE_ADDR')
-            # ip_info = get_ip_info(ip)
-            # userprofile.ip_info = ip_info
-            # userprofile.save()
-            login(request, user)
-            return redirect('index')
-
+        if email:    
+            users = User.objects.filter(email=email)
+            if not users.exists():
+                users = User.objects.filter(Q(userprofile__employeeprofile__phone=email) | Q(userprofile__companyprofile__phone=email))
+            if users.exists():
+                user = users.first()
+                user = authenticate(username=user.username, password=password)
+                if user is None:
+                    messages.error(request, "خطاء في البريد الالكتروني او كلمة المرور")
+                    return redirect('Login')
+                else:
+                    if not user.is_superuser:
+                        userprofile = UserProfile.objects.get(user=user)
+                        alt_id = userprofile.alt_id
+                        if userprofile.is_employee:
+                            if userprofile.cv_signup_process != '5' or userprofile.cv_signup_process != '6':
+                                return redirect('SignupSetupProcess', alt_id)
+                        elif userprofile.is_company:
+                            if userprofile.company_signup_process == '4' or userprofile.company_signup_process == '5':
+                                return redirect('SignupSetupProcess', alt_id)
+                    login(request, user)
+                    return redirect('index')
+            else:
+                messages.error(request, 'خطاء في البريد الالكتروني او كلمة المرور')
         # userprofile = UserProfile.objects.get(user=user)
 
         # return redirect('index',)
@@ -555,7 +583,6 @@ def CompanySettingGernral(request):
 
             user.username = username
             user.email = email
-            print(img_base64)
             user.save()
             form2 = form.save(commit=False)
             form2.img_base64 = img_base64
@@ -909,3 +936,61 @@ def UserLike(request, liked_id):
         like.save()
         return JsonResponse({'status':True})
     
+
+
+def ForgetPassword(request):
+    if request.method == 'POST':
+        type = request.POST.get('type')
+        if type == '1':
+            email = request.POST.get('email')
+    
+            users = User.objects.filter(email=email)
+            if users.exists():
+                user = users.first()
+                code = ForgetPWDModel.objects.create(user=user)
+                code.save()
+
+                index_url = request.build_absolute_uri('/')
+                index_url = index_url.rsplit('/', 1)[0]
+                profile_reverced_url = reverse('ResetPassword', kwargs={'code': code.secret})
+                callBackUrl = index_url+profile_reverced_url
+                msg = f'تغير كلمة المرور من هذا الرابط : {callBackUrl}'
+                subject = 'تغير كلمة المرور'
+                send_mail( subject, msg, email_from, [email] )
+            messages.success(request, 'اذا كان البيات التي ادخلتها صحيحاََ فسوف تستلم رابط تغير كلمة المرور عبر البريد الالكتروني')
+        elif type == '2':
+            phone = request.POST.get('full_phone')
+            users = User.objects.filter(Q(userprofile__employeeprofile__phone=phone) | Q(userprofile__companyprofile__phone=phone))
+            if users.exists():
+                user = users.first()
+                userprofile = UserProfile.objects.get(user=user)
+                code = ForgetPWDModel.objects.create(user=user)
+                code.save()
+
+                index_url = request.build_absolute_uri('/')
+                index_url = index_url.rsplit('/', 1)[0]
+                profile_reverced_url = reverse('ResetPassword', kwargs={'code': code.secret})
+                callBackUrl = index_url+profile_reverced_url
+
+                msg = f'تغير كلمة المرور من هذا الرابط : {callBackUrl}'
+                wa_send_msg(msg, phone)
+            messages.success(request, 'اذا كان البيات التي ادخلتها صحيحاََ فسوف تستلم رابط تغير كلمة المرور عبر الواتساب')
+            return redirect('ForgetPassword')
+
+    return render(request, 'accounts/forget_password/forgetPWD.html')
+
+def ResetPassword(request, code):
+    codes = ForgetPWDModel.objects.filter(secret=code, is_finshed=False)
+    if codes.exists():
+        code = codes.first()
+        if request.method == 'POST':
+            password = request.POST.get('password')
+            user = User.objects.get(id=code.user.id)
+            user.set_password(password)
+            user.save()
+            code.is_finshed = True
+            code.save()
+            messages.success(request, 'تم تغير كلمة المرور بنجاح')
+            return redirect('Login')
+        return render(request, 'accounts/forget_password/ResetPassword.html')
+    return redirect('Login')

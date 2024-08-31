@@ -53,4 +53,8 @@ urlpatterns = [
     
     path('UserPayment/<int:subscription_id>', views.UserPayment, name='UserPayment'),
     path('checkPaymentProcess/<str:orderID>', views.checkPaymentProcess, name='checkPaymentProcess'),
+    
+    
+    path('ForgetPassword', views.ForgetPassword, name='ForgetPassword'),
+    path('ResetPassword/<str:code>', views.ResetPassword, name='ResetPassword'),
 ]

@@ -87,6 +87,10 @@ def StrNumCodeGen():
     N = 13
     res = ''.join(random.choices(string.digits+ string.ascii_letters, k=N))
     return str(res)
+def ResetPWDCodeGen():
+    N = 100
+    res = ''.join(random.choices(string.digits+ string.ascii_letters, k=N))
+    return str(res)
 
 def GenrateRefString(len=6):
     a = ''.join(random.choice(string.ascii_letters) for i in range(len))
@@ -416,6 +420,10 @@ class AdminADSModel(models.Model):
     redirect_url = models.CharField(max_length=254)
     country = models.CharField(max_length=250, choices=CountrysChoices, null=True)
     available_num_of_days = models.IntegerField()
+    is_main_ad = models.BooleanField(default=False, verbose_name='انه اعلان الرئيسي')
+    show_in_cv = models.BooleanField(default=False, verbose_name='اظهار بين السير')
+    show_in_others = models.BooleanField(default=False, verbose_name='اظهار بين الاقسام الاخرى للموقع')
+    show_on_all_countrys = models.BooleanField(default=False, verbose_name='عرض في جميع الدول')
     is_enabled = models.BooleanField(default=True)
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
 
@@ -428,3 +436,11 @@ class AdminADSModel(models.Model):
         if reminding_days <=0:
             reminding_days = 0
         return reminding_days
+    
+
+class ForgetPWDModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    secret = models.CharField(max_length=250, default=ResetPWDCodeGen, null=True)
+    is_finshed = models.BooleanField(default=False)
+
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")

@@ -43,4 +43,4 @@ class AdminADSModelForm(forms.ModelForm):
 
     class Meta:
         model = AdminADSModel
-        fields = ['img', 'redirect_url', 'country', 'available_num_of_days', 'is_enabled']
+        fields = ['img', 'redirect_url', 'country', 'available_num_of_days', 'is_main_ad', 'show_in_cv', 'show_in_others', 'show_on_all_countrys', 'is_enabled']

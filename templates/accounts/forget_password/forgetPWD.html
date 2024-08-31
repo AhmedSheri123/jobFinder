@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/css/intlTelInput.css">
+
+{% endblock links %}
+
+
+{% block sheri %}
+
+
+<div class="pt-5 container" dir="rtl">
+    
+
+
+    <div class=" mt-5 p-5" style="max-width: 600px; background-color: #f1f1f1; border-radius: 15px; border: 1px solid rgb(211, 211, 211); display: block; margin: auto;     box-shadow: 0 10px 15px rgba(0, 0, 0, .1) !important;">
+        <h4>استرجاع كلمة المرور</h4>
+        <p>الرجاء اختيار طريقة الاسترجاع</p>
+
+        <div style="max-width: 500px;" dir="rtl">
+
+
+
+
+
+
+
+
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">بريد الالكتروني</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">الهاتف</button>
+            </li>
+
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+
+              <form method="post" class="pt-3">
+                {% csrf_token %}
+
+                <input type="hidden" name="type" value="1">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
+
+                  {% comment %} <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label> {% endcomment %}
+                  <input type="email" style="text-align: right;" placeholder="البريد الالكتروني" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+   
+                <button type="submit" class="btn btn-primary">استرجاع</button>
+
+              </form>
+
+            </div>
+
+
+
+
+
+            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+              
+
+
+              <form method="post" class="pt-3">
+                {% csrf_token %}
+                <input type="hidden" name="type" value="2">
+                <div class="mb-3">
+                  <label for="" class="form-label">الهاتف</label>
+                  <input type="tel" id="tel" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
+                  <div id="emailHelp" class="form-text"><strong>مهم!</strong> يرجى ادخل رقم هاتف يتواجد عليه حساب واتس اب</div>
+                </div>
+                <button type="submit" class="btn btn-primary">استرجاع</button>
+
+
+              </form>
+            </div>
+
+            <p class="mt-3">
+              ليس لديك حساب؟ <a data-bs-toggle="modal" data-bs-target="#SignupModal" href="#">انشاء حساب</a>
+            </p>
+            <p class="mt-3">
+              لديك حساب بالفعل؟ <a href="{% url 'Login' %}">تسجيل الدخول</a>
+            </p>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+    </div>
+
+
+</div>
+<style>
+      .iti  {
+        width:100%;
+    }
+    #tel {
+      text-align: right;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/intlTelInput.min.js"></script>
+<script>
+  const input = document.querySelector("#tel");
+  window.intlTelInput(input, {
+    
+    initialCountry: "sa",
+    hiddenInput: () => ({ phone: "full_phone", country: "country_code" }),
+
+    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.js",
+  });
+</script>
+
+<script>
+  function checkPassword(){
+    let obj = document.querySelector('#password');
+    if (obj.type=='text') {
+      obj.type = 'password'
+    } else {
+      obj.type = 'text'
+    }
+    
+  }
+</script>
+{% endblock sheri %}
