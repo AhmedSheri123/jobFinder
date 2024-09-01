@@ -137,7 +137,7 @@ def filter_sub_price(request, subs):
     for sub in subs:
         for subc in subsc:
             if sub == subc.subscription:
-                if subc.country == ip_info.get('isocode'):
+                if subc.country.name == ip_info.get('isocode'):
                     sub.price = subc.price
                     sub.currency = subc.currency
     return subs

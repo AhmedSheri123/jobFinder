@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel
+from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel
 from accounts.fields import GenderFields
 from calendar import monthrange
 import datetime
@@ -9,7 +9,7 @@ from messenger.models import MessengerModel
 from messenger.views import get_user_img
 from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
 from jobs.forms import JobsModelForm
-from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm
+from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm, NationalityModelForm
 from pages.models import ContactUsModel
 from django.utils import timezone
 # Create your views here.
@@ -246,11 +246,16 @@ def DeleteEmployees(request, id):
             
         # if request.user.userprofile.admin_permission == '0':
         obj = User.objects.get(userprofile__id=id)
-        e_profile = EmployeeProfile.objects.filter(id=obj.userprofile.employeeprofile.id)
-        msgr = MessengerModel.objects.filter(messenger_users__id__in=[obj.id])
-
+        
+        if obj.userprofile:
+            employeeprofile_id = obj.userprofile.employeeprofile.id
+            if employeeprofile_id:
+                e_profile = EmployeeProfile.objects.filter(id=employeeprofile_id)
+                e_profile.delete()
         obj.delete()
-        e_profile.delete()
+        msgr = MessengerModel.objects.filter(messenger_users__id__in=[obj.id])
+        
+        
         for i in msgr:
             i.delete()
         # else:
@@ -555,7 +560,7 @@ def AddCountrys(request):
     return render(request, 'panel/countrys/AddCountrys.html', {'form':form})
 
 def EditCountrys(request, id):
-    subscription = AdminADSModel.objects.get(id=id)
+    subscription = CountrysModel.objects.get(id=id)
     form = CountrysModelForm(instance=subscription)
     if request.method == 'POST':
         form = CountrysModelForm(data=request.POST, files=request.FILES, instance=subscription)
@@ -569,3 +574,40 @@ def DeleteCountrys(request, id):
     subscription = CountrysModel.objects.get(id=id)
     subscription.delete()
     return redirect('ManageCountrys')
+
+
+
+
+
+
+def ManageNationality(request):
+    objs = NationalityModel.objects.all()
+
+    return render(request, 'panel/nationality/ManageNationality.html', {'objs':objs})
+
+def AddNationality(request):
+    form = NationalityModelForm()
+    if request.method == 'POST':
+        form = NationalityModelForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            ob = form.save()
+            ob.creation_date = timezone.now()
+            ob.save()
+            return redirect('ManageNationality')
+    return render(request, 'panel/nationality/AddNationality.html', {'form':form})
+
+def EditNationality(request, id):
+    subscription = NationalityModel.objects.get(id=id)
+    form = NationalityModelForm(instance=subscription)
+    if request.method == 'POST':
+        form = NationalityModelForm(data=request.POST, files=request.FILES, instance=subscription)
+        if form.is_valid():
+            form.save()
+            return redirect('ManageNationality')
+    return render(request, 'panel/nationality/EditNationality.html', {'form':form})
+
+
+def DeleteNationality(request, id):
+    subscription = NationalityModel.objects.get(id=id)
+    subscription.delete()
+    return redirect('ManageNationality')

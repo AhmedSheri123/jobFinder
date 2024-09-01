@@ -68,7 +68,7 @@ def get_random_ad_cv(ip_info):
                 ads = ads.exclude(id=ad.id)
 
             elif not ad.show_on_all_countrys:
-                if ad.country!=ip_info.get('isocode'):
+                if ad.country.name!=ip_info.get('isocode'):
                     ads = ads.exclude(id=ad.id)
         if ads:
             ad = random.choice(ads)
@@ -88,7 +88,7 @@ def get_random_ad_main(ip_info):
             elif not ad.show_on_all_countrys:
                 
 
-                if ad.country!=ip_info.get('isocode'):
+                if ad.country.name!=ip_info.get('isocode'):
                     ads = ads.exclude(id=ad.id)
         if ads:
             ad = random.choice(ads)
@@ -105,7 +105,7 @@ def get_random_ad_others(ip_info):
             if ad.reminding_days() <= 0:
                 ads = ads.exclude(id=ad.id)
             elif not ad.show_on_all_countrys:
-                if ad.country!=ip_info.get('isocode'):
+                if ad.country.name!=ip_info.get('isocode'):
                     ads = ads.exclude(id=ad.id)
         if ads:
             ad = random.choice(ads)

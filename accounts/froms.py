@@ -1,5 +1,5 @@
 from django import forms
-from .models import CompanyProfile, SubscriptionsModel, SubscriptionPriceByCountry, AdminADSModel, CountrysModel
+from .models import CompanyProfile, SubscriptionsModel, SubscriptionPriceByCountry, AdminADSModel, CountrysModel, NationalityModel
 
 class CompanyProfileForm(forms.ModelForm):
 
@@ -50,4 +50,11 @@ class CountrysModelForm(forms.ModelForm):
 
     class Meta:
         model = CountrysModel
+        fields = ['name']
+
+
+class NationalityModelForm(forms.ModelForm):
+
+    class Meta:
+        model = NationalityModel
         fields = ['name']

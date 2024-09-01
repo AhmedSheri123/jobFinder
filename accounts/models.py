@@ -189,9 +189,16 @@ class CountrysModel(models.Model):
     name = models.CharField(max_length=255, choices=CountrysChoices, null=True, verbose_name="اسم الدولة")
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
     def __str__(self):
+        return self.get_name_display()
+    
+
+class NationalityModel(models.Model):
+    name = models.CharField(max_length=255, null=True, verbose_name="الجنسية")
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+    def __str__(self):
         return self.name
-    
-    
+
+
 class SkilsModel(models.Model):
     name = models.CharField(max_length=255, null=True, verbose_name="اسم المهارة")
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
@@ -213,7 +220,7 @@ class EmployeeProfile(models.Model):
     country = models.ForeignKey('CountrysModel', on_delete=models.SET_NULL, null=True, verbose_name='الدولة')
     employee_city = models.CharField(max_length=255, null=True, verbose_name="المدينة")
     district = models.CharField(max_length=250, null=True, verbose_name="الحي")
-    nationality = models.CharField(max_length=255, choices = NationalityFields, null=True, verbose_name="الجنسية")
+    nationality = models.ForeignKey('NationalityModel', on_delete=models.SET_NULL, null=True, verbose_name='الجنسية')
     how_hear = models.CharField(max_length=255, choices = HowHearFields, null=True, verbose_name="كيف سمعت عنا")
     how_hear_other = models.CharField(max_length=250, null=True, verbose_name="اذكر لنا كيف سمعت عنا")
     have_car = models.CharField(max_length=255, choices = YesNoFields, null=True, verbose_name="أمتلك سيارة ورخصة قيادة")
@@ -408,7 +415,7 @@ class UserLikeModel(models.Model):
 
 class SubscriptionPriceByCountry(models.Model):
     subscription = models.ForeignKey(SubscriptionsModel, on_delete=models.SET_NULL, null=True)
-    country = models.ForeignKey('CountrysModel', on_delete=models.PROTECT, null=True, verbose_name='الدولة')
+    country = models.ForeignKey('CountrysModel', on_delete=models.SET_NULL, null=True, verbose_name='الدولة')
     price = models.DecimalField(max_digits=6, decimal_places=2)
     currency = models.CharField(max_length=250, choices=CurrencyChoices, null=True)
 
@@ -418,7 +425,7 @@ class SubscriptionPriceByCountry(models.Model):
 class AdminADSModel(models.Model):
     img = models.ImageField(upload_to='ADS/%Y/%m/')
     redirect_url = models.CharField(max_length=254)
-    country = models.ForeignKey('CountrysModel', on_delete=models.PROTECT, null=True, verbose_name='الدولة')
+    country = models.ForeignKey('CountrysModel', on_delete=models.SET_NULL, null=True, verbose_name='الدولة')
     available_num_of_days = models.IntegerField()
     is_main_ad = models.BooleanField(default=False, verbose_name='انه اعلان الرئيسي')
     show_in_cv = models.BooleanField(default=False, verbose_name='اظهار بين السير')

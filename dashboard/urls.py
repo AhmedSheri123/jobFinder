@@ -51,4 +51,10 @@ urlpatterns = [
     path('EditCountrys/<int:id>', views.EditCountrys, name='EditCountrys'),
     path('DeleteCountrys/<int:id>', views.DeleteCountrys, name='DeleteCountrys'),
     
+
+    #nationality
+    path('ManageNationality', views.ManageNationality, name='ManageNationality'),
+    path('AddNationality', views.AddNationality, name='AddNationality'),
+    path('EditNationality/<int:id>', views.EditNationality, name='EditNationality'),
+    path('DeleteNationality/<int:id>', views.DeleteNationality, name='DeleteNationality'),
 ]
