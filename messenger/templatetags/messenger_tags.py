@@ -30,10 +30,11 @@ def get_last_msg(messenger_id, receiver):
 @register.simple_tag
 @stringfilter
 def get_user_profile_img(user_id):
-    user = User.objects.get(id=user_id)
-    img = get_user_img(user)
+    if user_id:
+        user = User.objects.get(id=user_id)
+        img = get_user_img(user)
 
-    return img
+        return img
 
 @register.simple_tag
 @stringfilter
