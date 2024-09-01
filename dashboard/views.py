@@ -9,7 +9,7 @@ from messenger.models import MessengerModel
 from messenger.views import get_user_img
 from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
 from jobs.forms import JobsModelForm
-from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm
+from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm
 from pages.models import ContactUsModel
 from django.utils import timezone
 # Create your views here.
@@ -500,7 +500,7 @@ def DeleteContactUs(request, id):
 
 
 
-    
+
 def ManageAdminADS(request):
     objs = AdminADSModel.objects.all()
 
@@ -532,3 +532,40 @@ def DeleteAdminADS(request, id):
     subscription = AdminADSModel.objects.get(id=id)
     subscription.delete()
     return redirect('ManageAdminADS')
+
+
+
+
+
+
+def ManageCountrys(request):
+    objs = CountrysModel.objects.all()
+
+    return render(request, 'panel/countrys/ManageCountrys.html', {'objs':objs})
+
+def AddCountrys(request):
+    form = CountrysModelForm()
+    if request.method == 'POST':
+        form = CountrysModelForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            ob = form.save()
+            ob.creation_date = timezone.now()
+            ob.save()
+            return redirect('ManageCountrys')
+    return render(request, 'panel/countrys/AddCountrys.html', {'form':form})
+
+def EditCountrys(request, id):
+    subscription = AdminADSModel.objects.get(id=id)
+    form = CountrysModelForm(instance=subscription)
+    if request.method == 'POST':
+        form = CountrysModelForm(data=request.POST, files=request.FILES, instance=subscription)
+        if form.is_valid():
+            form.save()
+            return redirect('ManageCountrys')
+    return render(request, 'panel/countrys/EditCountrys.html', {'form':form})
+
+
+def DeleteCountrys(request, id):
+    subscription = CountrysModel.objects.get(id=id)
+    subscription.delete()
+    return redirect('ManageCountrys')

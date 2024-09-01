@@ -19,8 +19,8 @@
 
             {% get_random_ad_main request.session.ip_info as ad %}
             {% if ad %}
-            <a href="{{ad.redirect_url}}" target="_blank" class="ad-main-box mb-3 mt-3">
-                <img style="width: 100%;" src="{{ad.img.url}}" alt="">
+            <a href="{{ad.redirect_url}}" target="_blank" class="ad-main-box mt-3">
+                <img class="mb-3" style="width: 100%;" src="{{ad.img.url}}" alt="">
             </a>
             {% endif %}
             <h1 >البحث عن أصحاب المهارات</h1>
@@ -53,7 +53,7 @@
             <select name="country" id="" class="input-group-text no-border" style="border-radius: 0px !important;">
                 <option value="">الدولة</option>
                 {% for countr in countrys %}
-                <option {%if countr.id|stringformat:"i" == country %} selected {% endif %} value="{{countr.id}}">{{countr.name}}</option>
+                <option {%if countr.id|stringformat:"i" == country %} selected {% endif %} value="{{countr.id}}">{{countr.get_name_display}}</option>
                 {% endfor %}
             </select>
 
@@ -227,7 +227,7 @@
 
                     <p style="font-size: 14px; text-align: center; margin: 0;" class="mb-2">
                         <i class="bi bi-geo-alt "></i>يقيم في
-                        {{userprofile.employeeprofile.country}}/{{userprofile.employeeprofile.employee_city}}
+                        {{userprofile.employeeprofile.country.get_name_display}}/{{userprofile.employeeprofile.employee_city}}
                     </p>
 
                     <div style="display: flex; justify-content: space-around; flex-wrap: wrap;font-size: .8em;">

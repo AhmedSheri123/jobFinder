@@ -44,7 +44,7 @@
           <select class="form-select item" aria-label="Default select example" name="country">
             <option selected value="">الدولة</option>
             {% for country in countrys %}
-            <option {%if country.id|stringformat:"i" == country_id %} selected {% endif %} value="{{country.id}}">{{country.name}}</option>
+            <option {%if country.id|stringformat:"i" == country_id %} selected {% endif %} value="{{country.id}}">{{country.get_name_display}}</option>
             {% endfor %}
           </select>
 

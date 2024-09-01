@@ -131,7 +131,7 @@
                             <label for="exampleInputEmail1" class="form-label">دولة الاقامة</label>
                             <select required name="country" id="" class="form-control">
                                 {% for i in countrys %}
-                                <option value="{{i.id}}">{{i.name}}</option>
+                                <option value="{{i.id}}">{{i.get_name_display}}</option>
                                 {% endfor %}
                             </select>
                             </div>

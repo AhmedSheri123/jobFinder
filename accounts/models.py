@@ -186,7 +186,7 @@ class UserProfile(models.Model):
         return [is_avarible, avarible_msg, msg_count, used_msg_count]
 
 class CountrysModel(models.Model):
-    name = models.CharField(max_length=255, null=True, verbose_name="اسم الدولة")
+    name = models.CharField(max_length=255, choices=CountrysChoices, null=True, verbose_name="اسم الدولة")
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
     def __str__(self):
         return self.name
@@ -408,7 +408,7 @@ class UserLikeModel(models.Model):
 
 class SubscriptionPriceByCountry(models.Model):
     subscription = models.ForeignKey(SubscriptionsModel, on_delete=models.SET_NULL, null=True)
-    country = models.CharField(max_length=250, choices=CountrysChoices, null=True)
+    country = models.ForeignKey('CountrysModel', on_delete=models.PROTECT, null=True, verbose_name='الدولة')
     price = models.DecimalField(max_digits=6, decimal_places=2)
     currency = models.CharField(max_length=250, choices=CurrencyChoices, null=True)
 
@@ -418,7 +418,7 @@ class SubscriptionPriceByCountry(models.Model):
 class AdminADSModel(models.Model):
     img = models.ImageField(upload_to='ADS/%Y/%m/')
     redirect_url = models.CharField(max_length=254)
-    country = models.CharField(max_length=250, choices=CountrysChoices, null=True)
+    country = models.ForeignKey('CountrysModel', on_delete=models.PROTECT, null=True, verbose_name='الدولة')
     available_num_of_days = models.IntegerField()
     is_main_ad = models.BooleanField(default=False, verbose_name='انه اعلان الرئيسي')
     show_in_cv = models.BooleanField(default=False, verbose_name='اظهار بين السير')
@@ -444,3 +444,41 @@ class ForgetPWDModel(models.Model):
     is_finshed = models.BooleanField(default=False)
 
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+
+class AdminPermissionModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+    show_employees = models.BooleanField(default=False)
+    delete_employees = models.BooleanField(default=False)
+    edit_employees = models.BooleanField(default=False)
+
+    show_companys = models.BooleanField(default=False)
+    delete_companys = models.BooleanField(default=False)
+    edit_companys = models.BooleanField(default=False)
+
+    show_jobs = models.BooleanField(default=False)
+    delete_jobs = models.BooleanField(default=False)
+    edit_jobs = models.BooleanField(default=False)
+
+    show_subscription = models.BooleanField(default=False)
+    add_subscription = models.BooleanField(default=False)
+    delete_subscription = models.BooleanField(default=False)
+    edit_subscription = models.BooleanField(default=False)
+
+    show_custum_subscription = models.BooleanField(default=False)
+    add_custum_subscription = models.BooleanField(default=False)
+    delete_custum_subscription = models.BooleanField(default=False)
+    edit_custum_subscription = models.BooleanField(default=False)
+
+    show_ads = models.BooleanField(default=False)
+    add_ads = models.BooleanField(default=False)
+    delete_ads = models.BooleanField(default=False)
+    edit_ads = models.BooleanField(default=False)
+
+    send_notifications = models.BooleanField(default=False)
+
+    edit_settings = models.BooleanField(default=False)
+
+    show_user_subscription = models.BooleanField(default=False)
+    edit_user_subscription = models.BooleanField(default=False)

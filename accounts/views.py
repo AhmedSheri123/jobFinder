@@ -485,7 +485,10 @@ def Login(request):
                         elif userprofile.is_company:
                             if userprofile.company_signup_process == '4' or userprofile.company_signup_process == '5':
                                 return redirect('SignupSetupProcess', alt_id)
+
                     login(request, user)
+                    if user.is_superuser:
+                        return redirect('PanelHome')
                     return redirect('index')
             else:
                 messages.error(request, 'خطاء في البريد الالكتروني او كلمة المرور')

@@ -1,5 +1,5 @@
 from django import forms
-from .models import CompanyProfile, SubscriptionsModel, SubscriptionPriceByCountry, AdminADSModel
+from .models import CompanyProfile, SubscriptionsModel, SubscriptionPriceByCountry, AdminADSModel, CountrysModel
 
 class CompanyProfileForm(forms.ModelForm):
 
@@ -44,3 +44,10 @@ class AdminADSModelForm(forms.ModelForm):
     class Meta:
         model = AdminADSModel
         fields = ['img', 'redirect_url', 'country', 'available_num_of_days', 'is_main_ad', 'show_in_cv', 'show_in_others', 'show_on_all_countrys', 'is_enabled']
+
+
+class CountrysModelForm(forms.ModelForm):
+
+    class Meta:
+        model = CountrysModel
+        fields = ['name']

@@ -44,4 +44,11 @@ urlpatterns = [
     path('EditAdminADS/<int:id>', views.EditAdminADS, name='EditAdminADS'),
     path('DeleteAdminADS/<int:id>', views.DeleteAdminADS, name='DeleteAdminADS'),
     
+
+    #countrys
+    path('ManageCountrys', views.ManageCountrys, name='ManageCountrys'),
+    path('AddCountrys', views.AddCountrys, name='AddCountrys'),
+    path('EditCountrys/<int:id>', views.EditCountrys, name='EditCountrys'),
+    path('DeleteCountrys/<int:id>', views.DeleteCountrys, name='DeleteCountrys'),
+    
 ]
