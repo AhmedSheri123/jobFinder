@@ -290,8 +290,8 @@
             <label for="exampleInputEmail1" class="form-label">الجنسية</label>
 
             <select class="form-control" name="nationality" id="">
-              {% for i in NationalityFields %}
-              <option value="{{i.0}}" {%if i.0 == employee_profile.nationality %} selected {% endif %}>{{i.1}}</option>
+              {% for i in nationalitys %}
+              <option value="{{i.id}}" {%if i.id == employee_profile.nationality.id %} selected {% endif %}>{{i.name}}</option>
               {% endfor %}
             </select>
           </div>

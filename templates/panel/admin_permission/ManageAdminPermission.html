@@ -28,11 +28,10 @@
       
 </style>
 <div>
-    
-
+  
 
 </div>
-<a href="{% url 'AddCountrys' %}" class="btn btn-primary" style="margin: 10px;" type="button">اضافة دولة جديد</a>
+<a href="{% url 'AddAdminPermission' %}" class="btn btn-primary" style="margin: 10px;" type="button">اضافة مسؤول جديد</a>
 
 <div class="table-box">
     
@@ -42,8 +41,8 @@
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">الدولة</th>
-                    <th scope="col">كود الدولة</th>
+                    <th scope="col">اسم المستخدم</th>
+                    <th scope="col">اسم الكامل</th>
                     <th scope="col">تعديل</th>
                     <th scope="col">حذف</th>
                   </tr>
@@ -63,10 +62,10 @@
                       {{forloop.counter}}
                   </div>
                     </th>
-                    <td>{{job.get_name_display}}</td>
-                    <td>{{job.name}}</td>
-                    <td><a href="{% url 'EditCountrys' job.id %}" class="ui inverted blue button">تعديل</a></td>
-                    <td><a href="{% url 'DeleteCountrys' job.id %}" class="ui  red button">حذف</a></td>
+                    <td>{{job.user.username}}</td>
+                    <td>{{job.user.first_name}} {{job.user.last_name}}</td>
+                    <td><a href="{% url 'EditAdminPermission' job.id %}" class="ui inverted blue button">تعديل</a></td>
+                    <td><a href="{% url 'DeleteAdminPermission' job.id %}" class="ui  red button">حذف</a></td>
                   </tr>
                   {% endfor %}
                 </form>

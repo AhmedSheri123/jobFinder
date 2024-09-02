@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel
+from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel, NationalityModel
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -127,6 +127,7 @@ def cvSignupConf(request, alt_id):
 
 def cvSignupCvCreation(request, alt_id):
     countrys = CountrysModel.objects.all()
+    nationalitys = NationalityModel.objects.all()
     skils_model = SkilsModel.objects.all()
 
     if request.method == 'POST':
@@ -155,7 +156,7 @@ def cvSignupCvCreation(request, alt_id):
         employee_profile.country = countrys.get(id=country)
         employee_profile.employee_city = employee_city
         employee_profile.district = district
-        employee_profile.nationality = nationality
+        employee_profile.nationality = nationalitys.get(id=nationality)
         employee_profile.have_car = have_car
         employee_profile.about_me = about_me
         employee_profile.cert_type = cert_type
@@ -170,7 +171,7 @@ def cvSignupCvCreation(request, alt_id):
         EnableDefaultUserSubscription(userprofile.id)
 
         return redirect('Login')
-    return render(request, 'accounts/signup/Employee/cvSignupCvCreation.html', {'alt_id':alt_id, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys})
+    return render(request, 'accounts/signup/Employee/cvSignupCvCreation.html', {'alt_id':alt_id, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys, 'nationalitys':nationalitys})
 
 
 def companySignup(request):
@@ -464,7 +465,6 @@ def Login(request):
         password = request.POST.get('password')
         if type == '2':
             email = full_phone
-
         if email:    
             users = User.objects.filter(email=email)
             if not users.exists():
@@ -477,13 +477,14 @@ def Login(request):
                     return redirect('Login')
                 else:
                     if not user.is_superuser:
+
                         userprofile = UserProfile.objects.get(user=user)
                         alt_id = userprofile.alt_id
                         if userprofile.is_employee:
-                            if userprofile.cv_signup_process != '5' or userprofile.cv_signup_process != '6':
+                            if userprofile.cv_signup_process != '5' and userprofile.cv_signup_process != '6':
                                 return redirect('SignupSetupProcess', alt_id)
                         elif userprofile.is_company:
-                            if userprofile.company_signup_process == '4' or userprofile.company_signup_process == '5':
+                            if userprofile.company_signup_process != '4' and userprofile.company_signup_process != '5':
                                 return redirect('SignupSetupProcess', alt_id)
 
                     login(request, user)
@@ -625,6 +626,7 @@ def CVSettingsGernral(request):
     return render(request, 'accounts/settings/Employee/settings.html', {'user':user, 'employee_profile':employee_profile, 'callBackUrl':callBackUrl, 'profile_reverced_url':profile_reverced_url})
 
 def SettingsCV(request):
+    nationalitys = NationalityModel.objects.all()
     countrys = CountrysModel.objects.all()
     skils_model = SkilsModel.objects.all()
     
@@ -675,7 +677,7 @@ def SettingsCV(request):
         employee_profile.country = countrys.get(id=country)
         employee_profile.employee_city = employee_city
         employee_profile.district = district
-        employee_profile.nationality = nationality
+        employee_profile.nationality = nationalitys.get(id=nationality)
         employee_profile.have_car = have_car
         employee_profile.about_me = about_me
         employee_profile.cert_type = cert_type
@@ -702,7 +704,7 @@ def SettingsCV(request):
     userprofile = UserProfile.objects.get(user=user)
     employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
     profile_imgs = EmployeeProfileImages.objects.filter(user=user)
-    return render(request, 'accounts/settings/Employee/settings-cv.html', {'user':user, 'employee_profile':employee_profile, 'userprofile':userprofile, 'GenderFields':GenderFields, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys, 'profile_imgs':profile_imgs})
+    return render(request, 'accounts/settings/Employee/settings-cv.html', {'user':user, 'employee_profile':employee_profile, 'userprofile':userprofile, 'GenderFields':GenderFields, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys, 'profile_imgs':profile_imgs, 'nationalitys':nationalitys})
 
 
 

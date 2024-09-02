@@ -454,38 +454,55 @@ class ForgetPWDModel(models.Model):
 
 
 class AdminPermissionModel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    is_enabled = models.BooleanField(default=True, verbose_name='هل المسؤول مفعل')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='المستخدم')
 
-    show_employees = models.BooleanField(default=False)
-    delete_employees = models.BooleanField(default=False)
-    edit_employees = models.BooleanField(default=False)
+    show_employees = models.BooleanField(default=False, verbose_name='عرض الموظفين')
+    delete_employees = models.BooleanField(default=False, verbose_name='حذف الموظفين')
+    edit_employees = models.BooleanField(default=False, verbose_name='تعديل_الموظفين')
 
-    show_companys = models.BooleanField(default=False)
-    delete_companys = models.BooleanField(default=False)
-    edit_companys = models.BooleanField(default=False)
+    show_companys = models.BooleanField(default=False, verbose_name='عرض الشركات')
+    delete_companys = models.BooleanField(default=False, verbose_name='حذف_الشركات')
+    edit_companys = models.BooleanField(default=False, verbose_name='تعديل_الشركات')
 
-    show_jobs = models.BooleanField(default=False)
-    delete_jobs = models.BooleanField(default=False)
-    edit_jobs = models.BooleanField(default=False)
+    show_jobs = models.BooleanField(default=False, verbose_name='عرض الوظائف')
+    delete_jobs = models.BooleanField(default=False, verbose_name='حذف الوظائف')
+    edit_jobs = models.BooleanField(default=False, verbose_name='تعديل الوظائف')
 
-    show_subscription = models.BooleanField(default=False)
-    add_subscription = models.BooleanField(default=False)
-    delete_subscription = models.BooleanField(default=False)
-    edit_subscription = models.BooleanField(default=False)
+    show_subscription = models.BooleanField(default=False, verbose_name='عرض الاشتراك')
+    add_subscription = models.BooleanField(default=False, verbose_name='إضافة_اشتراك')
+    delete_subscription = models.BooleanField(default=False, verbose_name='حذف_الاشتراك')
+    edit_subscription = models.BooleanField(default=False, verbose_name='تعديل الاشتراك')
 
-    show_custum_subscription = models.BooleanField(default=False)
-    add_custum_subscription = models.BooleanField(default=False)
-    delete_custum_subscription = models.BooleanField(default=False)
-    edit_custum_subscription = models.BooleanField(default=False)
+    show_custum_subscription = models.BooleanField(default=False, verbose_name='عرض الاشتراك المخصص')
+    add_custum_subscription = models.BooleanField(default=False, verbose_name='إضافة اشتراك مخصص')
+    delete_custum_subscription = models.BooleanField(default=False, verbose_name='حذف_الاشتراك_المخصص')
+    edit_custum_subscription = models.BooleanField(default=False, verbose_name='تعديل_الاشتراك_المخصص')
 
-    show_ads = models.BooleanField(default=False)
-    add_ads = models.BooleanField(default=False)
-    delete_ads = models.BooleanField(default=False)
-    edit_ads = models.BooleanField(default=False)
+    show_ads = models.BooleanField(default=False, verbose_name='عرض الإعلانات')
+    add_ads = models.BooleanField(default=False, verbose_name='إضافة إعلانات')
+    delete_ads = models.BooleanField(default=False, verbose_name='حذف_الإعلانات')
+    edit_ads = models.BooleanField(default=False, verbose_name='تعديل_الإعلانات')
 
-    send_notifications = models.BooleanField(default=False)
+    show_countrys = models.BooleanField(default=False, verbose_name='عرض الإعلانات')
+    add_countrys = models.BooleanField(default=False, verbose_name='إضافة إعلانات')
+    delete_countrys = models.BooleanField(default=False, verbose_name='حذف_الإعلانات')
+    edit_countrys = models.BooleanField(default=False, verbose_name='تعديل_الإعلانات')
 
-    edit_settings = models.BooleanField(default=False)
+    show_countrys = models.BooleanField(default=False, verbose_name='إظهار البلدان')
+    add_countrys = models.BooleanField(default=False, verbose_name='إضافة البلدان')
+    delete_countrys = models.BooleanField(default=False, verbose_name='حذف_البلدان')
+    edit_countrys = models.BooleanField(default=False, verbose_name='تعديل_البلدان')
 
-    show_user_subscription = models.BooleanField(default=False)
-    edit_user_subscription = models.BooleanField(default=False)
+    show_nationality = models.BooleanField(default=False, verbose_name='إظهار_الجنسية')
+    add_nationality = models.BooleanField(default=False, verbose_name='إضافة_جنسية')
+    delete_nationality = models.BooleanField(default=False, verbose_name='حذف_الجنسية')
+    edit_nationality = models.BooleanField(default=False, verbose_name='تعديل_الجنسية')
+
+    send_notifications = models.BooleanField(default=False, verbose_name='إرسال الإشعارات')
+
+    edit_settings = models.BooleanField(default=False, verbose_name='تعديل الإعدادات')
+
+    show_user_subscription = models.BooleanField(default=False, verbose_name='إظهار اشتراك المستخدم')
+    edit_user_subscription = models.BooleanField(default=False, verbose_name='تعديل اشتراك المستخدم')
+

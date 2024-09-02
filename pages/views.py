@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel, AdminADSModel
+from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel, AdminADSModel, NationalityModel
 from accounts.fields import CertTypeFields, GenderFields, StateFields, NationalityFields
 from notifications.views import create_notifications
 from accounts.libs import filter_sub_price
@@ -11,7 +11,7 @@ import random
 # Create your views here.
 
 def index(request):
-
+    nationalitys = NationalityModel.objects.all()
     countrys = CountrysModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True)
     subscriptions = filter_sub_price(request, SubscriptionsModel.objects.all())
@@ -21,10 +21,11 @@ def index(request):
     #     u.append(i.user.id)
     # aa = create_notifications(request.user.id, receiver_ids=u, msg='sadas as daasd a dsa d')
     # print(aa)
-    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFields, 'NationalityFields':NationalityFields})
+    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFields, 'nationalitys':nationalitys})
 
 
 def AdvancedSearch(request):
+    nationalitys = NationalityModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True)
     employee_profile = EmployeeProfile.objects.all()
     countrys = CountrysModel.objects.all()
@@ -62,7 +63,7 @@ def AdvancedSearch(request):
     if country:userprofiles = userprofiles.filter(employeeprofile__country__id=country)
     else:country=''
 
-    if nationality:userprofiles = userprofiles.filter(employeeprofile__nationality=nationality)
+    if nationality:userprofiles = userprofiles.filter(employeeprofile__nationality__id=nationality)
     else:nationality=''
 
     if gender:userprofiles = userprofiles.filter(employeeprofile__gender=gender)
@@ -83,7 +84,7 @@ def AdvancedSearch(request):
         'marital_status': marital_status,
     }
 
-    dic = {'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFields, 'StateFields':StateFields, 'NationalityFields':NationalityFields, 'countrys':countrys}
+    dic = {'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFields, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys}
     objs = {}
     objs.update(dic)
     objs.update(inputs)

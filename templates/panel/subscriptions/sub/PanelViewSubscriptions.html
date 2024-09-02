@@ -28,52 +28,7 @@
       
 </style>
 <div>
-    <form id="filter-form" class="ui vertical menu" style="margin-left: 10px; text-align: right; width: 100%; padding-bottom: 20px;">
-
-        <p style="padding: 10px; text-align: center; font-weight: bold; border-bottom: 1px solid rgb(194, 194, 194);">
-            تصفية
-            البحث</p>
-      
-            <div class="filter-input-grid" >
-      
-
-
-      
-        
-          <input type="text" value="{{search}}" name="search" class="form-control item" placeholder="اسم الشركة">
-          {% comment %} <input type="text" value="{{complite_name}}" name="complite_name" class="form-control item" placeholder="اسم الممثل">
-          <input type="text" value="{{job_title}}" name="job_title" class="form-control item" placeholder="عنوان"> {% endcomment %}
-
-
-          {% comment %} <select class="form-select item" aria-label="Default select example" name="state">
-            <option selected value="">الحالة</option>
-            {% for city in JobStateChoices %}
-            <option {%if city.0 == state %} selected {% endif %} value="{{city.0}}">{{city.1}}</option>
-            {% endfor %}
-          </select> {% endcomment %}
-{% comment %} 
-
-          <input type="text" value="{{search_email}}" name="search_email" class="form-control item" placeholder="البريد الإلكتروني">
-           <input type="text" value="{{search_phone}}" name="search_phone" class="form-control item" placeholder="رقم الهاتف"> 
-          <input dir="ltr" value="{{publish_date}}" type="date" name="publish_date" class="form-control item" >
-      
-           {% endcomment %}
-      
-          <div style="display: flex; align-items: center; justify-content: center;    margin-top: 30px;">
-            <input type="submit" name="" id="" value="بحث" class="btn btn-primary" style="background-color: purple; color: white !important; margin: 0; margin-left: 10px;">
-      
-      
-            {% comment %} <button class="btn btn-primary" type="button"
-            onclick="{document.getElementById('is_ExportExcel').value = '4';document.getElementById('FormPortal').submit()}">اكسل</button>
-          
-            <button class="btn btn-primary" onclick="selectAll()" style="margin: 10px;" type="button">تحديد الكل</button>
-           {% endcomment %}
-          </div>
-      
-          </div>
-
-       
-    </form>
+    
 
 
 </div>

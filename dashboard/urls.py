@@ -57,4 +57,11 @@ urlpatterns = [
     path('AddNationality', views.AddNationality, name='AddNationality'),
     path('EditNationality/<int:id>', views.EditNationality, name='EditNationality'),
     path('DeleteNationality/<int:id>', views.DeleteNationality, name='DeleteNationality'),
+    
+
+    #AdminPermission
+    path('ManageAdminPermission', views.ManageAdminPermission, name='ManageAdminPermission'),
+    path('AddAdminPermission', views.AddAdminPermission, name='AddAdminPermission'),
+    path('EditAdminPermission/<int:id>', views.EditAdminPermission, name='EditAdminPermission'),
+    path('DeleteAdminPermission/<int:id>', views.DeleteAdminPermission, name='DeleteAdminPermission'),
 ]

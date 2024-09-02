@@ -151,8 +151,8 @@
                         <label for="exampleInputEmail1" class="form-label">الجنسية</label>
 
                         <select required class="form-control" name="nationality" id="">
-                            {% for i in NationalityFields %}
-                            <option value="{{i.0}}">{{i.1}}</option>
+                            {% for i in nationalitys %}
+                            <option value="{{i.id}}">{{i.name}}</option>
                             {% endfor %}
                         </select>
                     </div>

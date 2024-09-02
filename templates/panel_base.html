@@ -65,7 +65,7 @@ table {
     }
 </style>
   
-    <div class="ui menu" style="overflow:scroll; margin: 0; background-color: #212529; border-radius: 0 !important; border-bottom: solid 1px rgba(255, 255, 255, 0.163);     height: 75px!important;">
+    <div class="ui menu fixed-top" style="overflow:scroll; margin: 0; background-color: #212529; border-radius: 0 !important; border-bottom: solid 1px rgba(255, 255, 255, 0.163);     height: 75px!important; z-index: 1550;">
       
         <div class="item">
           <button id="offcanvasScrollingBTN" style="font-size: 40px; margin: 0px 50px; " class="btn " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i style="color: white ;" class="bi bi-list" ></i></button>
@@ -83,7 +83,7 @@ table {
     <div style="display: flex; flex-wrap: nowrap; ">
 
         {% include 'parts/panel_navbar.html' %}
-        <div style="padding: 0px 0px; width: 100%; margin: 20px; overflow:scroll;     height: 100vh;">
+        <div style="padding: 0px 0px; width: 100%; overflow:scroll;height: 100vh;padding: 80px 10px;">
         {%block sheri%}
         {% endblock %}
         </div>

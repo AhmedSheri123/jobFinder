@@ -103,8 +103,8 @@
                     <label class="form-label" >الجنسية</label>
                     <select class="form-control" name="nationality" id="">
                         <option value="">غير محدد</option>
-                        {% for countr in NationalityFields %}
-                        <option {%if countr.0 == nationality %} selected {% endif %} value="{{countr.0}}">{{countr.1}}</option>
+                        {% for countr in nationalitys %}
+                        <option {%if countr.id == nationality %} selected {% endif %} value="{{countr.id}}">{{countr.name}}</option>
                         {% endfor %}
                     </select>
                     </div>

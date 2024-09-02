@@ -148,7 +148,7 @@
           <td>{{job.employeeprofile.phone}}</td>
           <td>{{job.user.email}}</td>
           <td>{{job.get_cv_signup_process_display}}</td>
-          <td><a href="{% url 'PanelShowEmployee' job.id %}" class="ui inverted blue button">عرض</a></td>
+          <td><a href="{% url 'PanelShowEmployee' job.employeeprofile.id %}" class="ui inverted blue button">عرض</a></td>
           <td><a href="{% url 'DeleteEmployees' job.id %}" class="ui  red button">حذف</a></td>
         </tr>
         {% endfor %}

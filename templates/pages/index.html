@@ -45,8 +45,8 @@
 
             <select name="nationality" id="" class="input-group-text hideed no-border">
                 <option value="">الجنسية</option>
-                {% for countr in NationalityFields %}
-                <option {%if countr.id|stringformat:"i" == country %} selected {% endif %} value="{{countr.0}}">{{countr.1}}</option>
+                {% for countr in nationalitys %}
+                <option {%if countr.id|stringformat:"i" == country %} selected {% endif %} value="{{countr.id}}">{{countr.name}}</option>
                 {% endfor %}
             </select>
 

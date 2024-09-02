@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel
+from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel, AdminPermissionModel
 from accounts.fields import GenderFields
 from calendar import monthrange
 import datetime
@@ -9,7 +9,7 @@ from messenger.models import MessengerModel
 from messenger.views import get_user_img
 from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
 from jobs.forms import JobsModelForm
-from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm, NationalityModelForm
+from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm, NationalityModelForm, AdminPermissionModelForm
 from pages.models import ContactUsModel
 from django.utils import timezone
 # Create your views here.
@@ -231,7 +231,6 @@ def PanelShowEmployees(request):
 
 def PanelShowEmployee(request, id):
     if request.user.is_superuser:
-
         employee = EmployeeProfile.objects.get(id=id)
         userprofile = UserProfile.objects.get(employeeprofile=employee)
         if request.method == 'POST':
@@ -606,8 +605,43 @@ def EditNationality(request, id):
             return redirect('ManageNationality')
     return render(request, 'panel/nationality/EditNationality.html', {'form':form})
 
-
 def DeleteNationality(request, id):
     subscription = NationalityModel.objects.get(id=id)
     subscription.delete()
     return redirect('ManageNationality')
+
+
+
+
+
+
+def ManageAdminPermission(request):
+    objs = AdminPermissionModel.objects.all()
+
+    return render(request, 'panel/admin_permission/ManageAdminPermission.html', {'objs':objs})
+
+def AddAdminPermission(request):
+    form = AdminPermissionModelForm()
+    if request.method == 'POST':
+        form = AdminPermissionModelForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            ob = form.save()
+            ob.creation_date = timezone.now()
+            ob.save()
+            return redirect('ManageAdminPermission')
+    return render(request, 'panel/admin_permission/AddAdminPermission.html', {'form':form})
+
+def EditAdminPermission(request, id):
+    subscription = AdminPermissionModel.objects.get(id=id)
+    form = AdminPermissionModelForm(instance=subscription)
+    if request.method == 'POST':
+        form = AdminPermissionModelForm(data=request.POST, files=request.FILES, instance=subscription)
+        if form.is_valid():
+            form.save()
+            return redirect('ManageAdminPermission')
+    return render(request, 'panel/admin_permission/EditAdminPermission.html', {'form':form})
+
+def DeleteAdminPermission(request, id):
+    subscription = AdminPermissionModel.objects.get(id=id)
+    subscription.delete()
+    return redirect('ManageAdminPermission')
