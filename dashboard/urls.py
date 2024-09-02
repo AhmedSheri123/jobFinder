@@ -2,8 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    #Employee
     path('PanelHome', views.PanelHome, name='PanelHome'),
+
+    #Employee
     path('PanelShowEmployees', views.PanelShowEmployees, name='PanelShowEmployees'),
     path('PanelShowEmployee/<int:id>', views.PanelShowEmployee, name='PanelShowEmployee'),
     path('DeleteEmployees/<int:id>', views.DeleteEmployees, name='DeleteEmployees'),

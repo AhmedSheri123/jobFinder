@@ -1,7 +1,7 @@
 {% extends 'panel_base.html' %}
 {% load static %}
 {% load jobs_tags %}
-
+{% load panel_tags %}
 
 {% block links %}
 <link rel="stylesheet" href="{% static 'css\employee\employeePortal.css' %}">
@@ -78,8 +78,9 @@
 
 
 </div>
+{% temp_get_permission_state request.user.id 'ads' 'add' as del_per%}{% if del_per %}
 <a href="{% url 'AddAdminADS' %}" class="btn btn-primary" style="margin: 10px;" type="button">اضافة اعلان جديد</a>
-
+{% endif %}
 <div class="table-box">
     
     <div style="display: contents;">
@@ -129,8 +130,8 @@
                     {% comment %} <td>{{job.user.userprofile.companyprofile.phone}}</td> {% endcomment %}
                     {% comment %} <td>{{job.user.email}}</td> {% endcomment %}
 
-                    <td><a href="{% url 'EditAdminADS' job.id %}" class="ui inverted blue button">تعديل</a></td>
-                    <td><a href="{% url 'DeleteAdminADS' job.id %}" class="ui  red button">حذف</a></td>
+                    <td>{% temp_get_permission_state request.user.id 'ads' 'edit' as del_per%}{% if del_per %}<a href="{% url 'EditAdminADS' job.id %}" class="ui inverted blue button">تعديل</a>{% endif %}</td>
+                    <td>{% temp_get_permission_state request.user.id 'ads' 'delete' as del_per%}{% if del_per %}<a href="{% url 'DeleteAdminADS' job.id %}" class="ui  red button">حذف</a>{% endif %}</td>
                   </tr>
                   {% endfor %}
                 </form>

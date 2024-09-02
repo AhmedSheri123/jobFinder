@@ -484,11 +484,6 @@ class AdminPermissionModel(models.Model):
     delete_ads = models.BooleanField(default=False, verbose_name='حذف_الإعلانات')
     edit_ads = models.BooleanField(default=False, verbose_name='تعديل_الإعلانات')
 
-    show_countrys = models.BooleanField(default=False, verbose_name='عرض الإعلانات')
-    add_countrys = models.BooleanField(default=False, verbose_name='إضافة إعلانات')
-    delete_countrys = models.BooleanField(default=False, verbose_name='حذف_الإعلانات')
-    edit_countrys = models.BooleanField(default=False, verbose_name='تعديل_الإعلانات')
-
     show_countrys = models.BooleanField(default=False, verbose_name='إظهار البلدان')
     add_countrys = models.BooleanField(default=False, verbose_name='إضافة البلدان')
     delete_countrys = models.BooleanField(default=False, verbose_name='حذف_البلدان')

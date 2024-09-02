@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel, NationalityModel
+from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel, NationalityModel, AdminPermissionModel
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -15,6 +15,7 @@ from django.core.mail import send_mail
 from messenger.models import FavoriteUserModel
 from django.conf import settings
 from django.db.models import Q
+from dashboard.views import has_perm
 # Create your views here.
 email_from = settings.EMAIL_HOST_USER
 
@@ -488,7 +489,8 @@ def Login(request):
                                 return redirect('SignupSetupProcess', alt_id)
 
                     login(request, user)
-                    if user.is_superuser:
+                        
+                    if user.is_superuser or has_perm(user):
                         return redirect('PanelHome')
                     return redirect('index')
             else:

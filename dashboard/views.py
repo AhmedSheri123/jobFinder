@@ -13,10 +13,16 @@ from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryMode
 from pages.models import ContactUsModel
 from django.utils import timezone
 # Create your views here.
-
+def has_perm(user):
+    is_staff = False
+    pers = AdminPermissionModel.objects.filter(user=user, is_enabled=True)
+    if pers.exists():
+        is_staff = True
+    
+    return is_staff
 
 def PanelHome(request):
-    if request.user.is_superuser:
+    if request.user.is_superuser or has_perm(request.user):
             
         userprofile = UserProfile.objects.filter()
         companys = userprofile.filter(is_company = True)
@@ -168,7 +174,7 @@ def PanelHome(request):
 
 
 def PanelShowEmployees(request):
-    if request.user.is_superuser:
+    if request.user.is_superuser or has_perm(request.user):
         countrys = CountrysModel.objects.all()
         jobs = UserProfile.objects.filter(is_employee=True).order_by('-id')
         
@@ -230,7 +236,7 @@ def PanelShowEmployees(request):
 
 
 def PanelShowEmployee(request, id):
-    if request.user.is_superuser:
+    if request.user.is_superuser or has_perm(request.user):
         employee = EmployeeProfile.objects.get(id=id)
         userprofile = UserProfile.objects.get(employeeprofile=employee)
         if request.method == 'POST':
@@ -241,7 +247,7 @@ def PanelShowEmployee(request, id):
 
 
 def DeleteEmployees(request, id):
-    if request.user.is_superuser:
+    if request.user.is_superuser or has_perm(request.user):
             
         # if request.user.userprofile.admin_permission == '0':
         obj = User.objects.get(userprofile__id=id)
@@ -267,7 +273,7 @@ def DeleteEmployees(request, id):
 
 
 def Companys(request):
-    if request.user.is_superuser:
+    if request.user.is_superuser or has_perm(request.user):
         countrys = CountrysModel.objects.all()
 
         jobs = UserProfile.objects.filter(is_company=True).order_by('-id')
@@ -322,7 +328,7 @@ def Companys(request):
 
 
 def Company(request, id):
-    if request.user.is_superuser:            
+    if request.user.is_superuser or has_perm(request.user):            
         company = UserProfile.objects.get(id=id)
         img = get_user_img(company.user)
 
@@ -333,7 +339,7 @@ def Company(request, id):
         return render(request, 'panel/company/company/Company.html', {'company':company, 'img':img, 'CompanySignupProcessChoices':CompanySignupProcessChoices})
     
 def DeleteCompanys(request, id):
-    if request.user.is_superuser:
+    if request.user.is_superuser or has_perm(request.user):
         # if request.user.userprofile.admin_permission == '0':
         obj = User.objects.get(userprofile__id=id)
         obj.delete()
@@ -343,7 +349,7 @@ def DeleteCompanys(request, id):
 
 
 def ViewJobsPanel(request):
-    if request.user.is_superuser:
+    if request.user.is_superuser or has_perm(request.user):
 
         jobs = JobsModel.objects.filter().order_by('-id')
 
@@ -487,14 +493,14 @@ def PanelDeleteSubscriptions(request, id):
 
 
 def ShowAllContactUsHistory(request):
-    if request.user.is_superuser:
+    if request.user.is_superuser or has_perm(request.user):
             
         contact_us = ContactUsModel.objects.all().order_by('-id')
 
         return render(request, 'panel/network/ContactUs/ShowAllContactUsHistory.html', {'contact_us':contact_us})
     
 def DeleteContactUs(request, id):
-    if request.user.is_superuser:
+    if request.user.is_superuser or has_perm(request.user):
             
         contact_us = ContactUsModel.objects.get(id=id)
         contact_us.delete()
@@ -645,3 +651,105 @@ def DeleteAdminPermission(request, id):
     subscription = AdminPermissionModel.objects.get(id=id)
     subscription.delete()
     return redirect('ManageAdminPermission')
+
+
+def get_permission_state(user_id, url, method):
+    user = User.objects.get(id=user_id)
+    permissions = AdminPermissionModel.objects.filter(user=user)
+
+    if user.is_superuser:
+        return True
+    
+    elif permissions.exists():
+        permission = permissions.first()
+        if url == 'employees':
+            if method == 'show':
+                return permission.show_employees
+            elif method == 'edit':
+                return permission.edit_employees
+            elif method == 'delete':
+                return permission.delete_employees
+            
+        elif url == 'companys':
+            if method == 'show':
+                return permission.show_companys
+            elif method == 'edit':
+                return permission.edit_companys
+            elif method == 'delete':
+                return permission.delete_companys
+            
+        elif url == 'jobs':
+            if method == 'show':
+                return permission.show_jobs
+            elif method == 'edit':
+                return permission.edit_jobs
+            elif method == 'delete':
+                return permission.delete_jobs
+            
+        elif url == 'subscription':
+            if method == 'show':
+                return permission.show_subscription
+            elif method == 'add':
+                return permission.add_subscription
+            elif method == 'edit':
+                return permission.edit_subscription
+            elif method == 'delete':
+                return permission.delete_subscription
+            
+        elif url == 'custum_subscription':
+            if method == 'show':
+                return permission.show_custum_subscription
+            elif method == 'add':
+                return permission.add_custum_subscription
+            elif method == 'edit':
+                return permission.edit_custum_subscription
+            elif method == 'delete':
+                return permission.delete_custum_subscription
+            
+        elif url == 'ads':
+            if method == 'show':
+                return permission.show_ads
+            elif method == 'add':
+                return permission.add_ads
+            elif method == 'edit':
+                return permission.edit_ads
+            elif method == 'delete':
+                return permission.delete_ads
+            
+        elif url == 'countrys':
+            if method == 'show':
+                return permission.show_countrys
+            elif method == 'add':
+                return permission.add_countrys
+            elif method == 'edit':
+                return permission.edit_countrys
+            elif method == 'delete':
+                return permission.delete_countrys
+            
+        elif url == 'nationality':
+            if method == 'show':
+                return permission.show_nationality
+            elif method == 'add':
+                return permission.add_nationality
+            elif method == 'edit':
+                return permission.edit_nationality
+            elif method == 'delete':
+                return permission.delete_nationality
+            
+        elif url == 'user_subscription':
+            if method == 'show':
+                return permission.show_user_subscription
+            elif method == 'edit':
+                return permission.edit_user_subscription
+            
+        elif url == 'send_notifications':
+            if method == 'show':
+                return permission.send_notifications
+            
+        elif url == 'edit_settings':
+            if method == 'show':
+                return permission.edit_settings
+            if method == 'edit':
+                return permission.edit_settings
+    
+    return False

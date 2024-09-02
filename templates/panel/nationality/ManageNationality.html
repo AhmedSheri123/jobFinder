@@ -1,7 +1,7 @@
 {% extends 'panel_base.html' %}
 {% load static %}
 {% load jobs_tags %}
-
+{% load panel_tags %}
 
 {% block links %}
 <link rel="stylesheet" href="{% static 'css\employee\employeePortal.css' %}">
@@ -32,8 +32,9 @@
 
 
 </div>
+{% temp_get_permission_state request.user.id 'nationality' 'add' as del_per%}{% if del_per %}
 <a href="{% url 'AddNationality' %}" class="btn btn-primary" style="margin: 10px;" type="button">اضافة جنسية جديد</a>
-
+{% endif %}
 <div class="table-box">
     
     <div style="display: contents;">
@@ -63,8 +64,8 @@
                   </div>
                     </th>
                     <td>{{job.name}}</td>
-                    <td><a href="{% url 'EditNationality' job.id %}" class="ui inverted blue button">تعديل</a></td>
-                    <td><a href="{% url 'DeleteNationality' job.id %}" class="ui  red button">حذف</a></td>
+                    <td>{% temp_get_permission_state request.user.id 'nationality' 'edit' as del_per%}{% if del_per %}<a href="{% url 'EditNationality' job.id %}" class="ui inverted blue button">تعديل</a>{% endif %}</td>
+                    <td>{% temp_get_permission_state request.user.id 'nationality' 'delete' as del_per%}{% if del_per %}<a href="{% url 'DeleteNationality' job.id %}" class="ui  red button">حذف</a>{% endif %}</td>
                   </tr>
                   {% endfor %}
                 </form>

@@ -1,4 +1,4 @@
-
+{% load panel_tags %}
 <style>
     .nav-icon {
         font-size: 20px;
@@ -37,55 +37,78 @@
               لمحة سريعة
             </a>
           </li>
-
+          {% temp_get_permission_state request.user.id 'employees' 'show' as del_per%}{% if del_per %}
           <li>
             <a href="{% url 'PanelShowEmployees' %}" class="nav-link text-white nav-strings">
               <i class="bi bi-person-fill"></i>
               إدارة الأفراد
             </a>
           </li>
+          {% endif %}
+
+          {% temp_get_permission_state request.user.id 'companys' 'show' as del_per%}{% if del_per %}
           <li>
             <a href="{% url 'Companys' %}" class="nav-link text-white nav-strings">
               <i class="bi bi-building-fill"></i>
               إدارة المنظمات
             </a>
           </li>
+          {% endif %}
+
+          {% temp_get_permission_state request.user.id 'jobs' 'show' as del_per%}{% if del_per %}
           <li>
             <a href="{% url 'ViewJobsPanel' %}" class="nav-link text-white nav-strings">
               <i class="bi bi-shuffle"></i>
               إدارة الوظائف
             </a>
           </li>
+          {% endif %}
+
+          {% temp_get_permission_state request.user.id 'subscription' 'show' as del_per%}{% if del_per %}
           <li>
             <a href="{% url 'PanelViewSubscriptions' %}" class="nav-link text-white nav-strings">
               <i class="bi bi-tag-fill"></i>
               إدارة الاشتراكات
             </a>
           </li>
+          {% endif %}
+
+          {% temp_get_permission_state request.user.id 'custum_subscription' 'show' as del_per%}{% if del_per %}
           <li>
             <a href="{% url 'ManageSubscriptionPriceByCountry' %}" class="nav-link text-white nav-strings">
               <i class="bi  bi-sliders"></i>
               تخصيص الاشتراكات
             </a>
           </li>
+          {% endif %}
+
+          {% temp_get_permission_state request.user.id 'ads' 'show' as del_per%}{% if del_per %}
           <li>
             <a href="{% url 'ManageAdminADS' %}" class="nav-link text-white nav-strings">
               <i class="bi bi-badge-ad-fill"></i>
               اعلانات او بنرات
             </a>
           </li>
+          {% endif %}
+
+          {% temp_get_permission_state request.user.id 'countrys' 'show' as del_per%}{% if del_per %}
           <li>
             <a href="{% url 'ManageCountrys' %}" class="nav-link text-white nav-strings">
               <i class="bi bi-globe-americas"></i>
               ادارة الدول
             </a>
           </li>
+          {% endif %}
+
+          {% temp_get_permission_state request.user.id 'nationality' 'show' as del_per%}{% if del_per %}
           <li>
             <a href="{% url 'ManageNationality' %}" class="nav-link text-white nav-strings">
               <i class="bi bi-globe"></i>
               ادارة الجنسيات
             </a>
           </li>
+          {% endif %}
+
           {% comment %} <li>
             <a href="{% url 'index' %}" class="nav-link text-white nav-strings">
               <i class="bi bi-suitcase-lg-fill"></i>
@@ -116,13 +139,14 @@
           </li> -->
           
 
-
+          {% temp_get_permission_state request.user.id 'edit_settings' 'show' as del_per%}{% if del_per %}
           <li>
             <a onclick="ShowSettingDrop()" style="cursor: pointer;" class="nav-link text-white nav-strings">
               <i class="bi bi-gear-fill"></i>
                 الإعدادات
             </a>
           </li>
+          {% endif %}
           <div>
             <ul class="dropdown-menu settings-drop settings-drop-hide" id="settings-dropdown" style="display: block; position: relative; overflow: hidden;">
               <div>

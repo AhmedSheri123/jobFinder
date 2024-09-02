@@ -1,5 +1,6 @@
 {% extends 'panel_base.html' %}
 {% load static %}
+{% load panel_tags %}
 {% load jobs_tags %}
 
 
@@ -27,9 +28,9 @@
       }
       
 </style>
-
+{% temp_get_permission_state request.user.id 'custum_subscription' 'add' as del_per%}{% if del_per %}
 <a href="{% url 'AddSubscriptionPriceByCountry' %}" class="btn btn-primary" style="margin: 10px;" type="button">اضافة دولة جديدة</a>
-
+{% endif %}
 <div class="table-box">
     
     <div style="display: contents;">
@@ -74,8 +75,8 @@
                     {% comment %} <td>{{job.user.userprofile.companyprofile.phone}}</td> {% endcomment %}
                     {% comment %} <td>{{job.user.email}}</td> {% endcomment %}
 
-                    <td><a href="{% url 'EditSubscriptionPriceByCountry' job.id %}" class="ui inverted blue button">تعديل</a></td>
-                    <td><a href="{% url 'DeleteSubscriptionPriceByCountry' job.id %}" class="ui  red button">حذف</a></td>
+                    <td>{% temp_get_permission_state request.user.id 'custum_subscription' 'edit' as del_per%}{% if del_per %}<a href="{% url 'EditSubscriptionPriceByCountry' job.id %}" class="ui inverted blue button">تعديل</a>{% endif %}</td>
+                    <td>{% temp_get_permission_state request.user.id 'custum_subscription' 'delete' as del_per%}{% if del_per %}<a href="{% url 'DeleteSubscriptionPriceByCountry' job.id %}" class="ui  red button">حذف</a>{% endif %}</td>
                   </tr>
                   {% endfor %}
                 </form>

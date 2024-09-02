@@ -1,5 +1,6 @@
 {% extends 'panel_base.html' %}
 {% load static %}
+{% load panel_tags %}
 
 {% block links %}
 <link rel="stylesheet" href="{% static 'css\employee\employeePortal.css' %}">
@@ -148,8 +149,9 @@
           <td>{{job.employeeprofile.phone}}</td>
           <td>{{job.user.email}}</td>
           <td>{{job.get_cv_signup_process_display}}</td>
+          {% temp_get_permission_state request.user.id 'employees' 'delete' as del_per%}
           <td><a href="{% url 'PanelShowEmployee' job.employeeprofile.id %}" class="ui inverted blue button">عرض</a></td>
-          <td><a href="{% url 'DeleteEmployees' job.id %}" class="ui  red button">حذف</a></td>
+          <td>{% if del_per %}<a href="{% url 'DeleteEmployees' job.id %}" class="ui  red button">حذف</a>{% endif %}</td>
         </tr>
         {% endfor %}
       </form>

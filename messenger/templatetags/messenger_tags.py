@@ -3,7 +3,7 @@ from django.template.defaultfilters import stringfilter
 from messenger.models import MessagesModel, MessengerModel, BlockUserModel, FavoriteUserModel
 from messenger.views import get_user_img
 from django.contrib.auth.models import User
-
+from accounts.models import UserProfile
 register = template.Library()
 
 @register.simple_tag
@@ -76,10 +76,13 @@ def get_user_full_name(user_id):
     full_name = ''
     if user_id:
         user = User.objects.get(id=user_id)
-        if user.userprofile.is_employee:
-            full_name = user.userprofile.employeeprofile.name
-        elif user.userprofile.is_company:
-            full_name = user.userprofile.companyprofile.complite_name
+        userprofiles = UserProfile.objects.filter(user=user)
+        if userprofiles.exists():
+            userprofile = userprofiles.first()
+            if userprofile.is_employee:
+                full_name = userprofile.employeeprofile.name
+            elif userprofile.is_company:
+                full_name = user.userprofile.companyprofile.complite_name
 
     return full_name
     
