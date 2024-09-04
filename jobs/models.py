@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.company_field import CompanyGenderFields
-from accounts.fields import CertTypeFields
+from accounts.fields import CertTypeFields, JobTypeFields
 from django.contrib.auth.models import User
 from accounts.libs import when_published
 
@@ -30,6 +30,8 @@ class JobsModel(models.Model):
     gender = models.CharField(max_length=255, choices=CompanyGenderFields, null=True, verbose_name="الجنس")
     age_from = models.IntegerField(verbose_name="العمر من")
     age_to = models.IntegerField(verbose_name="العمر الى")
+
+    job_type = models.CharField(max_length=255, choices=JobTypeFields, null=True, verbose_name="الجنس")
 
     number_of_days_closing_job = models.IntegerField(verbose_name="عدد الايام للاغلاق الوظيفة تلقائيا", default=30)
     about_job = models.TextField(verbose_name="نبذه مختصرة عن مهام الوظيفة")

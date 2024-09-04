@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel, NationalityModel, AdminPermissionModel
+from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel, NationalityModel, GenrateUserID
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -38,7 +38,7 @@ def cvSignup(request):
 
         employee_profile.save()
         userprofile = UserProfile.objects.create(user=user, is_employee=True, employeeprofile=employee_profile)
-        user.username = userprofile.alt_id
+        user.username = GenrateUserID(5)
         user.save()
         userprofile.cv_signup_process = '2'
         userprofile.save()
@@ -144,8 +144,12 @@ def cvSignupCvCreation(request, alt_id):
         about_me = request.POST.get('about_me')
         cert_type = request.POST.get('cert_type')
         major = request.POST.get('major')
-        skils = request.POST.get('skils')
+        
         desires = request.POST.getlist('desires')
+        experiences = request.POST.getlist('experiences')
+        classes = request.POST.getlist('classes')
+        skils = request.POST.getlist('skils')
+        lang = request.POST.getlist('lang')
         
         userprofile = UserProfile.objects.get(alt_id=alt_id)
         employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
@@ -162,8 +166,11 @@ def cvSignupCvCreation(request, alt_id):
         employee_profile.about_me = about_me
         employee_profile.cert_type = cert_type
         employee_profile.major = major
-        employee_profile.skils = skils
         employee_profile.desires = {'desires':desires}
+        employee_profile.experiences = {'desires':experiences}
+        employee_profile.classes = {'desires':classes}
+        employee_profile.skils = {'desires':skils}
+        employee_profile.lang = {'desires':lang}
         
 
         userprofile.cv_signup_process = '5'
@@ -194,7 +201,7 @@ def companySignup(request):
 
         userprofile = UserProfile.objects.create(user=user, is_company=True, companyprofile=company_profile)
         
-        user.username = userprofile.alt_id
+        user.username = GenrateUserID(5)
         alt_id = userprofile.alt_id
         user.save()
         userprofile.company_signup_process = '2'
@@ -587,7 +594,7 @@ def CompanySettingGernral(request):
             email = request.POST.get('email')
             img_base64 = request.POST.get('profile_img')
 
-            user.username = username
+            # user.username = username
             user.email = email
             user.save()
             form2 = form.save(commit=False)
@@ -612,7 +619,7 @@ def CVSettingsGernral(request):
 
         user = User.objects.get(id=request.user.id)
         user.email = email
-        user.username = username
+        # user.username = username
 
         userprofile = UserProfile.objects.get(user=user)
         employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
@@ -653,8 +660,13 @@ def SettingsCV(request):
         about_me = request.POST.get('about_me')
         cert_type = request.POST.get('cert_type')
         major = request.POST.get('major')
-        skils = request.POST.get('skils')
         desires = request.POST.getlist('desires')
+
+        experiences = request.POST.getlist('experiences')
+        classes = request.POST.getlist('classes')
+        skils = request.POST.getlist('skils')
+        lang = request.POST.getlist('lang')
+
 
         phone = request.POST.get('phone')
         facebook = request.POST.get('facebook')
@@ -686,6 +698,11 @@ def SettingsCV(request):
         employee_profile.major = major
         employee_profile.skils = skils
         employee_profile.desires = {'desires':desires}
+        employee_profile.experiences = {'desires':experiences}
+        employee_profile.classes = {'desires':classes}
+        employee_profile.skils = {'desires':skils}
+        employee_profile.lang = {'desires':lang}
+
         employee_profile.phone = phone
         employee_profile.facebook = facebook
         employee_profile.linkedin = linkedin

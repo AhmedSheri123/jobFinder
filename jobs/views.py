@@ -29,6 +29,7 @@ def companyviewJob(request, id):
 def companyCreateJob(request):
     user = request.user
     form = JobsModelForm()
+
     if request.method == 'POST':
         form = JobsModelForm(request.POST)
         if form.is_valid():

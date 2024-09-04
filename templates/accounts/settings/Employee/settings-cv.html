@@ -186,13 +186,82 @@
             <button type="button" onclick="addDesires()" class="btn btn-primary mt-2">اضافة رغبة اخرى</button>
           </div>
 
-          <div class="p-2 mt-3 bg-f1">
-            <div class="mb-3">
 
-              <label for="exampleInputEmail1" class="form-label">المهارات</label>
-              <textarea rows="6" name="skils" class="p-2 form-control">{{employee_profile.skils}}</textarea>
+          <div class="mb-3">
+            
+            <label for="exampleInputEmail1" class="form-label">خبرات سابقة</label>
+            
+            <div class="desires" id="experiences">
+              {% for i in employee_profile.experiences.desires %}
+              
+              <div class="desires-box {% if forloop.counter != 1 %} mt-3 {% endif %}" id="desires-box-{{forloop.counter}}">
+                <input value="{{i}}" name="experiences" type="text" style="padding-left:30px ;" class="form-control"
+                  id="exampleInputEmail1" aria-describedby="emailHelp">
+                <a onclick="document.getElementById('desires-box-{{forloop.counter}}').remove()"
+                  class="bi bi-trash-fill desiresButton"></a>
+              </div>
+              {% endfor %}
             </div>
+            <button type="button" onclick="addExperiences()" class="btn btn-primary mt-2">اضافة خبرة اخرى</button>
           </div>
+
+
+          <div class="mb-3">
+            
+            <label for="exampleInputEmail1" class="form-label">دورات تدريبية</label>
+            
+            <div class="desires" id="classes">
+              {% for i in employee_profile.classes.desires %}
+              
+              <div class="desires-box {% if forloop.counter != 1 %} mt-3 {% endif %}" id="desires-box-{{forloop.counter}}">
+                <input value="{{i}}" name="classes" type="text" style="padding-left:30px ;" class="form-control"
+                  id="exampleInputEmail1" aria-describedby="emailHelp">
+                <a onclick="document.getElementById('desires-box-{{forloop.counter}}').remove()"
+                  class="bi bi-trash-fill desiresButton"></a>
+              </div>
+              {% endfor %}
+            </div>
+            <button type="button" onclick="addClasses()" class="btn btn-primary mt-2">اضافة دورة اخرى</button>
+          </div>
+
+
+          <div class="mb-3">
+            
+            <label for="exampleInputEmail1" class="form-label">مهارات</label>
+            
+            <div class="desires" id="skils">
+              {% for i in employee_profile.skils.desires %}
+              
+              <div class="desires-box {% if forloop.counter != 1 %} mt-3 {% endif %}" id="desires-box-{{forloop.counter}}">
+                <input value="{{i}}" name="skils" type="text" style="padding-left:30px ;" class="form-control"
+                  id="exampleInputEmail1" aria-describedby="emailHelp">
+                <a onclick="document.getElementById('desires-box-{{forloop.counter}}').remove()"
+                  class="bi bi-trash-fill desiresButton"></a>
+              </div>
+              {% endfor %}
+            </div>
+            <button type="button" onclick="addSkils()" class="btn btn-primary mt-2">اضافة مهارة اخرى</button>
+          </div>
+
+
+          <div class="mb-3">
+            
+            <label for="exampleInputEmail1" class="form-label">لغات</label>
+            
+            <div class="desires" id="lang">
+              {% for i in employee_profile.lang.desires %}
+              
+              <div class="desires-box {% if forloop.counter != 1 %} mt-3 {% endif %}" id="desires-box-{{forloop.counter}}">
+                <input value="{{i}}" name="lang" type="text" style="padding-left:30px ;" class="form-control"
+                  id="exampleInputEmail1" aria-describedby="emailHelp">
+                <a onclick="document.getElementById('desires-box-{{forloop.counter}}').remove()"
+                  class="bi bi-trash-fill desiresButton"></a>
+              </div>
+              {% endfor %}
+            </div>
+            <button type="button" onclick="addLang()" class="btn btn-primary mt-2">اضافة لغة اخرى</button>
+          </div>
+
 
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">نوع الشهادة</label>
@@ -395,9 +464,56 @@
                           </div>
       `
     document.getElementById('desires').insertAdjacentHTML('beforeend', html_code)
-
-
   }
+
+
+
+  function addExperiences() {
+    desiresID++
+    html_code = `
+                        <div class="desires-box mt-3" id="desires-box-${desiresID}">
+                            <input required name="experiences" type="text" style="padding-left:30px ;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <a onclick="document.getElementById('desires-box-${desiresID}').remove()" class="bi bi-trash-fill desiresButton"></a>
+                        </div>
+    `
+    document.getElementById('experiences').insertAdjacentHTML('beforeend', html_code)
+}
+
+
+function addClasses() {
+    desiresID++
+    html_code = `
+                        <div class="desires-box mt-3" id="desires-box-${desiresID}">
+                            <input required name="classes" type="text" style="padding-left:30px ;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <a onclick="document.getElementById('desires-box-${desiresID}').remove()" class="bi bi-trash-fill desiresButton"></a>
+                        </div>
+    `
+    document.getElementById('classes').insertAdjacentHTML('beforeend', html_code)
+}
+
+
+function addSkils() {
+    desiresID++
+    html_code = `
+                        <div class="desires-box mt-3" id="desires-box-${desiresID}">
+                            <input required name="skils" type="text" style="padding-left:30px ;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <a onclick="document.getElementById('desires-box-${desiresID}').remove()" class="bi bi-trash-fill desiresButton"></a>
+                        </div>
+    `
+    document.getElementById('skils').insertAdjacentHTML('beforeend', html_code)
+}
+
+
+function addLang() {
+    desiresID++
+    html_code = `
+                        <div class="desires-box mt-3" id="desires-box-${desiresID}">
+                            <input required name="lang" type="text" style="padding-left:30px ;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <a onclick="document.getElementById('desires-box-${desiresID}').remove()" class="bi bi-trash-fill desiresButton"></a>
+                        </div>
+    `
+    document.getElementById('lang').insertAdjacentHTML('beforeend', html_code)
+}
 </script>
 
 

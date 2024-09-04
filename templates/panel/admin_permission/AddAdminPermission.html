@@ -13,7 +13,10 @@
 
     <form method='post'>
         {% csrf_token %}
-        <div class="row g-3 mt-4">
+
+        <label for="user_id" class="mt-4 mb-1">رقم العضوية</label>
+        <input type="text" name="user_id" id="user_id" placeholder="رقم العضوية">
+        <div class="row g-3 mt-2">
 
             {{form}}
 
@@ -32,6 +35,10 @@
 .form-switch label {
     margin-right: 7px;
 }
+#id_user, label[for="id_user"]{
+    display:none;
+}
+
 </style>
 
 <script>
@@ -48,6 +55,9 @@
         element.insertAdjacentHTML("beforebegin", `<div class="mb-3 col-sm-6"><div class="form-check form-switch">${label.outerHTML.replace(':','')}${element.outerHTML}</div></div>`)
         element.remove()
         label.remove()
-    }); 
+    });
+
+    document.querySelectorAll('#id_user option')[1].selected = true
+
 </script>
 {% endblock %}

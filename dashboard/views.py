@@ -630,11 +630,17 @@ def AddAdminPermission(request):
     form = AdminPermissionModelForm()
     if request.method == 'POST':
         form = AdminPermissionModelForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            ob = form.save()
-            ob.creation_date = timezone.now()
-            ob.save()
-            return redirect('ManageAdminPermission')
+        user_id = request.POST.get('user_id')
+        users = User.objects.filter(username=user_id)
+        if users.exists():
+            user = users.first()
+            if form.is_valid():
+                ob = form.save(commit=False)
+                ob.user = user
+                ob.creation_date = timezone.now()
+                ob.save()
+                return redirect('ManageAdminPermission')
+        else:messages.error(request, 'رقم العضوية غير موجودة')
     return render(request, 'panel/admin_permission/AddAdminPermission.html', {'form':form})
 
 def EditAdminPermission(request, id):

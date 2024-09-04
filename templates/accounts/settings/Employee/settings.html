@@ -26,8 +26,8 @@
       <form class="mt-5" method="post">
         {% csrf_token %}
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">اسم المستخدم</label>
-          <input type="text" name="username" value="{{user.username}}" class="form-control" id="exampleInputPassword1">
+          <label for="exampleInputPassword1" class="form-label">رقم العضوية</label>
+          <input type="text" name="username" disabled value="{{user.username}}" class="form-control" id="exampleInputPassword1">
         </div>
 
         <div class="mb-3">

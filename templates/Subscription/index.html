@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% load jobs_tags %}
+{% load static %}
+{% block sheri %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+
+{% endblock links %}
+<style>
+    h1 {font-size: 1.6em;}
+</style>
+
+<div style="margin-top: 100px;"></div>
+<div class="container" dir="rtl">
+    <p>الرئيسية/ الاشتراكات</p>
+    <h1 style="text-align: center;">الباقات</h1>
+
+    <div class="main mt-5">
+
+        <div class="Subscriptions-main-box" dir="rtl" style="display: flex; justify-content: space-between; flex-wrap: wrap; align-items: flex-start;">
+            {% for subscription in subscriptions %}
+            <div class="Subscriptions-card {{subscription.Theem}}">
+                <div class="subscriptions-main-ico">
+                    {{subscription.ico|safe}}
+                </div>
+                <h4 class="pt-4">{{subscription.title}}</h4>
+                <p >{{subscription.subtitle}}</p>
+    
+                <div style="display: flex;align-items: flex-end; margin-top: 50px;" >
+                    <div style="display: flex;">
+                        <p style="padding: 0; margin: 0;">{{subscription.currency}}</p>
+                        <span style="font-size: 80px; padding: 0; margin: 0;line-height: 1;">{{subscription.price|stringformat:'d'}}</span>
+                    </div>
+    
+                    <p style="padding: 0; margin: 0;">/لمدة {{subscription.number_of_days}} يوم</p>
+                </div>
+    
+                <hr class="mt-5">
+                <div class="subscriptions-card-details">
+                    <p style="display: flex; align-items: center;">
+                        <i class="bi bi-check2 ms-2" ></i>
+                        عدد ارسال الرسائل {{subscription.number_of_send_msgs}}
+                    </p>
+    
+                    <p style="display: flex; align-items: center;">
+                        <i class="bi bi-check2 ms-2" ></i>
+                        عدد استقبال الرسائل {{subscription.number_of_receive_msgs}}
+                    </p>
+    
+                    <p style="display: flex; align-items: center;">
+                        <i class="bi bi-check2 ms-2" ></i>
+                        مرات عرض ملف الشخصي {{subscription.number_of_view_profiles}}
+                    </p>
+    
+    
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_phone %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار رقم الهاتف
+                    </p>
+    
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_whats %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار رقم الواتساب
+                    </p>
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_facebook %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار حساب الفيسبوك
+                    </p>
+                    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_linkedin %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار حساب الينكداين
+                    </p>
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_instgram %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار حساب الانستغرام
+                    </p>
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_snap %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار حساب سناب شات
+                    </p>
+    
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_tiktok %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار حساب التيك توك
+                    </p>
+    
+    
+                    
+    
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.referral_link_to_earn %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        الحصول على رابط احاله للربح
+                    </p>
+                    
+    
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.distinctive_mark %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار علامة مميزة
+                    </p>
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.distinctive_frame %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار اطار مميز
+                    </p>
+                    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_number_of_likes %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار عدد المعجبين
+                    </p>
+    
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_number_of_appearances %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        اظهار عدد الظهور للسيرة
+                    </p>
+    
+                    <div style="display: grid;">
+                        <a href="{% url 'UserPayment' subscription.id %}" class="btn btn-outline-light mt-5 p-2" >الاشتراك</a>
+    
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+    
+        </div>
+    
+    </div>
+</div>
+
+{% endblock sheri %}

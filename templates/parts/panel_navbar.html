@@ -151,8 +151,8 @@
             <ul class="dropdown-menu settings-drop settings-drop-hide" id="settings-dropdown" style="display: block; position: relative; overflow: hidden;">
               <div>
                 <!-- <li><a class="dropdown-item" href="#">الإتصالات</a></li> -->
-                <li><a class="dropdown-item " href="{% url 'index' %}" aria-current="true">تعديل التذييل</a></li>
-                <li><a class="dropdown-item " style="cursor: pointer;" onclick="{document.getElementById('ChangeHeaderImage').click()}" aria-current="true">تعديل الصورة</a></li>
+                {% comment %} <li><a class="dropdown-item " href="{% url 'index' %}" aria-current="true">تعديل التذييل</a></li> {% endcomment %}
+                {% comment %} <li><a class="dropdown-item " style="cursor: pointer;" onclick="{document.getElementById('ChangeHeaderImage').click()}" aria-current="true">تعديل الصورة</a></li> {% endcomment %}
                 <li><a class="dropdown-item" href="{% url 'ShowAllContactUsHistory' %}">نماذج التواصل</a></li>
               </div>
             </ul>
@@ -178,7 +178,7 @@
             }
 
             .settings-drop-show {
-              height: 100px;
+              height: 35px;
               padding: 7px 0px;
               width: 100%;
               border: var(--bs-dropdown-border-width) solid var(--bs-dropdown-border-color);
@@ -192,7 +192,7 @@
             }
 
             .admin-drop-show {
-              height: 70px;
+              height: 35px;
               padding: 7px 0px;
               width: 100%;
               border: var(--bs-dropdown-border-width) solid var(--bs-dropdown-border-color);
@@ -254,7 +254,7 @@
             <ul class="dropdown-menu settings-drop settings-drop-hide" id="admin-dropdown" style="display: block; position: relative; overflow: hidden;">
               <div>
                 <li><a class="dropdown-item" href="{% url 'ManageAdminPermission' %}">حسابات المسؤول</a></li>
-                <li><a class="dropdown-item" href="{% url 'index' %}">نسخة احتياطية</a></li>
+                {% comment %} <li><a class="dropdown-item" href="{% url 'index' %}">نسخة احتياطية</a></li> {% endcomment %}
               </div>
             </ul>
           </div>

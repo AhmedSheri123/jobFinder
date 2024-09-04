@@ -100,6 +100,14 @@ def GenrateRefString(len=6):
     return a
 
 
+
+def GenrateUserID(len=6):
+    a = ''.join(random.choice(string.digits) for i in range(len))
+    obj = User.objects.filter(username=a)
+    if obj.exists():
+        GenrateUserID(len+1)
+    return a
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_employee = models.BooleanField(default=False, null=True, verbose_name="هل هو موظف")
@@ -227,10 +235,16 @@ class EmployeeProfile(models.Model):
     
     about_me = models.TextField(verbose_name='نبذة عني', null=True)
     desires = models.JSONField(verbose_name='الرغبات json', null=True, default=dict)
+    experiences = models.JSONField(verbose_name='خبرات json', null=True, default=dict)
+    classes = models.JSONField(verbose_name='دورات json', null=True, default=dict)
+    skils = models.JSONField(verbose_name='مهارات json', null=True, default=dict)
+    lang = models.JSONField(verbose_name='لغات json', null=True, default=dict)
+
+
 
     major = models.CharField(max_length=250, null=True, verbose_name="التخصص الدراسي")
     job_title = models.CharField(max_length=50, null=True, verbose_name="المسمى الوظيفي")
-    skils = models.TextField(verbose_name='المهارات', null=True)
+    # skils = models.TextField(verbose_name='المهارات', null=True)
 
     cert_type = models.CharField(max_length=255, choices = CertTypeFields, null=True, verbose_name="نوع الشهادة")
     learning_domain = models.CharField(max_length=255, choices = LearningDomainFields, null=True, verbose_name="مجال التعلم")

@@ -24,6 +24,11 @@ def index(request):
     return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFields, 'nationalitys':nationalitys})
 
 
+def Subscriptions(request):
+    subscriptions = filter_sub_price(request, SubscriptionsModel.objects.all())
+    return render(request, 'Subscription/index.html', {'subscriptions':subscriptions})
+
+
 def AdvancedSearch(request):
     nationalitys = NationalityModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True)

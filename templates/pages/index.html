@@ -260,8 +260,8 @@
                             <nav dir="rtl" class="mt-5">
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                 <button class="nav-link active" id="nav-home-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-home{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-home{{forloop.counter|add:-1}}" aria-selected="true">نبذة عني</button>
-                                 <button class="nav-link" id="nav-profile-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-profile{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-profile{{forloop.counter|add:-1}}" aria-selected="false">المؤهل الدراسي</button> 
-                                 <button class="nav-link" id="nav-disabled-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-disabled{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-disabled{{forloop.counter|add:-1}}" aria-selected="false">المهارات</button>
+                                 <button class="nav-link" id="nav-profile-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-profile{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-profile{{forloop.counter|add:-1}}" aria-selected="false">الرغبات</button> 
+                                 <button class="nav-link" id="nav-disabled-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-disabled{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-disabled{{forloop.counter|add:-1}}" aria-selected="false">الخبرات</button>
                                  <button class="nav-link" id="nav-contact-tab{{forloop.counter|add:-1}}" data-bs-toggle="tab" data-bs-target="#nav-contact{{forloop.counter|add:-1}}" type="button" role="tab" aria-controls="nav-contact{{forloop.counter|add:-1}}" aria-selected="false">التواصل</button>
                                 </div>
                             </nav>
@@ -269,22 +269,31 @@
                             <div class="tab-pane fade show " id="nav-disabled{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-disabled-tab{{forloop.counter|add:-1}}" tabindex="0">
                                 <h6 class="pt-2 ">
                                     <i class="bi bi-stars "></i>
-                                    المهارات</h6>
+                                    الخبرات</h6>
             
-                                <div class="contact-info">
-                                    {{userprofile.employeeprofile.skils}}
+                                    <div class="contents-box" style="grid-template-columns: auto auto auto; background-color: #f1f1f1;">
+                                        {% for experience in userprofile.employeeprofile.experiences.desires %}
+                                        <p >
+                                            <span class="answer" ><i class="bi bi-explicit"></i>{{experience}}</span>
+                                        </p >
+                
+                                        {% endfor %}
+                                    </div>
 
-                                </div>
                             </div>
                             <div class="tab-pane fade show " id="nav-profile{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-profile-tab{{forloop.counter|add:-1}}" tabindex="0">
                                 <h6 class="pt-2 ">
                                     <i class="bi bi-stars "></i>
-                                    المؤهل الدراسي</h6>
+                                    الرغبات</h6>
             
-                                <div class="contact-info">
-                                    {{userprofile.employeeprofile.skils}}
-
-                                </div>
+                                    <div class="contents-box" style="grid-template-columns: auto auto auto; background-color: #f1f1f1;">
+                                        {% for experience in userprofile.employeeprofile.desires.desires %}
+                                        <p >
+                                            <span class="answer" ><i class="bi bi-explicit"></i>{{experience}}</span>
+                                        </p >
+                
+                                        {% endfor %}
+                                    </div>
                             </div>
 
                             <div class="tab-pane fade show active" id="nav-home{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-home-tab{{forloop.counter|add:-1}}" tabindex="0">
