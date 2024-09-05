@@ -3,6 +3,7 @@ from .models import JobsModel, JobAppliersModel
 from .forms import JobsModelForm
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib import messages
 # Create your views here.
 
 def index(request):
@@ -37,7 +38,8 @@ def companyCreateJob(request):
             job.user = user
             job.creation_date = timezone.now()
             job.save()
-
+            messages.success(request, 'طلبك قيد المراجعة سوف يتم النشر في حال الموافقة عليه من قبل الادارة')
+            return redirect('companyJobs')
     return render(request, 'jobs/company/CreateJob.html', {'form':form})
 
 def companyCloseJob(request, id):

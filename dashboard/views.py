@@ -488,7 +488,7 @@ def DeleteSubscriptionPriceByCountry(request, id):
 def PanelDeleteSubscriptions(request, id):
     subscription = SubscriptionsModel.objects.get(id=id)
     subscription.delete()
-    return redirect('ManageSubscriptionPriceByCountry')
+    return redirect('PanelViewSubscriptions')
 
 
 
