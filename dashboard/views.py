@@ -411,6 +411,7 @@ def ViewCompanyPostJobs(request, id):
     if request.method == 'POST':
         state = request.POST.get('state')
         form = JobsModelForm(request.POST, instance=job)
+        print(form)
         
         if form.is_valid():
             job = form.save(commit=False)
