@@ -2,21 +2,26 @@ from django.shortcuts import render, redirect
 from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel, AdminPermissionModel
 from accounts.fields import GenderFields
 from calendar import monthrange
-import datetime
 from django.contrib.auth.models import User
 from django.contrib import messages
 from messenger.models import MessengerModel
-from messenger.views import get_user_img
 from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
 from jobs.forms import JobsModelForm
 from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm, NationalityModelForm, AdminPermissionModelForm
 from pages.models import ContactUsModel
 from django.utils import timezone
+from accounts.libs import send_msg_email_phone_noti, get_user_img
+from django.conf import settings
+import datetime, json
+
+BASE_DIR = settings.BASE_DIR
+
 # Create your views here.
 def has_perm(user):
     is_staff = False
     pers = AdminPermissionModel.objects.filter(user=user, is_enabled=True)
-    if pers.exists():
+
+    if pers.exists() or user.is_superuser:
         is_staff = True
     
     return is_staff
@@ -236,13 +241,19 @@ def PanelShowEmployees(request):
 
 
 def PanelShowEmployee(request, id):
+
     if request.user.is_superuser or has_perm(request.user):
         employee = EmployeeProfile.objects.get(id=id)
         userprofile = UserProfile.objects.get(employeeprofile=employee)
         if request.method == 'POST':
             state = request.POST.get('state')
+            msg = request.POST.get('msg')
+            subject = request.POST.get('subject')
+            
             userprofile.cv_signup_process = state
             userprofile.save()
+
+            send_msg_email_phone_noti(subject, msg, request.user.id, [userprofile.user.id])
         return render(request, 'panel/employee/PanelShowEmployee.html', {'employee':employee, 'EmployeeJobStateFields':CVSignupProcessChoices, 'userprofile':userprofile})
 
 
@@ -334,8 +345,13 @@ def Company(request, id):
 
         if request.method == 'POST':
             state = request.POST.get('state')
+            msg = request.POST.get('msg')
+            subject = request.POST.get('subject')
+
             company.company_signup_process = state
             company.save()
+            send_msg_email_phone_noti(subject, msg, request.user.id, [company.user.id])
+
         return render(request, 'panel/company/company/Company.html', {'company':company, 'img':img, 'CompanySignupProcessChoices':CompanySignupProcessChoices})
     
 def DeleteCompanys(request, id):
@@ -760,3 +776,22 @@ def get_permission_state(user_id, url, method):
                 return permission.edit_settings
     
     return False
+
+
+def EditVerificationMsg(request):
+    path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+    file_reader = open(path, 'r', encoding='UTF-8')
+    data = json.loads(file_reader.read())
+    file_reader.close()
+        
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        msg = request.POST.get('msg')
+        file_writer = open(path, 'w', encoding='UTF-8')
+        data = {
+            'subject':subject,
+            'msg': msg
+        }
+        file_writer.write(json.dumps(data))
+
+    return render(request, 'panel/settings/EditVerificationMsg.html', {'data':data})

@@ -206,6 +206,12 @@ class NationalityModel(models.Model):
     def __str__(self):
         return self.name
 
+class HealthStatusModel(models.Model):
+    name = models.CharField(max_length=255, null=True, verbose_name="الحالة الصحية")
+    creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+    def __str__(self):
+        return self.name
+
 
 class SkilsModel(models.Model):
     name = models.CharField(max_length=255, null=True, verbose_name="اسم المهارة")
@@ -223,7 +229,7 @@ class EmployeeProfile(models.Model):
     weight = models.IntegerField(verbose_name="الوزن", null=True)
     height = models.IntegerField(verbose_name="الطول", null=True)
     marital_status = models.CharField(max_length=255, choices = StateFields, null=True, verbose_name="الحالة الإجتماعية")
-    health_status = models.CharField(max_length=255, choices = HealthStatusFields, null=True, verbose_name="الحالة الصحية")
+    health_status = models.ForeignKey(HealthStatusModel, on_delete=models.SET_NULL, null=True, verbose_name='الحالة الصحية')
     phone = models.CharField(max_length=250, null=True, verbose_name="الهاتف")
     country = models.ForeignKey('CountrysModel', on_delete=models.SET_NULL, null=True, verbose_name='الدولة')
     employee_city = models.CharField(max_length=255, null=True, verbose_name="المدينة")
@@ -335,37 +341,38 @@ class ViewersCounterByIPADDR(models.Model):
 
 
 class SubscriptionsModel(models.Model):
-    title = models.CharField(max_length=255)
-    subtitle = models.CharField(max_length=255)
-    ico = models.TextField()
+    title = models.CharField(max_length=255, verbose_name='العنوان')
+    subtitle = models.CharField(max_length=255, verbose_name='العنوان الفرعي')
+    ico = models.TextField(verbose_name='الأيقونة')
 
-    Theem = models.CharField(max_length=255, choices=SubscriptionsTheemChoices, null=True)
+    Theem = models.CharField(max_length=255, choices=SubscriptionsTheemChoices, null=True, verbose_name='الثيم')
 
     is_default_Subscription = models.BooleanField(default=False, verbose_name='هل هذه الباقة الافتراضية عند التسجيل')
 
-    number_of_days = models.IntegerField(default=30)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    currency = models.CharField(max_length=250, choices=CurrencyChoices, default='USD', null=True)
+    number_of_days = models.IntegerField(default=30, verbose_name='عدد الأيام')
+    price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='السعر')
+    currency = models.CharField(max_length=250, choices=CurrencyChoices, default='USD', null=True, verbose_name='العملة')
 
-    number_of_receive_msgs = models.IntegerField(default=1)
-    number_of_send_msgs = models.IntegerField(default=1)
-    number_of_view_profiles = models.IntegerField(default=1)
+    number_of_receive_msgs = models.IntegerField(default=1, verbose_name='عدد الرسائل المستلمة')
+    number_of_send_msgs = models.IntegerField(default=1, verbose_name='عدد الرسائل المرسلة')
+    number_of_view_profiles = models.IntegerField(default=1, verbose_name='عدد مرات مشاهدة الملفات الشخصية')
 
-    show_phone = models.BooleanField(default=False)
-    show_whats = models.BooleanField(default=False)
-    show_facebook = models.BooleanField(default=False)
-    show_linkedin = models.BooleanField(default=False)
-    show_instgram = models.BooleanField(default=False)
-    show_snap = models.BooleanField(default=False)
-    show_tiktok = models.BooleanField(default=False)
-    show_userprofile_img = models.BooleanField(default=False)
+    show_phone = models.BooleanField(default=False, verbose_name='إظهار رقم الهاتف')
+    show_whats = models.BooleanField(default=False, verbose_name='إظهار رقم الواتساب')
+    show_facebook = models.BooleanField(default=False, verbose_name='إظهار الفيسبوك')
+    show_linkedin = models.BooleanField(default=False, verbose_name='إظهار لينكدإن')
+    show_instgram = models.BooleanField(default=False, verbose_name='إظهار الإنستغرام')
+    show_snap = models.BooleanField(default=False, verbose_name='إظهار السناب شات')
+    show_tiktok = models.BooleanField(default=False, verbose_name='إظهار التيك توك')
+    show_userprofile_img = models.BooleanField(default=False, verbose_name='إظهار صورة الملف الشخصي')
 
-    distinctive_mark = models.BooleanField(default=False)
-    distinctive_frame = models.BooleanField(default=False)
+    distinctive_mark = models.BooleanField(default=False, verbose_name='علامة مميزة')
+    distinctive_frame = models.BooleanField(default=False, verbose_name='إطار مميز')
 
-    show_number_of_appearances = models.BooleanField(default=False)
-    show_number_of_likes = models.BooleanField(default=False)
-    referral_link_to_earn = models.BooleanField(default=False)
+    show_number_of_appearances = models.BooleanField(default=False, verbose_name='إظهار عدد الظهور')
+    show_number_of_likes = models.BooleanField(default=False, verbose_name='إظهار عدد الإعجابات')
+    referral_link_to_earn = models.BooleanField(default=False, verbose_name='رابط الإحالة للربح')
+
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
 
     def __str__(self):

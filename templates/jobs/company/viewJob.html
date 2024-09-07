@@ -32,6 +32,7 @@
 
     .job-details {
         display: flex;
+        flex-wrap: wrap;
     }
 
     .job-details i{
@@ -119,10 +120,7 @@
                     {{number_of_apllyers}} عرض
                 </p>
 
-                <p  class="btn btn-light">
-                    <i class="bi bi-joystick"></i>
-                    {{number_of_accepted_apllyers}} مقبولين
-                </p>
+
 
                 <p  class="btn btn-light">
                     <i class="bi bi-coin"></i>
@@ -130,7 +128,7 @@
                 </p>
                 <p  class="btn btn-light">
                     <i class="bi bi-braces"></i>
-                    {{job.job_type}}
+                    {{job.get_job_type_display}}
                 </p>
             </div>
         </div>

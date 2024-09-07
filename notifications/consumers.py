@@ -6,7 +6,7 @@ from accounts.models import UserProfile
 from django.utils import timezone
 from channels.layers import get_channel_layer
 from messenger.models import MessagesModel
-from messenger.views import get_user_img
+from accounts.libs import get_user_img
 from messenger.templatetags.messenger_tags import get_count_of_not_readed_msg
 
 

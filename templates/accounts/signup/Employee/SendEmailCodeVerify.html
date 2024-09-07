@@ -94,12 +94,13 @@
                 <div class=" mb-3">
                     <label for="" class="form-label">كود التاكيد</label>
                     <!-- <span class="input-group-text" id="basic-addon1">@</span> -->
-                    <input type="text" id="code" class="form-control" name="code" placeholder="كود التاكيد" aria-label="Username" aria-describedby="basic-addon1">
-                  </div>
+                    <input type="text" id="code" class="form-control" oninput="verfiyCode()" name="code" placeholder="كود التاكيد" aria-label="Username" aria-describedby="basic-addon1">
+                    <div id="emailHelp" class="form-text"><strong>مهم!</strong> اذا لم تستلم رمز التحقق قد يكون في البريد المهمل يرجى التنبيه</div>  
+                </div>
 
                   <input type="hidden" name="resend" value="" id="resend">
 
-                <button type="submit" class="btn btn-primary mb-2">الخطوة التالية</button>
+                <button type="submit" class="btn warning mb-2">الخطوة التالية</button>
                 <button type="button" onclick="{document.querySelector('#resend').value='1';document.querySelector('form').submit()}" class="btn btn-primary mb-2">اعادة ارسال رمز التاكيد</button>
                 <a href="{% url 'SignupSetupProcess' alt_id %}" class="btn btn-primary mb-2">تعديل البريد الالكتروني</a>
 
@@ -113,4 +114,22 @@
 
 </div>
 
+
+
+<script>
+
+    function verfiyCode() {
+        let input = document.querySelector('input[name="code"]')
+        let value = input.value
+        let accepted_char = '0123456789'
+        out = ''
+        for (var i = 0; i < value.length; i++) {
+          if (accepted_char.includes(value[i])){
+            
+            out = out+value[i]
+          }
+        }
+        input.value = out
+      }
+</script>
 {% endblock sheri %}

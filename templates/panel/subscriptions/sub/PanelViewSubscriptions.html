@@ -35,6 +35,37 @@
 </div>
 {% temp_get_permission_state request.user.id 'subscription' 'add' as del_per%}{% if del_per %}
 <a href="{% url 'PanelAddSubscriptions' %}" class="btn btn-primary" style="margin: 10px;" type="button">اضافة اشتراك جديد</a>
+<a href="{% url 'PanelAddSubscriptions' %}" class="btn btn-primary" style="margin: 10px;" type="button" data-bs-toggle="modal" data-bs-target="#addsubModal">اضافة اشتراك لمستخدم</a>
+
+
+
+
+<div class="modal fade" id="addsubModal" tabindex="-1" aria-labelledby="addsubModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form class="modal-content" method="post" action="{% url 'AdminEnableUserSubscription' %}">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addsubModalLabel">اضافة اشتراك لمستخدم</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        <input type="text" class="form-control" name="user_id" placeholder="رمز عضوية المستخدم">
+
+        <select name="subscription_id" class="form-control">
+          {% for subscription in subscriptions %}
+            <option value="{{subscription.id}}">{{subscription.title}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+        <button type="submit" class="btn btn-primary">اضافة</button>
+      </div>
+    </from>
+  </div>
+</div>
+
+
 {% endif %}
 <div class="table-box">
     

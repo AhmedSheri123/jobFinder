@@ -16,8 +16,14 @@ from messenger.models import FavoriteUserModel
 from django.conf import settings
 from django.db.models import Q
 from dashboard.views import has_perm
+import json
+
 # Create your views here.
 email_from = settings.EMAIL_HOST_USER
+BASE_DIR = settings.BASE_DIR
+
+        
+
 
 def cvSignup(request):
     alt_id = None
@@ -70,7 +76,11 @@ def cvSignupVerifyEmail(request, alt_id):
             co = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
-            msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
+
+            path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+            file_reader = open(path, 'r', encoding='UTF-8')
+            data = json.loads(file_reader.read())
+            msg = data['msg'].format(code=OPT.secret)
             wa_send_msg(msg, co.phone)
             return redirect('EmployeeSendWhaCodeVerify', alt_id)
 
@@ -83,7 +93,10 @@ def cvSignupVerifyEmail(request, alt_id):
             co.save()
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
-            msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
+            path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+            file_reader = open(path, 'r', encoding='UTF-8')
+            data = json.loads(file_reader.read())
+            msg = data['msg'].format(code=OPT.secret)
             wa_send_msg(msg, full_phone)
             return redirect('EmployeeSendWhaCodeVerify', alt_id)
 
@@ -177,7 +190,7 @@ def cvSignupCvCreation(request, alt_id):
         employee_profile.save()
         userprofile.save()
         EnableDefaultUserSubscription(userprofile.id)
-
+        messages.success(request, '( تم التسجيل بنجاح وهو قيد المراجعة الان . وقد يستغرق ذلك ٢٤ الى ٤٨ ساعة ) . حتى تتمكن من استخدام خدمات المنصة')
         return redirect('Login')
     return render(request, 'accounts/signup/Employee/cvSignupCvCreation.html', {'alt_id':alt_id, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys, 'nationalitys':nationalitys})
 
@@ -230,6 +243,8 @@ def companySignupConf(request, alt_id):
         company_profile.save()
         userprofile.company_signup_process = '4'
         userprofile.save()
+        messages.success(request, '( تم التسجيل بنجاح وهو قيد المراجعة الان . وقد يستغرق ذلك ٢٤ الى ٤٨ ساعة ) . حتى تتمكن من استخدام خدمات المنصة')
+
         return redirect('SignupSetupProcess', userprofile.alt_id)
     return render(request, 'accounts/signup/Company/companySignupConf.html', {'countrys':countrys, 'alt_id':alt_id})
 
@@ -239,8 +254,13 @@ def sendEmailCode(request, alt_id):
     user = userprofile.user
     OPT = EmailOTPModel.objects.create(user=user)
     OPT.save()
-    msg = f'رمز تاكيد البريد الالكتروني هو : {OPT.secret}'
-    subject = 'تأكيد البريد الالكتروني'
+
+    path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+    file_reader = open(path, 'r', encoding='UTF-8')
+    data = json.loads(file_reader.read())
+    subject = data['subject']
+    msg = data['msg'].format(code=OPT.secret)
+
     send_mail( subject, msg, email_from, [userprofile.user.email] )
     messages.success(request, 'تم ارسال رمز تأكيد عبر البريدالالكتروني')
 
@@ -268,7 +288,10 @@ def companySignupVerifyEmail(request, alt_id):
             co = CompanyProfile.objects.get(id=userprofile.companyprofile.id)
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
-            msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
+            path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+            file_reader = open(path, 'r', encoding='UTF-8')
+            data = json.loads(file_reader.read())
+            msg = data['msg'].format(code=OPT.secret)
             wa_send_msg(msg, co.phone)
             return redirect('SendWhaCodeVerify', alt_id)
 
@@ -283,7 +306,10 @@ def companySignupVerifyEmail(request, alt_id):
             co.save()
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
-            msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
+            path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+            file_reader = open(path, 'r', encoding='UTF-8')
+            data = json.loads(file_reader.read())
+            msg = data['msg'].format(code=OPT.secret)
             wa_send_msg(msg, full_phone)
             return redirect('SendWhaCodeVerify', alt_id)
 
@@ -317,7 +343,10 @@ def SendWhaCodeVerify(request, alt_id):
             co = CompanyProfile.objects.get(id=userprofile.companyprofile.id)
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
-            msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
+            path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+            file_reader = open(path, 'r', encoding='UTF-8')
+            data = json.loads(file_reader.read())
+            msg = data['msg'].format(code=OPT.secret)
             wa_send_msg(msg, co.phone)
             return redirect('SendWhaCodeVerify', alt_id)
 
@@ -344,7 +373,10 @@ def EmployeeSendWhaCodeVerify(request, alt_id):
             co = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
-            msg = f'رمز تاكيد رقم الهاتف هو : {OPT.secret}'
+            path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+            file_reader = open(path, 'r', encoding='UTF-8')
+            data = json.loads(file_reader.read())
+            msg = data['msg'].format(code=OPT.secret)
             wa_send_msg(msg, co.phone)
             return redirect('EmployeeSendWhaCodeVerify', alt_id)
 
@@ -466,6 +498,8 @@ def SignupSetupProcess(request, alt_id):
 
 
 def Login(request):
+    is_signup = request.GET.get('is_signup', '')
+
     if request.method == 'POST':
         type = request.POST.get('type')
         email = request.POST.get('email')
@@ -505,7 +539,8 @@ def Login(request):
         # userprofile = UserProfile.objects.get(user=user)
 
         # return redirect('index',)
-    return render(request, 'accounts/login/login.html')
+    print(is_signup)
+    return render(request, 'accounts/login/login.html', {'is_signup':is_signup})
 
 
 def Logout(request):
@@ -567,7 +602,8 @@ def CVProfile(request, id):
     userprofile = user.userprofile
     employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
     profile_images = EmployeeProfileImages.objects.filter(user=user)
-
+    if userprofile.cv_signup_process == '5':
+        messages.error(request, 'حاليا لن يتم ظهور حسابك ضمن نتائج حتى تتم مراجعته واعتماده من قبل الادارة')
     return render(request, 'accounts/profile/Employee/profile.html', {'is_fav':is_fav, 'is_liked':is_liked, 'UserFavURL':UserFavURL, 'UserLikeURL':UserLikeURL, 'employee_profile':employee_profile, 'profile_images':profile_images, 'userprofile':userprofile})
 
 def CPProfile(request, id):
@@ -575,7 +611,8 @@ def CPProfile(request, id):
     user = User.objects.get(id=id)
     userprofile = user.userprofile
     company_profile = userprofile.companyprofile
-
+    if userprofile.cv_signup_process == '4':
+        messages.error(request, 'حاليا لن تتمكن من التواصل مع صاحب السير او عرض سيرتهم حتى تتم مراجعت حسابك واعتماده من قبل الادارة')
     return render(request, 'accounts/profile/Company/profile.html', {'company_profile':company_profile, 'userprofile':userprofile})
 
 def CompanySettingGernral(request):
@@ -827,6 +864,25 @@ def EnableUserSubscription(request, id):
     order.save()
     messages.success(request, 'تم الاشتراك بنجاح')
     return redirect('index')
+
+
+def AdminEnableUserSubscription(request):
+    if request.user.is_superuser or has_perm(request.user):
+        if request.method == 'POST':
+            user_id = request.POST.get('user_id')
+            subscription_id = request.POST.get('subscription_id')
+
+            user = User.objects.get(username=user_id)
+            userprofile = UserProfile.objects.get(user=user)
+
+            subscription = SubscriptionsModel.objects.get(id=subscription_id)
+            user_subscription = UserSubscriptionModel.objects.create(subscription=subscription, price = subscription.price, number_of_days = subscription.number_of_days, number_of_receive_msgs = subscription.number_of_receive_msgs, number_of_send_msgs = subscription.number_of_send_msgs, number_of_view_profiles = subscription.number_of_view_profiles)
+            user_subscription.save()
+
+            userprofile.subscription = user_subscription
+            userprofile.save()
+            messages.success(request, 'تم الاشتراك بنجاح')
+    return redirect('PanelViewSubscriptions')
 
 def DisableUserSubscription(request):
     user = request.user

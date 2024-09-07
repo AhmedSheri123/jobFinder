@@ -38,7 +38,7 @@ def companyCreateJob(request):
             job.user = user
             job.creation_date = timezone.now()
             job.save()
-            messages.success(request, 'طلبك قيد المراجعة سوف يتم النشر في حال الموافقة عليه من قبل الادارة')
+            messages.success(request, 'لقد تم استلام طلبك وهو قيد المراجعة الان وقد يستغرق ذلك ٢٤ ساعة . ستصلكم اشعار عند اعتمادة')
             return redirect('companyJobs')
     return render(request, 'jobs/company/CreateJob.html', {'form':form})
 

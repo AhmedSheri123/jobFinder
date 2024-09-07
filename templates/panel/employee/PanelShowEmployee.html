@@ -261,15 +261,40 @@
             <a href="" target="_blank">مشهد الإعاقة</a>
         </div> {% endcomment %}
 
-        <form method="post" class="input-group mb-3 mt-5">
-            {% csrf_token %}
-            <button class="btn btn-outline-secondary" type="submit" id="button-addon1">حفظ</button>
-            <select name="state" class="form-control" id="">
-                {% for city in EmployeeJobStateFields %}
-                <option {%if city.0 == userprofile.cv_signup_process %} selected {% endif %} value="{{city.0}}">{{city.1}}</option>
-                {% endfor %}
-            </select>
-        </form>
+        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            تعديل حالة الحساب
+          </button>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <form class="modal-content" method="post">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">تعديل حالة الحساب</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <label for="" class="label-control ">حالة الحساب</label>
+
+                    <select name="state" class="form-control mb-3" id="">
+                        {% for city in EmployeeJobStateFields %}
+                        <option {%if city.0 == userprofile.cv_signup_process %} selected {% endif %} value="{{city.0}}">{{city.1}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="" class="label-control ">الموضوع</label>
+                    <input type="text" name="subject" class="form-control mb-3">
+
+                    <label for="" class="label-control ">رسالة</label>
+                    <textarea name="msg" rows="5" class="form-control mb-3"></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                  <button type="submit" class="btn btn-primary">ارسال</button>
+                </div>
+            </form>
+            </div>
+          </div>
+
     </div>
 
 </div>

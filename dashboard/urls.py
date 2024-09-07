@@ -65,4 +65,7 @@ urlpatterns = [
     path('AddAdminPermission', views.AddAdminPermission, name='AddAdminPermission'),
     path('EditAdminPermission/<int:id>', views.EditAdminPermission, name='EditAdminPermission'),
     path('DeleteAdminPermission/<int:id>', views.DeleteAdminPermission, name='DeleteAdminPermission'),
+
+    path('EditVerificationMsg', views.EditVerificationMsg, name='EditVerificationMsg'),
+
 ]

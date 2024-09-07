@@ -53,7 +53,7 @@
                   <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
 
                   <p class="mt-3">
-                      ليس لديك حساب؟ <a data-bs-toggle="modal" data-bs-target="#SignupModal" href="#">انشاء حساب</a>
+                      ليس لديك حساب؟ <a data-bs-toggle="modal" data-bs-target="#SignupModal" id="SignupBtn" href="#">انشاء حساب</a>
                   </p>
                   <p class="mt-3">
                     هل نسيت كلمة المرور؟ <a href="{% url 'ForgetPassword' %}">استرجاع</a>
@@ -78,7 +78,7 @@
                   <input type="hidden" name="type" value="2">
                   <div class="mb-3">
                     <label for="" class="form-label">الهاتف</label>
-                    <input type="tel" id="tel" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="tel" id="tel" oninput="verfiyPhone()" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">كلمة مرور الحساب</label>
@@ -92,7 +92,7 @@
                   <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
 
                   <p class="mt-3">
-                      ليس لديك حساب؟ <a data-bs-toggle="modal" data-bs-target="#SignupModal" href="#">انشاء حساب</a>
+                      ليس لديك حساب؟ <a data-bs-toggle="modal" data-bs-target="#SignupModal" id="SignupBtn" href="#">انشاء حساب</a>
                   </p>
                   <p class="mt-3">
                     هل نسيت كلمة المرور؟ <a href="{% url 'ForgetPassword' %}">استرجاع</a>
@@ -131,6 +131,13 @@ utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.
 </script>
 
 <script>
+    $(document).ready(function() {
+      is_signup = '{{is_signup}}'
+
+      if (is_signup) {
+        document.querySelector('#SignupBtn').click()
+      }
+    })
   function checkPassword(){
     let obj = document.querySelector('#password');
     if (obj.type=='text') {
@@ -138,7 +145,21 @@ utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.
     } else {
       obj.type = 'text'
     }
-    
+  }
+
+
+  function verfiyPhone() {
+    let input = document.querySelector('#tel')
+    let value = input.value
+    let accepted_char = '0123456789+'
+    out = ''
+    for (var i = 0; i < value.length; i++) {
+      if (accepted_char.includes(value[i])){
+        
+        out = out+value[i]
+      }
+    }
+    input.value = out
   }
 </script>
 {% endblock sheri %}

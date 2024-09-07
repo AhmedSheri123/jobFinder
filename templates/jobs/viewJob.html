@@ -32,6 +32,7 @@
 
     .job-details {
         display: flex;
+        flex-wrap: wrap;
     }
 
     .job-details i{
@@ -130,7 +131,7 @@
                 </p>
                 <p  class="btn btn-light">
                     <i class="bi bi-braces"></i>
-                    {{job.job_type}}
+                    {{job.get_job_type_display}}
                 </p>
             </div>
         </div>

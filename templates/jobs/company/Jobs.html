@@ -75,14 +75,7 @@
                     <a href="{% url 'companyviewJob' job.id %}" class="job-title">{{job.job_title}}</a>
 
                 </div>
-                <div style="text-align: left;">
-                    <a href="{% url 'companyviewJob' job.id %}" class="btn btn-primary mt-2">عرض</a>
-                    {% if job.state == '0' or job.state == '1' %}
-                    <a href="{% url 'companyCloseJob' job.id %}" class="btn btn-danger mt-2">أغلاق</a>
-                    {% elif job.state == '2' %}
-                    <a href="{% url 'companyOpenJob' job.id %}" class="btn btn-success mt-2">فتح</a>
-                    {% endif %}
-                </div>
+
             </div>
             <div class="job-details">
                 <p  class="btn btn-light"><i class="bi bi-stopwatch-fill"></i>
@@ -102,6 +95,14 @@
             <p class="custom-text-truncate">
                 {{job.about_job}}
             </p>
+            <div style="display: flex; justify-content: space-between;">
+                <a href="{% url 'companyviewJob' job.id %}" class="btn btn-primary mt-2">عرض</a>
+                {% if job.state == '0' or job.state == '1' %}
+                <a href="{% url 'companyCloseJob' job.id %}" class="btn btn-danger mt-2">أغلاق</a>
+                {% elif job.state == '2' %}
+                <a href="{% url 'companyOpenJob' job.id %}" class="btn btn-success mt-2">فتح</a>
+                {% endif %}
+            </div>
         <hr>
 
         </div>

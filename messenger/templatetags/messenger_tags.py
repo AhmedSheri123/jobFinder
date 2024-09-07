@@ -1,7 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from messenger.models import MessagesModel, MessengerModel, BlockUserModel, FavoriteUserModel
-from messenger.views import get_user_img
+from accounts.libs import get_user_img
 from django.contrib.auth.models import User
 from accounts.models import UserProfile
 register = template.Library()

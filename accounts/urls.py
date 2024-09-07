@@ -20,7 +20,7 @@ urlpatterns = [
 
     
 
-    path('login', views.Login, name='Login'),
+    path('login/', views.Login, name='Login'),
     path('Logout', views.Logout, name='Logout'),
 
     path('UserLike/<int:liked_id>', views.UserLike, name='UserLike'),
@@ -44,6 +44,7 @@ urlpatterns = [
     #Subscriptions
     path('EnableUserSubscription/<int:id>', views.EnableUserSubscription, name='EnableUserSubscription'),
     path('DisableUserSubscription', views.DisableUserSubscription, name='DisableUserSubscription'),
+    path('AdminEnableUserSubscription', views.AdminEnableUserSubscription, name='AdminEnableUserSubscription'),
 
     path('CompanyUserSubscription', views.CompanyUserSubscription, name='CompanyUserSubscription'),
     path('EmployeeUserSubscription', views.EmployeeUserSubscription, name='EmployeeUserSubscription'),

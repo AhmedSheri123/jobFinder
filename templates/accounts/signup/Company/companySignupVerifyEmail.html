@@ -93,7 +93,7 @@
                 <div class=" mb-3">
                     <label for="" class="form-label">الهاتف</label>
                     <!-- <span class="input-group-text" id="basic-addon1">@</span> -->
-                    <input type="tel" id="tel" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="tel" id="tel" oninput="verfiyPhone()" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
                   </div>
 
                 <button type="submit" class="btn btn-primary">الخطوة التالية</button>
@@ -108,7 +108,7 @@
 
                 </div>
 
-                <button type="submit" class="btn btn-primary">الخطوة التالية</button>
+                <button type="submit" class="btn btn-warning">الخطوة التالية</button>
                 {% endif %}
 
 
@@ -150,5 +150,19 @@
 
     utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.js",
   });
+
+  function verfiyPhone() {
+    let input = document.querySelector('#tel')
+    let value = input.value
+    let accepted_char = '0123456789+'
+    out = ''
+    for (var i = 0; i < value.length; i++) {
+      if (accepted_char.includes(value[i])){
+        
+        out = out+value[i]
+      }
+    }
+    input.value = out
+  }
 </script>
 {% endblock sheri %}

@@ -23,12 +23,13 @@
                 <img class="mb-3" style="width: 100%;" src="{{ad.img.url}}" alt="">
             </a>
             {% endif %}
+            
             <h1 >البحث عن أصحاب المهارات</h1>
             <div style="margin-top: 10px;">
                 <p class="arial title_desc">وظف افضل المواهب واشخاص ذوي الاختصاصات العلية</p>
                 <br><br>
             </div>
-<form action="{% url 'AdvancedSearch' %}" method="get">
+<form action="{% url 'AdvancedSearch' %}" style="padding: 20px;" method="get">
 
     <div class="input-group mb-3">
 
@@ -395,7 +396,7 @@
     </div>
 
 
-
+</div>
 
 
 <script>

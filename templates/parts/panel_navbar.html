@@ -146,6 +146,7 @@
                 الإعدادات
             </a>
           </li>
+
           {% endif %}
           <div>
             <ul class="dropdown-menu settings-drop settings-drop-hide" id="settings-dropdown" style="display: block; position: relative; overflow: hidden;">
@@ -154,6 +155,7 @@
                 {% comment %} <li><a class="dropdown-item " href="{% url 'index' %}" aria-current="true">تعديل التذييل</a></li> {% endcomment %}
                 {% comment %} <li><a class="dropdown-item " style="cursor: pointer;" onclick="{document.getElementById('ChangeHeaderImage').click()}" aria-current="true">تعديل الصورة</a></li> {% endcomment %}
                 <li><a class="dropdown-item" href="{% url 'ShowAllContactUsHistory' %}">نماذج التواصل</a></li>
+                <li><a class="dropdown-item" href="{% url 'EditVerificationMsg' %}">تعديل رسائل التحقق</a></li>
               </div>
             </ul>
           </div>
@@ -178,7 +180,7 @@
             }
 
             .settings-drop-show {
-              height: 35px;
+              height: 70px;
               padding: 7px 0px;
               width: 100%;
               border: var(--bs-dropdown-border-width) solid var(--bs-dropdown-border-color);

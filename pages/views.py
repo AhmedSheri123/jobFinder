@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel, AdminADSModel, NationalityModel
 from accounts.fields import CertTypeFields, GenderFields, StateFields, NationalityFields
-from notifications.views import create_notifications
 from accounts.libs import filter_sub_price
 from .models import ContactUsModel
 from django.contrib import messages

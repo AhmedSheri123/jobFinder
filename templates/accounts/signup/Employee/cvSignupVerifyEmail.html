@@ -96,9 +96,9 @@
                 <div class=" mb-3">
                     <label for="" class="form-label">الهاتف</label>
                     <!-- <span class="input-group-text" id="basic-addon1">@</span> -->
-                    <input type="tel" id="tel" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="tel" id="tel" oninput="verfiyPhone()" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
                   </div>
-                  <button type="submit" class="btn btn-primary">الخطوة التالية</button>
+                  <button type="submit" class="btn btn-warning">الخطوة التالية</button>
                 {% elif VerifyProccess == '2' %}
                     {% comment %} <p class="pt-2">تم ارسال رمز تأكيد عبر البريدالالكتروني</p> {% endcomment %}
 
@@ -108,7 +108,7 @@
                     <div id="emailHelp" class="form-text"><strong>مهم!</strong> لاكمال عملية التسجيل يتوجب عليك ادخال ايميل صحيح وفعال لاستلام رمز التحقق وتوثيق حسابك</div>
 
                 </div>
-                <button type="submit" class="btn btn-primary">الخطوة التالية</button>
+                <button type="submit" class="btn btn-warning">الخطوة التالية</button>
                 {% comment %} <a href="{% url  'sendEmailCode' alt_id%}" class="btn btn-primary">ارسال رمز التاكيد للبريد الالكتروني</a> {% endcomment %}
                 {% endif %}
 
@@ -151,5 +151,20 @@
     
         utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.js",
       });
+
+
+      function verfiyPhone() {
+        let input = document.querySelector('#tel')
+        let value = input.value
+        let accepted_char = '0123456789+'
+        out = ''
+        for (var i = 0; i < value.length; i++) {
+          if (accepted_char.includes(value[i])){
+            
+            out = out+value[i]
+          }
+        }
+        input.value = out
+      }
     </script>
 {% endblock sheri %}

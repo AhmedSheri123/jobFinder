@@ -1,7 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from accounts.models import NotificationsModel
-from messenger.views import get_user_img
+from accounts.libs import get_user_img
 from django.contrib.auth.models import User
 
 register = template.Library()

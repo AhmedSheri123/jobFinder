@@ -99,7 +99,7 @@
 
                 <div class=" mb-3">
                     <label for="" class="form-label">الهاتف</label>
-                    <input type="tel" id="tel" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="tel" oninput="verfiyPhone()" id="tel" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
                     <div id="emailHelp" class="form-text"><strong>مهم!</strong> يرجى ادخل رقم هاتف يتواجد عليه حساب واتس اب</div>
 
                 </div>
@@ -110,7 +110,7 @@
                     <i class="bi bi-eye-fill" style="position: absolute; top: 7px; left: 10px;" onclick="checkPassword()"></i>
                   </div>
    
-                <button type="submit" class="btn btn-primary mt-3">الخطوة التالية</button>
+                <button type="submit" class="btn btn-warning mt-3">الخطوة التالية</button>
               </form>
         </div>
 
@@ -145,8 +145,8 @@
     
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/intlTelInput.min.js"></script>
     <script>
-      const input = document.querySelector("#tel");
-      window.intlTelInput(input, {
+      const telInput = document.querySelector("#tel");
+      window.intlTelInput(telInput, {
         
         initialCountry: "sa",
         hiddenInput: () => ({ phone: "full_phone", country: "country_code" }),
@@ -165,5 +165,20 @@
           }
           
         }
+
+        function verfiyPhone() {
+          let input = document.querySelector('#tel')
+          let value = input.value
+          let accepted_char = '0123456789+'
+          out = ''
+          for (var i = 0; i < value.length; i++) {
+            if (accepted_char.includes(value[i])){
+              
+              out = out+value[i]
+            }
+          }
+          input.value = out
+        }
+
       </script>
 {% endblock sheri %}

@@ -1,31 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import MessagesModel, MessengerModel, FavoriteUserModel, BlockUserModel
-from accounts.models import EmployeeProfileImages, UserProfile, UserSubscriptionModel
+from accounts.models import UserProfile, UserSubscriptionModel
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
+from accounts.libs import get_user_img
 # Create your views here.
 
-def get_user_img(user):
-    employee_images = EmployeeProfileImages.objects.filter(user=user)
-    employee_image = ''
-    if employee_images.exists():
-        employee_image = employee_images.first().img_base64
-
-    img = []
-    if user.userprofile.is_employee:
-        if employee_image:
-            img = [employee_image, 0]
-        else:
-            img = ['', 1]
-    elif user.userprofile.is_company:
-        if user.userprofile.companyprofile.img_base64:
-            img = [user.userprofile.companyprofile.img_base64, 0]
-        else:
-            img = ['', 1]
-    else:
-        img = ['', 1]
-    return img
 
 def messageRoom(request, room_id):
     user = request.user
