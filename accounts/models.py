@@ -192,11 +192,13 @@ class UserProfile(models.Model):
     def is_has_subscription(self):
         datetime_now = DatetimeNow(self.user)
         date_now = datetime_now.date()
-        subscription_date = self.subscription.creation_date.date()
-        end_date = (datetime.timedelta(days=self.subscription.number_of_days) + subscription_date)
-        if date_now > end_date:
-            return False
-        return True
+        if self.subscription:
+            subscription_date = self.subscription.creation_date.date()
+            end_date = (datetime.timedelta(days=self.subscription.number_of_days) + subscription_date)
+            if date_now < end_date:
+                return True
+        
+        return False
 
     def subscription_send_msg_data(self):
         msg_count = self.subscription.number_of_send_msgs
