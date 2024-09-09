@@ -1,3 +1,4 @@
+{% if 'messageRoom' not in request.path %}
 <div class="bg-primary text-white">
 <div class="container" dir="rtl">
     <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 mt-4 border-top">
@@ -53,3 +54,4 @@
         color: white !important;
     }
 </style>
+{% endif %}
