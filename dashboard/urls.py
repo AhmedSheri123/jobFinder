@@ -60,6 +60,13 @@ urlpatterns = [
     path('DeleteNationality/<int:id>', views.DeleteNationality, name='DeleteNationality'),
     
 
+    #HealthStatus
+    path('ManageHealthStatus', views.ManageHealthStatus, name='ManageHealthStatus'),
+    path('AddHealthStatus', views.AddHealthStatus, name='AddHealthStatus'),
+    path('EditHealthStatus/<int:id>', views.EditHealthStatus, name='EditHealthStatus'),
+    path('DeleteHealthStatus/<int:id>', views.DeleteHealthStatus, name='DeleteHealthStatus'),
+    
+
     #AdminPermission
     path('ManageAdminPermission', views.ManageAdminPermission, name='ManageAdminPermission'),
     path('AddAdminPermission', views.AddAdminPermission, name='AddAdminPermission'),
@@ -67,5 +74,18 @@ urlpatterns = [
     path('DeleteAdminPermission/<int:id>', views.DeleteAdminPermission, name='DeleteAdminPermission'),
 
     path('EditVerificationMsg', views.EditVerificationMsg, name='EditVerificationMsg'),
+    path('EditTermsPolicy', views.EditTermsPolicy, name='EditTermsPolicy'),
+    
+    
 
+    
+    path('WithdrawDelete/<int:id>', views.WithdrawDelete, name='WithdrawDelete'),
+    path('WithdrawComplete/<int:id>', views.WithdrawComplete, name='WithdrawComplete'),
+    path('WithdrawCancel/<int:id>', views.WithdrawCancel, name='WithdrawCancel'),
+    path('WithdrawAccept/<int:id>', views.WithdrawAccept, name='WithdrawAccept'),
+    path('dashboardWithdraw', views.dashboardWithdraw, name='dashboardWithdraw'),
+
+
+
+    path('ContactUsSendReplay/<int:id>', views.ContactUsSendReplay, name='ContactUsSendReplay'),
 ]

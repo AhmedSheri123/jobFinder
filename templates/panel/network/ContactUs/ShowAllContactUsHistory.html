@@ -80,7 +80,7 @@
 
           <!-- Modal -->
           <div class="modal fade" id="exampleModal{{job.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{job.id}}" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title fs-5" id="exampleModalLabel{{job.id}}">معلومات الرسالة</h1>
@@ -91,8 +91,24 @@
                     <label for="exampleFormControlTextarea1" class="form-label">الرسالة</label>
                     <textarea class="form-control" name="msg" disabled id="exampleFormControlTextarea1" rows="3">{{job.msg}}</textarea>
                   </div>
-                </div>
+                  <hr>
+                  <form action="{% url 'ContactUsSendReplay' job.id %}" id="replay_msg_form" method="post">
+                    {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label"> موضوع الرسالة</label>
+                    <input type="text" class="form-control" name="subject"  id="exampleFormControlTextarea1" rows="3" placeholder="اكتب موضوع الرسالة هنا...">
+                  </div>
 
+                  <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">رسالة الرد</label>
+                    <textarea class="form-control" name="replay_msg"  id="exampleFormControlTextarea1" rows="3" placeholder="اكتب رسالتك هنا..."></textarea>
+                  </div>
+                </form>
+                </div>
+                <div class="modal-footer" style="justify-content: space-between;">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">اغلاق</button>
+                  <button type="submit" class="btn btn-primary" onclick="{document.querySelector('#replay_msg_form').submit()}">ارسال رسالة الرد</button>
+                </div>
 
               </div>
             </div>

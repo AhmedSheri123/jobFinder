@@ -63,6 +63,31 @@ SubscriptionsTheemChoices = (
     ('btn btn-dark', 'dark'),
 )
 
+
+# Create your models here.
+withdraw_status_list = (
+    ('0', 'Pending,, قيد الانتظار'),
+    ('1', 'Approved,, وافق'),
+    ('2', 'Complete,, مكتمل'),
+    ('3', 'Cancelled,, ألغيت'),
+)
+withdrawal_method_list = (
+    # ('0','Paypal'),
+    # ('1','USDT'),
+    ('2','حساب بنكي'),
+)
+usdt_network_choices = (
+    ('0','Tron (TRC20)'),
+    ('1','Ethereum (ERC20)'),
+    ('2','BNB Smart Chain (BEP20)'),
+    ('3','Solana'),
+    ('4','Polygon'),
+    ('5','Arbitrum One'),
+    ('6','Optimism'),
+)
+
+
+
 def EmployeeRandomNumCodeGen():
     N = 4
     res = ''.join(random.choices(string.digits, k=N))
@@ -142,7 +167,15 @@ class UserProfile(models.Model):
     dont_receive_msg_from_employees = models.BooleanField(default=False)
     
 
-    ip_info = models.JSONField(default=dict)
+
+    show_phone = models.BooleanField(default=True)
+    show_facebook = models.BooleanField(default=True)
+    show_linkedin = models.BooleanField(default=True)
+    show_whatsapp = models.BooleanField(default=True)
+    show_instgram = models.BooleanField(default=True)
+    show_snapshat = models.BooleanField(default=True)
+    show_tiktok = models.BooleanField(default=True)
+
     def __str__(self):
         return self.user.username
 
@@ -258,12 +291,12 @@ class EmployeeProfile(models.Model):
     cv = models.FileField(upload_to="employee_cv/%Y/%m/%d/")
     employee_password = models.CharField(max_length=250, null=True, verbose_name="كلمة المرور للمنصة")
     
-    facebook = models.CharField(max_length=250, null=True, verbose_name="facebook")
-    linkedin = models.CharField(max_length=250, null=True, verbose_name="linkedin")
-    whatsapp = models.CharField(max_length=250, null=True, verbose_name="whatsapp")
-    instgram = models.CharField(max_length=250, null=True, verbose_name="instgram")
-    snapshat = models.CharField(max_length=250, null=True, verbose_name="snapshat")
-    tiktok = models.CharField(max_length=250, null=True, verbose_name="tiktok")
+    facebook = models.CharField(max_length=250, default='', blank=True, null=True, verbose_name="facebook")
+    linkedin = models.CharField(max_length=250, default='', blank=True, null=True, verbose_name="linkedin")
+    whatsapp = models.CharField(max_length=250, default='', blank=True, null=True, verbose_name="whatsapp")
+    instgram = models.CharField(max_length=250, default='', blank=True, null=True, verbose_name="instgram")
+    snapshat = models.CharField(max_length=250, default='', blank=True, null=True, verbose_name="snapshat")
+    tiktok = models.CharField(max_length=250, default='', blank=True, null=True, verbose_name="tiktok")
 
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
     def __str__(self):
@@ -281,13 +314,13 @@ class CompanyProfile(models.Model):
     employee_city = models.CharField(max_length=255, null=True, verbose_name="المدينة")
     district = models.CharField(max_length=250, null=True, verbose_name="الحي")
     
-    land_line_number = models.CharField(max_length=250, null=True, verbose_name="هاتف ارضي")
-    facebook_profile = models.CharField(max_length=250, null=True, verbose_name="صفحة فيسبوك")
-    linkedin = models.CharField(max_length=250, null=True, verbose_name="صفحة لينكداين")
-    whatsapp = models.CharField(max_length=250, null=True, verbose_name="واتساب")
-    instgram = models.CharField(max_length=250, null=True, verbose_name="instgram")
-    snapshat = models.CharField(max_length=250, null=True, verbose_name="snapshat")
-    tiktok = models.CharField(max_length=250, null=True, verbose_name="tiktok")
+    land_line_number = models.CharField(max_length=250, blank=True, default='', null=True, verbose_name="هاتف ارضي")
+    facebook_profile = models.CharField(max_length=250, blank=True, default='', null=True, verbose_name="صفحة فيسبوك")
+    linkedin = models.CharField(max_length=250, blank=True, default='', null=True, verbose_name="صفحة لينكداين")
+    whatsapp = models.CharField(max_length=250, blank=True, default='', null=True, verbose_name="واتساب")
+    instgram = models.CharField(max_length=250, blank=True, default='', null=True, verbose_name="instgram")
+    snapshat = models.CharField(max_length=250, blank=True, default='', null=True, verbose_name="snapshat")
+    tiktok = models.CharField(max_length=250, blank=True, default='', null=True, verbose_name="tiktok")
 
 
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
@@ -522,3 +555,46 @@ class AdminPermissionModel(models.Model):
     show_user_subscription = models.BooleanField(default=False, verbose_name='إظهار اشتراك المستخدم')
     edit_user_subscription = models.BooleanField(default=False, verbose_name='تعديل اشتراك المستخدم')
 
+
+
+
+class Withdraw(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='المستخدم')
+    status = models.CharField(choices=withdraw_status_list, max_length=250, verbose_name="الحالة")
+    total_amount = models.DecimalField(max_digits=6, decimal_places=3, verbose_name='كمية السحب')
+    withdrawal_method = models.CharField(choices=withdrawal_method_list, max_length=250, verbose_name="نوع السحب")
+
+    usdt_network = models.CharField(choices=usdt_network_choices, max_length=250, verbose_name="شبكة usdt", blank=True, null=True)
+    usdt_address = models.CharField(max_length=250, verbose_name="عنوان محفظة usdt", blank=True, null=True)
+
+
+    full_name = models.CharField(max_length=250, verbose_name="عنوان محفظة usdt", blank=True, null=True)
+    bank_name = models.CharField(max_length=250, verbose_name="عنوان محفظة usdt", blank=True, null=True)
+    bank_account_number = models.CharField(max_length=250, verbose_name="عنوان محفظة usdt", blank=True, null=True)
+    IBAN_number = models.CharField(max_length=250, verbose_name="عنوان محفظة usdt", blank=True, null=True)
+
+    desc = models.TextField(verbose_name='وصف')
+    is_completed = models.BooleanField(default=False, verbose_name='دفعت')
+    withdraw_date = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ السحب')
+
+
+    class Meta:
+        ordering = ['-withdraw_date']
+
+    def __str__(self):
+        return self.user.username
+
+    def get_status_ar(self):
+        for i in withdraw_status_list:
+            if i[0] == self.status:
+                return i[1].split(',,')[1]
+
+    def get_status_en(self):
+        for i in withdraw_status_list:
+            if i[0] == self.status:
+                return i[1].split(',,')[0]
+
+    def get_withdrawal_method(self):
+        for i in withdrawal_method_list:
+            if i[0] == self.withdrawal_method:
+                return i[1]

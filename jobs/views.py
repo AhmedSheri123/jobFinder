@@ -18,7 +18,8 @@ def viewJob(request, id):
 def companyJobs(request):
     user = request.user
     jobs = JobsModel.objects.filter(user=user)
-
+    if request.user.userprofile.company_signup_process != '5':
+        messages.error(request, 'لا يمكنك اضافة وظائف حالية لان حسابك قيد المراجعة الرجاء الانتظار حتى يتم اكمال مراجعة حسابك')
     return render(request, 'jobs/company/Jobs.html', {'jobs':jobs})
 
 def companyviewJob(request, id):

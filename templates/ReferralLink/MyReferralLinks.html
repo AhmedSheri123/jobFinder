@@ -108,7 +108,7 @@
 
 <div class="toast toast2 align-items-center text-white bg-primary border-0" style="position: fixed; right: 0; bottom: 100px; z-index: 2030;" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex" style="flex-direction: row-reverse; align-content: center; align-items: center; justify-content: center;">
-      <div class="toast-body" id="msg-alret">
+      <div class="toast-body" dir="rtl" id="msg-alret">
         
       </div>
       <button type="button" class="btn-close btn-close-white " data-bs-dismiss="toast" aria-label="Close"></button>
@@ -215,6 +215,7 @@
 
     <div class="container" style="text-align: right; padding: 10px 15px;" >
         <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateReferralModal">انشاء رابط أحالة</a>
+        <a class="btn btn-warning" href="{% url 'Withdrawn' %}">سحب الرصيد</a>
 
   
   <!-- Modal -->
@@ -222,12 +223,12 @@
     <div class="modal-dialog">
       <form method="get" action="{% url 'CreateReferralLinkForMe' %}" class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="CreateReferralModalLabel">انشاء رابط احالة</h1>
+          <h6 class="modal-title fs-5" style="font-size: 17px !important;" id="CreateReferralModalLabel">انشاء رابط احالة</h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <label for="" class="form-label">اسم المستعار</label>
-          <input type="text" class="form-control" name="alias_name">
+            <label for="" class="form-label" style="font-size: 14px !important;">اسم رابط الاحالة</label>
+          <input type="text" class="form-control" style="font-size: 14px !important;" placeholder="مثال: رابط الواتس اب. التلغرام. السناب." name="alias_name">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
@@ -307,7 +308,7 @@
                             <div class="col-sm-6" style="width: 100%;">
                                 <div class="col-sm-6" style="width: 100%;">
                                     <div class="input-group" style="align-items: center;flex-direction: row-reverse;"><input type="text" disabled class="form-control input-sm" value="{{request.scheme}}://{{domain}}{{ref.get_absolute_url}}" >
-                                        <i data-a="{{request.scheme}}://{{domain}}{{ref.get_absolute_url}}" onclick="navigator.clipboard.writeText(this.dataset.a);ShowAlret('تم النسخ بنجاح')" class="bi bi-copy m-1"></i>
+                                        <i data-a="{{request.scheme}}://{{domain}}{{ref.get_absolute_url}}" onclick="navigator.clipboard.writeText(this.dataset.a);ShowAlret('تم النسخ بنجاح, يمكنك الان نشره في وسائل التواصل الاجتماعي وتحقيق الارباح')" class="bi bi-copy m-1"></i>
                                     </div>
                                 </div>
                             </div>

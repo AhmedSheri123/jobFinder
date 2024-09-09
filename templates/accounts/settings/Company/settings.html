@@ -279,10 +279,12 @@ $uploadCrop.croppie('result', {
   type: 'canvas',
   size: 'viewport'
 }).then(function (resp) {
-  // in this hidden input we can send cropped image to server
-  $('#userprofile-avatar').val(resp);
-  $('#cropped-result img').attr('src',resp);
-  $('#cropImagePop').modal('hide');
+  if (checkProfileImgCount()) {
+    // in this hidden input we can send cropped image to server
+    $('#userprofile-avatar').val(resp);
+    $('#cropped-result img').attr('src',resp);
+    $('#cropImagePop').modal('hide');
+  }
 });
 });    
 
@@ -293,6 +295,16 @@ function CarouselOnclickRemove() {
   let imgBox = document.querySelector('#cropped-result')
   imgBox.querySelector('img').src = "{% static '/img/default-profile-img-2.png' %}"
   imgBox.querySelector('input').value = ""
+}
+
+
+function checkProfileImgCount(){
+  let count = document.querySelectorAll('.carousel-item').length
+  if (count >=3) {
+    showToast(randomGen(), 'نظام', 'لقد وصلت الى الحد الاقصى من رفع الصور ملف الشخصي', '')
+    return false
+  }
+  return true
 }
 </script>
 {% endblock %}

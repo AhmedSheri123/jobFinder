@@ -18,6 +18,10 @@
           <li class="nav-item">
                 <a href="{% url 'companyJobs' %}" class="btn" role="button"><i class="bi bi-boxes"></i></a>
           </li>
+          {% else %}
+          <li class="nav-item">
+                <a href="{% url 'JobIndex' %}" class="btn" role="button"><i class="bi bi-briefcase-fill"></i></a>
+          </li>          
           {% endif %}
 
           <li class="nav-item">

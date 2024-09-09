@@ -62,6 +62,7 @@
     <h1 style="text-align: center;">وظائفي</h1>
     
     <div class="main mt-5">
+        {% if request.user.userprofile.company_signup_process == '5' %}
         <a href="{% url 'companyCreateJob' %}" class="btn btn-primary mb-2">اضافة وظيفية</a>
         {% for job in jobs %}
         {% get_number_of_apllyers job.id as number_of_apllyers %}
@@ -110,6 +111,8 @@
 
         
         {% endfor %}
+        {% else %}
+        {% endif %}
     </div>
 </div>
 

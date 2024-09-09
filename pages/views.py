@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel, AdminADSModel, NationalityModel
+from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel, AdminADSModel, NationalityModel, HealthStatusModel
 from accounts.fields import CertTypeFields, GenderFields, StateFields, NationalityFields
 from accounts.libs import filter_sub_price
 from .models import ContactUsModel
@@ -7,12 +7,15 @@ from django.contrib import messages
 from django.utils import timezone
 from accounts.libs import add_get_user_ip
 import random
+import datetime, json
+from django.conf import settings
 # Create your views here.
+BASE_DIR = settings.BASE_DIR
 
 def index(request):
     nationalitys = NationalityModel.objects.all()
     countrys = CountrysModel.objects.all()
-    userprofiles = UserProfile.objects.filter(is_employee=True)
+    userprofiles = UserProfile.objects.filter(is_employee=True, cv_signup_process='6')
     subscriptions = filter_sub_price(request, SubscriptionsModel.objects.all())
 
     # u = []
@@ -29,8 +32,9 @@ def Subscriptions(request):
 
 
 def AdvancedSearch(request):
+    healthes_status = HealthStatusModel.objects.all()
     nationalitys = NationalityModel.objects.all()
-    userprofiles = UserProfile.objects.filter(is_employee=True)
+    userprofiles = UserProfile.objects.filter(is_employee=True, cv_signup_process='6')
     employee_profile = EmployeeProfile.objects.all()
     countrys = CountrysModel.objects.all()
 
@@ -88,7 +92,7 @@ def AdvancedSearch(request):
         'marital_status': marital_status,
     }
 
-    dic = {'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFields, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys}
+    dic = {'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFields, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys, 'healthes_status':healthes_status}
     objs = {}
     objs.update(dic)
     objs.update(inputs)
@@ -97,13 +101,17 @@ def AdvancedSearch(request):
 
 
 def PrivacyPolicy(request):
-
-    return render(request, 'pages/PrivacyPolicy.html')
+    path = str(BASE_DIR / 'accounts/jsons/terms_policy.json')
+    file_reader = open(path, 'r', encoding='UTF-8')
+    data = json.loads(file_reader.read())
+    return render(request, 'pages/PrivacyPolicy.html', {'data':data})
 
 
 def TermsConditions(request):
-
-    return render(request, 'pages/TermsConditions.html')
+    path = str(BASE_DIR / 'accounts/jsons/terms_policy.json')
+    file_reader = open(path, 'r', encoding='UTF-8')
+    data = json.loads(file_reader.read())
+    return render(request, 'pages/TermsConditions.html', {'data':data})
 
 
 def ContactUs(request):

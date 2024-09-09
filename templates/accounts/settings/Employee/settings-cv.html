@@ -246,7 +246,7 @@
 
           <div class="mb-3">
             
-            <label for="exampleInputEmail1" class="form-label">لغات</label>
+            <label for="exampleInputEmail1" class="form-label">اللغة ودرجة الاتقان</label>
             
             <div class="desires" id="lang">
               {% for i in employee_profile.lang.desires %}
@@ -264,7 +264,7 @@
 
 
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">نوع الشهادة</label>
+            <label for="exampleInputEmail1" class="form-label">المؤهل الدراسي</label>
             <select class="form-control" name="cert_type" id="">
               {% for i in CertTypeFields %}
               <option value="{{i.0}}" {%if i.0 == employee_profile.cert_type %} selected {% endif %}>{{i.1}}</option>
@@ -327,8 +327,8 @@
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">الحالة الصحية</label>
             <select name="health_status" id="" class="form-control">
-              {% for i in HealthStatusFields %}
-              <option value="{{i.0}}" {%if i.0 == employee_profile.health_status %} selected {% endif %}>{{i.1}}</option>
+              {% for i in healthes_status %}
+              <option value="{{i.id}}" {%if i.id == employee_profile.healthes_status %} selected {% endif %}>{{i.name}}</option>
               {% endfor %}
             </select>
           </div>
@@ -377,6 +377,9 @@
 
 
         <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+
+          <div id="emailHelp" class="form-text mb-3"><strong>مهم!</strong> هذه البيانات لن تظهر للاخرين في حال لم تشترك في احد الباقات</div>
+
           <!-- <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
           <input value="" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
@@ -682,15 +685,29 @@ $uploadCrop.croppie('result', {
   size: 'viewport'
 }).then(function (resp) {
   // in this hidden input we can send cropped image to server
-  addProfileImg()
+  if (checkProfileImgCount()) {
+    addProfileImg()
   // $('#userprofile-avatar').val(resp);
   // $('#cropped-result img').attr('src',resp);
   $('#userprofile-avatar-'+imgCounter).val(resp);
   $('#cropped-result-'+imgCounter+' img').attr('src',resp);
   $('#cropImagePop').modal('hide');
+  }
+
 });
 });    
 
 });
+
+
+
+function checkProfileImgCount(){
+  let count = document.querySelectorAll('.carousel-item').length
+  if (count >=3) {
+    showToast(randomGen(), 'نظام', 'لقد وصلت الى الحد الاقصى من رفع الصور ملف الشخصي', '')
+    return false
+  }
+  return true
+}
 </script>
 {% endblock %}

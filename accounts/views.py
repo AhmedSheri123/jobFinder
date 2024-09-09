@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel, NationalityModel, GenrateUserID
+from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel, NationalityModel, GenrateUserID, HealthStatusModel, Withdraw, withdrawal_method_list, usdt_network_choices
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -140,6 +140,7 @@ def cvSignupConf(request, alt_id):
 
 
 def cvSignupCvCreation(request, alt_id):
+    healthes_status = HealthStatusModel.objects.all()
     countrys = CountrysModel.objects.all()
     nationalitys = NationalityModel.objects.all()
     skils_model = SkilsModel.objects.all()
@@ -170,7 +171,7 @@ def cvSignupCvCreation(request, alt_id):
         employee_profile.weight = weight
         employee_profile.height = height
         employee_profile.marital_status = marital_status
-        employee_profile.health_status = health_status
+        employee_profile.health_status = HealthStatusModel.objects.get(id=health_status)
         employee_profile.country = countrys.get(id=country)
         employee_profile.employee_city = employee_city
         employee_profile.district = district
@@ -192,7 +193,7 @@ def cvSignupCvCreation(request, alt_id):
         EnableDefaultUserSubscription(userprofile.id)
         messages.success(request, '( تم التسجيل بنجاح وهو قيد المراجعة الان . وقد يستغرق ذلك ٢٤ الى ٤٨ ساعة ) . حتى تتمكن من استخدام خدمات المنصة')
         return redirect('Login')
-    return render(request, 'accounts/signup/Employee/cvSignupCvCreation.html', {'alt_id':alt_id, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys, 'nationalitys':nationalitys})
+    return render(request, 'accounts/signup/Employee/cvSignupCvCreation.html', {'alt_id':alt_id, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys, 'nationalitys':nationalitys, 'healthes_status':healthes_status})
 
 
 def companySignup(request):
@@ -672,6 +673,7 @@ def CVSettingsGernral(request):
     return render(request, 'accounts/settings/Employee/settings.html', {'user':user, 'employee_profile':employee_profile, 'callBackUrl':callBackUrl, 'profile_reverced_url':profile_reverced_url})
 
 def SettingsCV(request):
+    healthes_status = HealthStatusModel.objects.all()
     nationalitys = NationalityModel.objects.all()
     countrys = CountrysModel.objects.all()
     skils_model = SkilsModel.objects.all()
@@ -724,7 +726,7 @@ def SettingsCV(request):
         employee_profile.weight = weight
         employee_profile.height = height
         employee_profile.marital_status = marital_status
-        employee_profile.health_status = health_status
+        employee_profile.health_status = HealthStatusModel.objects.get(id=health_status)
         employee_profile.country = countrys.get(id=country)
         employee_profile.employee_city = employee_city
         employee_profile.district = district
@@ -760,7 +762,7 @@ def SettingsCV(request):
     userprofile = UserProfile.objects.get(user=user)
     employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
     profile_imgs = EmployeeProfileImages.objects.filter(user=user)
-    return render(request, 'accounts/settings/Employee/settings-cv.html', {'user':user, 'employee_profile':employee_profile, 'userprofile':userprofile, 'GenderFields':GenderFields, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys, 'profile_imgs':profile_imgs, 'nationalitys':nationalitys})
+    return render(request, 'accounts/settings/Employee/settings-cv.html', {'user':user, 'employee_profile':employee_profile, 'userprofile':userprofile, 'GenderFields':GenderFields, 'NationalityFields':NationalityFields, 'CertTypeFields':CertTypeFields, 'skils_model':skils_model, 'HealthStatusFields':HealthStatusFields, 'StateFields':StateFields, 'YesNoFields':YesNoFields, 'countrys':countrys, 'profile_imgs':profile_imgs, 'nationalitys':nationalitys, 'healthes_status':healthes_status})
 
 
 
@@ -774,16 +776,26 @@ def MyReferralLink(request):
     user = request.user
     userprofile = user.userprofile
 
-    refs = ReferralLinkModel.objects.filter(creator_userprofile = userprofile)
+    subs_url = reverse('Subscriptions')
+    if userprofile.subscription:
+        if userprofile.subscription.subscription.referral_link_to_earn:
+            refs = ReferralLinkModel.objects.filter(creator_userprofile = userprofile)
 
-    refs_total_earn = 0
-    refs_all_total_earn = 0
-    total_links = refs.count()
-    total_signin_users = UserProfile.objects.filter(referral__creator_userprofile = userprofile).count()
-    for ref in refs:
-        refs_total_earn += ref.total_earn
-        refs_all_total_earn += ref.all_total_earn
-
+            refs_total_earn = 0
+            refs_all_total_earn = 0
+            total_links = refs.count()
+            total_signin_users = UserProfile.objects.filter(referral__creator_userprofile = userprofile).count()
+            for ref in refs:
+                refs_total_earn += ref.total_earn
+                refs_all_total_earn += ref.all_total_earn
+        else:
+            messages.error(request, f'لتتمكن من الحصول على رابط تحقق من خلاله ارباح, يجب عليك الاشتراك في احد الباقات <a href="{subs_url}">اضغط هنا</a>')
+            return redirect('Profile', user.id)
+    else:
+        
+        messages.error(request, f'لتتمكن من الحصول على رابط تحقق من خلاله ارباح, يجب عليك الاشتراك في احد الباقات <a href="{subs_url}">اضغط هنا</a>')
+        return redirect('Profile', user.id)
+    
     return render(request, 'ReferralLink/MyReferralLinks.html', {'refs':refs, 'refs_total_earn':refs_total_earn, 'refs_all_total_earn':refs_all_total_earn, 'total_links':total_links, 'total_signin_users':total_signin_users, 'domain':domain})
 
 def CreateReferralLinkForMe(request):
@@ -924,6 +936,15 @@ def EmployeeNotificationsSettings(request):
     if request.method == 'POST':
         dont_receive_msg_from_companys = request.POST.get('dont_receive_msg_from_companys')
         dont_receive_msg_from_employees = request.POST.get('dont_receive_msg_from_employees')
+        show_phone = request.POST.get('show_phone')
+        show_facebook = request.POST.get('show_facebook')
+        show_linkedin = request.POST.get('show_linkedin')
+        show_whatsapp = request.POST.get('show_whatsapp')
+        show_instgram = request.POST.get('show_instgram')
+        show_snapshat = request.POST.get('show_snapshat')
+        show_tiktok = request.POST.get('show_tiktok')
+
+
         userprofile = UserProfile.objects.get(user=user)
         if dont_receive_msg_from_companys:
             userprofile.dont_receive_msg_from_companys = True
@@ -935,6 +956,42 @@ def EmployeeNotificationsSettings(request):
         else:
             userprofile.dont_receive_msg_from_employees = False
 
+
+
+        if show_phone:
+            userprofile.show_phone = True
+        else:
+            userprofile.show_phone = False
+
+        if show_facebook:
+            userprofile.show_facebook = True
+        else:
+            userprofile.show_facebook = False
+
+        if show_linkedin:
+            userprofile.show_linkedin = True
+        else:
+            userprofile.show_linkedin = False
+
+        if show_whatsapp:
+            userprofile.show_whatsapp = True
+        else:
+            userprofile.show_whatsapp = False
+
+        if show_instgram:
+            userprofile.show_instgram = True
+        else:
+            userprofile.show_instgram = False
+
+        if show_snapshat:
+            userprofile.show_snapshat = True
+        else:
+            userprofile.show_snapshat = False
+
+        if show_tiktok:
+            userprofile.show_tiktok = True
+        else:
+            userprofile.show_tiktok = False
         userprofile.save()
 
     return render(request, 'accounts/settings/Employee/notifications-settings.html')
@@ -1074,3 +1131,74 @@ def ResetPassword(request, code):
             return redirect('Login')
         return render(request, 'accounts/forget_password/ResetPassword.html')
     return redirect('Login')
+
+
+def changePWD(request):
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        new_password = request.POST.get('new_password')
+
+        user = authenticate(request, username=request.user.username, password=password)
+        if user is not None:
+            user = User.objects.get(id=request.user.id)
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, 'تم تغير كلمة المرور بنجاح')
+            return redirect('Login')
+        else:
+            messages.success(request, 'كلمة المرور الحالي الذي ادخلتها خاطئة')
+    return render(request, 'accounts/forget_password/changePWD.html')
+
+
+
+
+def Withdrawn(request):
+    user = request.user
+    withdraw = Withdraw.objects.filter(user=user)
+    Pending = withdraw.filter(status__in=['0','1'])
+    Completed = withdraw.filter(status='2')
+    TotalAmountPendingMoney = 0
+    TotalAmountWithdrawnMoney = 0
+
+    for i in Completed:
+        TotalAmountWithdrawnMoney += i.total_amount
+    for i in Pending:
+        TotalAmountPendingMoney += i.total_amount
+        
+    money_now = request.user.userprofile.money-TotalAmountPendingMoney
+    if request.method == 'POST':
+        data = request.POST
+        withdrawn_type = data.get('withdrawn_type')
+        amount = data.get('amount')
+        desc = data.get('desc')
+
+        if float(money_now) >= float(amount):
+            if float(amount) >= 100:
+                if withdrawn_type == '1':
+                    usdt_network = data.get('usdt_network')
+                    usdt_address = data.get('usdt_address')
+
+                    obj = withdraw.create(user=user, status='0', withdrawal_method=withdrawn_type, total_amount=amount, desc=desc, usdt_network=usdt_network, usdt_address=usdt_address)
+                    obj.save()
+                elif withdrawn_type == '2':
+                    full_name = data.get('full_name')
+                    bank_name = data.get('bank_name')
+                    bank_account_number = data.get('bank_account_number')
+                    IBAN_number = data.get('IBAN_number')
+
+                    obj = withdraw.create(user=user, status='0', withdrawal_method=withdrawn_type, total_amount=amount, desc=desc, full_name = full_name, bank_name = bank_name, bank_account_number = bank_account_number, IBAN_number = IBAN_number)
+                    obj.save()
+                return redirect('Withdrawn')
+            else:
+                messages.error(request, 'يجب ان تسحب على الاقل 10 دولار')
+
+                
+        else:
+            messages.error(request, 'ليس لديك رصيد كافي')
+
+            
+    return render(request, 'accounts/withdraw/withdraw.html', {'withdrawal_method':withdrawal_method_list, 'usdt_network_choices':usdt_network_choices, 'withdraws':withdraw, 'TotalAmountPendingMoney':TotalAmountPendingMoney, 'TotalAmountWithdrawnMoney':TotalAmountWithdrawnMoney, 'money_now':money_now})
+
+
+
+

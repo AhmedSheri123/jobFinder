@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel, AdminPermissionModel
+from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel, AdminPermissionModel, HealthStatusModel, Withdraw, withdrawal_method_list, usdt_network_choices, ReferralLinkModel
 from accounts.fields import GenderFields
 from calendar import monthrange
 from django.contrib.auth.models import User
@@ -7,14 +7,18 @@ from django.contrib import messages
 from messenger.models import MessengerModel
 from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
 from jobs.forms import JobsModelForm
-from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm, NationalityModelForm, AdminPermissionModelForm
+from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm, NationalityModelForm, AdminPermissionModelForm, HealthStatusModelForm
 from pages.models import ContactUsModel
 from django.utils import timezone
-from accounts.libs import send_msg_email_phone_noti, get_user_img
+from accounts.libs import send_msg_email_phone_noti, get_user_img, create_notifications
 from django.conf import settings
+from django.core.mail import send_mail
 import datetime, json
+from decimal import Decimal
+from django.urls import reverse
 
 BASE_DIR = settings.BASE_DIR
+email_from = settings.EMAIL_HOST_USER
 
 # Create your views here.
 def has_perm(user):
@@ -525,7 +529,21 @@ def DeleteContactUs(request, id):
         return redirect('ShowAllContactUsHistory')    
     
 
-
+def ContactUsSendReplay(request, id):
+    if request.user.is_superuser or has_perm(request.user):
+            
+        contact_us = ContactUsModel.objects.get(id=id)
+        if request.method == 'POST':
+            subject = request.POST.get('subject')
+            replay_msg = request.POST.get('replay_msg')
+            email = contact_us.email
+            if replay_msg:
+                try:
+                    send_mail( subject, replay_msg, email_from, [email])
+                    messages.success(request, 'تم ارسال الرسالة')
+                except:
+                    messages.error(request, 'حدث خطاء اثناء ارسال الرسالة')
+        return redirect('ShowAllContactUsHistory')    
 
 
 def ManageAdminADS(request):
@@ -632,6 +650,42 @@ def DeleteNationality(request, id):
     subscription = NationalityModel.objects.get(id=id)
     subscription.delete()
     return redirect('ManageNationality')
+
+
+
+
+
+
+def ManageHealthStatus(request):
+    objs = HealthStatusModel.objects.all()
+
+    return render(request, 'panel/HealthStatus/ManageHealthStatus.html', {'objs':objs})
+
+def AddHealthStatus(request):
+    form = HealthStatusModelForm()
+    if request.method == 'POST':
+        form = HealthStatusModelForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            ob = form.save()
+            ob.creation_date = timezone.now()
+            ob.save()
+            return redirect('ManageHealthStatus')
+    return render(request, 'panel/HealthStatus/AddHealthStatus.html', {'form':form})
+
+def EditHealthStatus(request, id):
+    subscription = HealthStatusModel.objects.get(id=id)
+    form = HealthStatusModelForm(instance=subscription)
+    if request.method == 'POST':
+        form = HealthStatusModelForm(data=request.POST, files=request.FILES, instance=subscription)
+        if form.is_valid():
+            form.save()
+            return redirect('ManageHealthStatus')
+    return render(request, 'panel/HealthStatus/EditHealthStatus.html', {'form':form})
+
+def DeleteHealthStatus(request, id):
+    subscription = HealthStatusModel.objects.get(id=id)
+    subscription.delete()
+    return redirect('ManageHealthStatus')
 
 
 
@@ -795,3 +849,131 @@ def EditVerificationMsg(request):
         file_writer.write(json.dumps(data))
 
     return render(request, 'panel/settings/EditVerificationMsg.html', {'data':data})
+
+
+
+def EditTermsPolicy(request):
+    path = str(BASE_DIR / 'accounts/jsons/terms_policy.json')
+    file_reader = open(path, 'r', encoding='UTF-8')
+    data = json.loads(file_reader.read())
+    file_reader.close()
+        
+    if request.method == 'POST':
+        TermsConditions = request.POST.get('TermsConditions')
+        PrivacyPolicy = request.POST.get('PrivacyPolicy')
+        file_writer = open(path, 'w', encoding='UTF-8')
+        data = {
+            'TermsConditions':TermsConditions,
+            'PrivacyPolicy': PrivacyPolicy
+        }
+        file_writer.write(json.dumps(data))
+
+    return render(request, 'panel/settings/TermsPolicy.html', {'data':data})
+
+
+
+
+
+
+
+def WithdrawDelete(request, id):
+    if request.user.is_superuser:
+        REFERER = request.META['HTTP_REFERER']
+        withdraws = Withdraw.objects.get(id=id)
+        withdraws.delete()
+
+        return redirect(REFERER)
+
+def getWithdrawPercentage(total, percentage):
+    
+    x = percentage / 100
+    x = Decimal(x)
+    result = total * x
+    return result
+
+def WithdrawComplete(request, id):
+    if request.user.is_superuser:
+        REFERER = request.META['HTTP_REFERER']
+        withdraws = Withdraw.objects.get(id=id)
+        withdraws.status = '2'
+        withdraws.save()
+
+        link = reverse('Withdrawn')
+        message_ar = f'تم الانتهاء من عملية السحب بنجاح بقيمة {withdraws.total_amount} للمشاهدة <a style="color: #438fff;" href={link} target="_blank">اضغط هنا</a>'
+        create_notifications(sender_id=request.user.id, receiver_ids=[withdraws.user.id], msg=message_ar)
+        
+        userprofile = withdraws.user.userprofile
+        userprofile.money = userprofile.money - withdraws.total_amount
+        userprofile.save()
+        if userprofile.referral:
+            ref = ReferralLinkModel.objects.get(id=userprofile.referral.id)
+            result = getWithdrawPercentage(withdraws.total_amount, ref.percentage_of_withdraw)
+            ref.total_earn = ref.total_earn + result
+            ref.all_total_earn = ref.all_total_earn + result
+            ref.save()
+        return redirect(REFERER)
+
+def WithdrawCancel(request, id):
+    if request.user.is_superuser:
+        
+        if request.method == 'POST':
+
+            REFERER = request.META['HTTP_REFERER']
+            withdraws = Withdraw.objects.get(id=id)
+            userprofile = withdraws.user.userprofile
+            if withdraws.status == '2':
+                userprofile.money += withdraws.total_amount
+                if userprofile.referral:
+                    ref = ReferralLinkModel.objects.get(id=userprofile.referral.id)
+                    result = getWithdrawPercentage(withdraws.total_amount, ref.percentage_of_withdraw)
+                    ref.total_earn = ref.total_earn - result
+                    ref.all_total_earn = ref.all_total_earn - result
+                    ref.save()
+
+                
+            withdraws.status = '3'
+            withdraws.save()
+            msg = request.POST.get('msg')
+            create_notifications(sender_id=request.user.id, receiver_ids=[withdraws.user.id], msg=msg)
+
+            userprofile.save()
+    
+            return redirect(REFERER)
+
+def WithdrawAccept(request, id):
+    if request.user.is_superuser:
+        REFERER = request.META['HTTP_REFERER']
+        withdraws = Withdraw.objects.get(id=id)
+        withdraws.status = '1'
+        withdraws.save()
+        return redirect(REFERER)
+
+def dashboardWithdraw(request):
+    data = request.GET
+    filter_enabled = data.get('filter_enabled')
+    withdraws = Withdraw.objects.filter()
+    filter_list = []
+    if data.get('Pending'):
+        filter_list.append('0')
+
+    if data.get('Accepted'):
+        filter_list.append('1')
+
+    if data.get('Completed'):
+        
+        filter_list.append('2')
+
+    if data.get('Canceled'):
+        filter_list.append('3')
+    if filter_enabled:
+        withdraws = withdraws.filter(status__in=filter_list)
+    Pending = withdraws.filter(status='0').count()
+    accepted = withdraws.filter(status='1').count()
+    Completed = withdraws.filter(status='2').count()
+    Canceled = withdraws.filter(status='3').count()
+
+    return render(request, 'panel/withdraw/dashboardWithdraw.html', {'withdraws':withdraws, 'accepted':accepted,
+    'Completed':Completed, 'Canceled':Canceled, 'Pending':Pending, 'Pending_form': data.get('Pending'), 
+    'Accepted_form': data.get('Accepted'), 'Completed_form' : data.get('Completed'), 'Canceled_form': data.get('Canceled'), 'filter_enabled': filter_enabled,
+    'withdrawal_method':withdrawal_method_list, 'usdt_network_choices':usdt_network_choices
+    })

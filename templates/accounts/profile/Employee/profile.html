@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load custom_tags %}
+
 {% load static %}
 
 {% block links %}
@@ -66,7 +68,8 @@
             {% endif %}
             <h4 style="line-height: 0;">{{employee_profile.name}}</h4>
         </div>
-        <div  class="main-info">
+
+        <div  class="main-info mb-3">
 
             <div class="main-info-item">
                 <i class="bi bi-briefcase-fill"></i>
@@ -83,14 +86,19 @@
                 <p>صاحب سيرة</p>
             </div>
         </div>
+        <p style="line-height: 0; text-align: center; opacity: .8; font-size:14px;">رقم العضوية:{{userprofile.user.username}}</p>
 
         <div class="profile-nav-main">
             <nav dir="rtl" class="mt-5 profile-nav">
                 <div class="nav nav-tabs profile-nav-tabs" id="nav-tab" role="tablist">
                   <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">الملف الشخصي</button>
                   <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">المعلومات الشخصية</button>
-                  <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">التواصل</button>
+                  <button {% if not userprofile.is_has_subscription %} onclick="{showToast(randomGen(), 'نظام', 'في حال رغبتك في ظهور وسائل التواصل يجب عليك الاشتراك في احد الباقات <a href=\'/Subscriptions\'>اضغط هنا</a> ', '')}" {% else %}  id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" {% endif %}  class="nav-link" aria-selected="false">التواصل</button>
+                  
                   <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false">احصائيات</button>
+                {% if userprofile.is_has_subscription %}
+                  <button onclick="{window.location = ('{% url 'EmployeeUserSubscription' %}')}" class="nav-link" aria-selected="false">باقتي</button>
+                {% endif %}
                 </div>
               </nav>
 
@@ -144,14 +152,87 @@
             </div>
 
             <div class="p-2 mt-3 bg-f1">
-                <p>مهاراتي</p>
+                <p>خبراتي</p>
                 <hr>
                 <div>
-                    <div class="p-2">
-                        {{employee_profile.skils}}
+     
+                    <div class="contents-box" style="grid-template-columns: auto auto auto; background-color: #f1f1f1;">
+                        {% for experience in employee_profile.experiences.desires %}
+                        <p >
+                            <span class="answer text-dark" ><i class="bi bi-explicit me-1"></i>{{experience}}</span>
+                        </p >
+
+                        {% endfor %}
                     </div>
                 </div>
             </div>
+
+            <div class="p-2 mt-3 bg-f1">
+                <p>مهاراتي</p>
+                <hr>
+                <div>
+     
+                    <div class="contents-box" style="grid-template-columns: auto auto auto; background-color: #f1f1f1;">
+                        {% for experience in employee_profile.skils.desires %}
+                        <p >
+                            <span class="answer text-dark" ><i class="bi bi-explicit me-1"></i>{{experience}}</span>
+                        </p >
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 mt-3 bg-f1">
+                <p>رغباتي</p>
+                <hr>
+                <div>
+     
+                    <div class="contents-box" style="grid-template-columns: auto auto auto; background-color: #f1f1f1;">
+                        {% for experience in employee_profile.desires.desires %}
+                        <p >
+                            <span class="answer text-dark" ><i class="bi bi-explicit me-1"></i>{{experience}}</span>
+                        </p >
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 mt-3 bg-f1">
+                <p>دورات</p>
+                <hr>
+                <div>
+     
+                    <div class="contents-box" style="grid-template-columns: auto auto auto; background-color: #f1f1f1;">
+                        {% for experience in employee_profile.classes.desires %}
+                        <p >
+                            <span class="answer text-dark" ><i class="bi bi-explicit me-1"></i>{{experience}}</span>
+                        </p >
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 mt-3 bg-f1">
+                <p>اللغات التي اتقنها</p>
+                <hr>
+                <div>
+     
+                    <div class="contents-box" style="grid-template-columns: auto auto auto; background-color: #f1f1f1;">
+                        {% for experience in employee_profile.lang.desires %}
+                        <p >
+                            <span class="answer text-dark" ><i class="bi bi-explicit me-1"></i>{{experience}}</span>
+                        </p >
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+
         </div>
 
 
@@ -161,7 +242,7 @@
                 <p >
                     <span class="questtion">الجنسية:</span>
 
-                    <span class="answer" >{{employee_profile.get_nationality_display}}</span>
+                    <span class="answer" >{{employee_profile.nationality.name}}</span>
                 </p >
 
                 <p >
@@ -194,7 +275,7 @@
                 <p >
                     <span class="questtion">الحالة الصحية:</span>
 
-                    <span class="answer" >{{employee_profile.get_health_status_display}}</span>
+                    <span class="answer" >{{employee_profile.health_status.name}}</span>
                 </p >
 
 
@@ -279,8 +360,91 @@
         </div>
 
 
-        <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
+        <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">
+
+            <div style="background-color: #f1f1f1;" class="menu-box">
+                {% if userprofile.is_has_subscription %}
+                <button class="btn btn-primary details-card" id="button-addon1"><strong>ايام الباقية للاشتراك</strong>
+                    <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                            {{userprofile.reminding_subscription_days}}</strong>
+                        <i class="bi bi-arrows fa-2x"></i>
+                    </div>
+                </button>
+                {% endif %}
+                <button class="btn btn-primary details-card" id="button-addon1"><strong>عدد المعجبين</strong>
+                    <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                        {% get_user_likes userprofile.user.id as likes_count %}
+                        {{likes_count}}
+                            </strong>
+                        <i class="bi bi-hand-thumbs-up fa-2x"></i>
+                    </div>
+                </button>
+                <button class="btn btn-primary details-card" id="button-addon1"><strong>عدد المشاهدات</strong>
+                    <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                        {% get_user_views userprofile.user.id as views_count %}
+                        {{views_count}}
+                            </strong>
+                        <i class="bi bi-eye fa-2x"></i>
+                    </div>
+                </button>
+
+
+
+            </div>
+
+        </div>
     </div>
+
+<style>
+
+
+        .fa-2x {
+        font-size:30px;
+    }
+
+    .ico-with-value {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 20px 5px
+    }
+    .details-card {
+        color: white;
+        padding-top: 20px;
+        display: block;
+        margin: auto;
+        width: -webkit-fill-available;
+        margin-top: 13px;
+        min-height: 100px;
+    }
+
+
+    .menu-box {
+        /* max-width: 300px; */
+        width: 100%;
+        display: inline-block;
+        margin: 10px;
+        display: grid;
+        grid-template-columns: auto auto auto;
+    }
+
+    .menu-box button {
+        max-width: 300px;
+        margin: 10px;
+    }
+
+    @media (max-width: 767px) {
+        .menu-box {
+            grid-template-columns: auto auto;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .menu-box {
+            grid-template-columns: auto;
+        }
+    }
+</style>
 
       
 </div>
@@ -325,7 +489,11 @@
     
         });
     }
-        
+    // $(document).ready(function() {
+    //     document.querySelector('#nav-disabled-tab').click()
+
+    //     })
+    
     </script>
 <style>
     .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),

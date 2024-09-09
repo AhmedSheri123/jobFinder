@@ -121,8 +121,8 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">الحالة الصحية</label>
                         <select required name="health_status" id="" class="form-control">
-                            {% for i in HealthStatusFields %}
-                            <option value="{{i.0}}">{{i.1}}</option>
+                            {% for i in healthes_status %}
+                            <option value="{{i.id}}">{{i.name}}</option>
                             {% endfor %}
                         </select>
                         </div>
@@ -168,7 +168,7 @@
 
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">نبذة عنك</label>
-                        <textarea class="form-control" name="about_me" id="" rows="5"></textarea>
+                        <textarea class="form-control" placeholder="أضف سيرة ذاتية تعرف عن نفسك وتعليمك وخبراتك ومهاراتك" name="about_me" id="" rows="5"></textarea>
 
                     </div>
                     <div class="mb-3">
@@ -222,7 +222,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">لغات</label>
+                        <label for="exampleInputEmail1" class="form-label">اللغة ودرجة الاتقان</label>
                         <div class="desires" id="lang">
                             <div class="desires-box" id="desires-box-1">
                                 <input required name="lang" type="text" style="padding-left:30px ;" class="form-control" id="ilang" aria-describedby="emailHelp">
@@ -250,7 +250,7 @@
                     </div>
                     {% endcomment %}
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">نوع الشهادة</label>
+                        <label for="exampleInputEmail1" class="form-label">المؤهل الدراسي</label>
                         <select required class="form-control" name="cert_type" id="">
                             {% for i in CertTypeFields %}
                             <option value="{{i.0}}">{{i.1}}</option>

@@ -29,6 +29,8 @@
                 <p class="arial title_desc">وظف افضل المواهب واشخاص ذوي الاختصاصات العلية</p>
                 <br><br>
             </div>
+
+            
 <form action="{% url 'AdvancedSearch' %}" style="padding: 20px;" method="get">
 
     <div class="input-group mb-3">
@@ -161,7 +163,7 @@
                         <div class="contents-box" style="position: relative; overflow: hidden;font-size:.9em ;">
     
                             <p >
-                                <span class="answer" ><i class="bi bi-globe"></i>{{userprofile.employeeprofile.get_nationality_display}}</span>
+                                <span class="answer" ><i class="bi bi-globe"></i>{{userprofile.employeeprofile.nationality.name}}</span>
                             </p >
                             
                             <p >
@@ -177,7 +179,7 @@
     
                             <p >
     
-                                <span class="answer" ><i class="bi bi-bandaid-fill"></i>{{userprofile.employeeprofile.get_health_status_display}}</span>
+                                <span class="answer" ><i class="bi bi-bandaid-fill"></i>{{userprofile.employeeprofile.health_status.name}}</span>
                             </p >
     
     
@@ -322,42 +324,64 @@
                           
                                     
                                   {% if userprofile.subscription.subscription.show_phone %}
+                                  {% if userprofile.show_phone and userprofile.employee_profile.phone %}
                                   <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
                                     <input value="{{userprofile.employee_profile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
                                       aria-describedby="basic-addon1">
                                   </div>
-                        {% endif %}
+                                    {% endif %}
+                                    {% endif %}
 
                     
                                     {% if userprofile.subscription.subscription.show_instgram %}
+                                    {% if userprofile.show_instgram and userprofile.employee_profile.instgram %}
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-instagram"></i></span>
                                         <input value="{{userprofile.employee_profile.instgram}}" disabled type="text" name="instgram" class="form-control" placeholder="انستغرام" aria-label="Username"
                                           aria-describedby="basic-addon1">
                                       </div>
-                            {% endif %}
-                                {% if userprofile.subscription.subscription.show_snap %}
+                                    {% endif %}
+                                    {% endif %}
+
+                                    {% if userprofile.subscription.subscription.show_snap %}
+                                    {% if userprofile.show_snap and userprofile.employee_profile.snapshat %}
                                       <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-snapchat"></i></span>
                                         <input value="{{userprofile.employee_profile.snapshat}}" disabled type="text" name="snapshat" class="form-control" placeholder="سناب شات" aria-label="Username"
                                           aria-describedby="basic-addon1">
                                       </div>
-                            {% endif %}
-                                {% if userprofile.subscription.subscription.show_tiktok %}
+                                    {% endif %}
+                                    {% endif %}
+                                    {% if userprofile.subscription.subscription.show_tiktok %}
+                                    {% if userprofile.show_tiktok and userprofile.employee_profile.tiktok %}
                                       <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-tiktok"></i></span>
                                         <input value="{{userprofile.employee_profile.tiktok}}" disabled type="text" name="tiktok" class="form-control" placeholder="تيك توك" aria-label="Username"
                                           aria-describedby="basic-addon1">
                                       </div>
-                                      {% endif %}
+                                {% endif %}
+                                {% endif %}
                                     <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
                                         <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
                                         <div class="contact-info-soshial">
+                                            {% if userprofile.subscription.subscription.show_facebook %}
+                                            {% if userprofile.show_facebook and userprofile.employeeprofile.facebook%}
                                             <a href="{{userprofile.employeeprofile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+
+                                            {% if userprofile.subscription.subscription.show_linkedin %}
+                                            {% if userprofile.show_linkedin and userprofile.employeeprofile.linkedin %}
                                             <a href="{{userprofile.employeeprofile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+
+                                            {% if userprofile.subscription.subscription.show_whats %}
+                                            {% if userprofile.show_whats and userprofile.employeeprofile.whatsapp %}
                                             <a href="{{userprofile.employeeprofile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
-                        
+                                            {% endif %}
+                                            {% endif %}
                                         </div>
                                     </div>
 
@@ -394,6 +418,35 @@
 
         {%endfor%}
     </div>
+
+
+
+
+
+	<h1 style="margin-top: 100px; font-size: 25px; text-align: center;">نموذج التواصل</h1>
+	<div id="contact-us" dir="rtl" style="background-color: #fff;  box-shadow: inset #d4d4d4 0px 0px 5px 3px; padding: 15px; max-width: 950px; margin: auto; border-radius: 20px;">
+		<form  action="{% url 'ContactUs' %}" method="post" class="contact-form">
+		{% csrf_token %}
+		<div class="mb-3">
+			<label for="exampleFormControlInput1" class="form-label">الإسم</label>
+			<input style="text-align:right;" required name="name" type="text" class="form-control" id="exampleFormControlInput1" placeholder="مثال: محمد عدنان">
+		  </div>
+		  <div class="mb-3">
+			<label for="exampleFormControlInput1" class="form-label">بريد الالكتروني</label>
+			<input style="text-align:right;" required name="email" type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+		  </div>
+		  <div class="mb-3">
+			<label for="exampleFormControlTextarea1" class="form-label">رسالة</label>
+			<textarea class="form-control" required name="msg" id="exampleFormControlTextarea1" rows="3"></textarea>
+		  </div>
+
+		  <div class="col-auto">
+			<button type="submit" class="btn btn-primary mb-3 qa-btn-blu-color">إرسال</button>
+		  </div>
+		</form>
+	</div>
+
+
 
 
 </div>

@@ -30,6 +30,8 @@ urlpatterns = [
     path('CompanySettingGernral', views.CompanySettingGernral, name='CompanySettingGernral'),
 
 
+    path('Withdrawn', views.Withdrawn, name='Withdrawn'),
+
 
     path('Settings', views.Settings, name='Settings'),
     path('CVSettingsGernral', views.CVSettingsGernral, name='CVSettingsGernral'),    
@@ -56,6 +58,7 @@ urlpatterns = [
     path('checkPaymentProcess/<str:orderID>', views.checkPaymentProcess, name='checkPaymentProcess'),
     
     
+    path('changePWD', views.changePWD, name='changePWD'),
     path('ForgetPassword', views.ForgetPassword, name='ForgetPassword'),
     path('ResetPassword/<str:code>', views.ResetPassword, name='ResetPassword'),
 ]

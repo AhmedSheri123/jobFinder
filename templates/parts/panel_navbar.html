@@ -107,6 +107,18 @@
               ادارة الجنسيات
             </a>
           </li>
+          <li>
+            <a href="{% url 'ManageHealthStatus' %}" class="nav-link text-white nav-strings">
+              <i class="bi bi-globe"></i>
+              ادارة الحالة الصحية
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'dashboardWithdraw' %}" class="nav-link text-white nav-strings">
+              <i class="bi bi-globe"></i>
+              طلبات سحب الرصيد
+            </a>
+          </li>
           {% endif %}
 
           {% comment %} <li>
@@ -156,6 +168,7 @@
                 {% comment %} <li><a class="dropdown-item " style="cursor: pointer;" onclick="{document.getElementById('ChangeHeaderImage').click()}" aria-current="true">تعديل الصورة</a></li> {% endcomment %}
                 <li><a class="dropdown-item" href="{% url 'ShowAllContactUsHistory' %}">نماذج التواصل</a></li>
                 <li><a class="dropdown-item" href="{% url 'EditVerificationMsg' %}">تعديل رسائل التحقق</a></li>
+                <li><a class="dropdown-item" href="{% url 'EditTermsPolicy' %}">تعديل إتفاقيات والشروط</a></li>
               </div>
             </ul>
           </div>
@@ -180,7 +193,7 @@
             }
 
             .settings-drop-show {
-              height: 70px;
+              height: 90px;
               padding: 7px 0px;
               width: 100%;
               border: var(--bs-dropdown-border-width) solid var(--bs-dropdown-border-color);
@@ -238,13 +251,13 @@
 
 
           
-
+{% comment %} 
           <form hidden id="ChangeHeaderImageForm" action="{% url 'index' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
             <input id="ChangeHeaderImage" onchange="{document.getElementById('ChangeHeaderImageForm').submit()}" type="file" name="img" accept=".jpg">
-          </form>
-          {% if user.userprofile.admin_permission == '0' or user.username == '0988' %}
+          </form> {% endcomment %}
+          {% if user.is_superuser %}
           <li>
             <a onclick="ShowAdminDrop()" style="cursor: pointer;" class="nav-link text-white nav-strings">
               <i class="bi bi-tools"></i>

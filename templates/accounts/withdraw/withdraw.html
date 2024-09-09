@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+
+
+{% endblock %}
+
+{% block sheri %}
+
+
+<style>
+    .fa-2x {
+        font-size:30px;
+    }
+
+    .details-card {
+        color: white;
+        padding-top: 20px;
+        display: block;
+        margin: auto;
+        width: -webkit-fill-available;
+        margin-top: 13px;
+        min-height: 100px;
+    }
+
+    .item-box {
+        display: flex;
+        text-align: center;
+        padding-bottom: 40px;
+        align-items: center;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .ico-with-value {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 20px 5px
+    }
+
+    .menu-box {
+        max-width: 300px;
+        width: 100%;
+        display: inline-block;
+        margin: 10px;
+    }
+
+    .box-two {
+        max-width: 500px;
+        width: 100%;
+        display: inline-block;
+        margin: 10px;
+
+        border-radius: 7px;
+        padding: 15px 8px;
+        box-shadow: rgb(231, 231, 231) 1px 2px 3px;
+    }
+
+    .box-two select,
+    .box-two textarea,
+    .box-two input {
+        margin-bottom: 15px;
+        display: block;
+        width: 100%;
+        border: rgb(223, 223, 223) solid 1px;
+        border-radius: 4px;
+        box-shadow: rgb(223, 222, 222) 1px 2px 3px;
+
+    }
+
+    .box-two form {
+        text-align: right;
+    }
+
+    select:focus,
+    textarea:focus {
+        outline: rgb(100, 100, 100) solid 1px;
+    }
+
+    select {
+        padding-right: 30px;
+    }
+</style>
+
+<style>
+    .item-box {
+        display: flex;
+    }
+</style>
+
+<div class="container" dir="rtl">
+    <header class="ex-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 offset-xl-1">
+                    <h1>السحب</h1>
+
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </header>
+
+</div>
+<div class="container" dir="rtl">
+{% comment %}     
+{% for message in messages %}
+
+{% if message.tags == 'error' %}
+<div class="alert alert-danger d-flex align-items-center" role="alert">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+        <use xlink:href="#exclamation-triangle-fill" />
+    </svg>
+    <div>
+        {{message}}
+    </div>
+
+</div>
+
+{% elif message.tags == 'success' %}
+<div class="alert alert-success d-flex align-items-center" role="alert" >
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+        <use xlink:href="#check-circle-fill" />
+    </svg>
+    <div>
+        {{message}}
+    </div>
+
+</div>
+{% endif %}
+{% endfor %} {% endcomment %}
+</div>
+<div dir="rtl" class="item-box">
+    <div class="menu-box">
+
+        <button class="btn btn-warning details-card" id="button-addon1"><strong>الرصيد الحالي</strong>
+            <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i> {{money_now}}</strong>
+                <i class="bi bi-wallet fa-2x"></i>
+            </div>
+        </button>
+
+        <button class="btn btn-primary details-card" id="button-addon1"><strong>في انتظار السحب</strong>
+            <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                    {{TotalAmountPendingMoney}}</strong>
+
+                <svg style="width: 2.2em;" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                    class="bi bi-hourglass-split" viewBox="0 0 16 16">
+                    <path
+                        d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2h-7zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48V8.35zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z" />
+                </svg>
+
+            </div>
+        </button>
+
+        <button class="btn btn-danger details-card" id="button-addon1"><strong>إجمالي رصيد المنسحب</strong>
+            <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                    {{TotalAmountWithdrawnMoney}}</strong>
+                <i class="bi bi-arrows fa-2x"></i>
+            </div>
+        </button>
+
+
+
+    </div>
+
+    <div dir="rtl" class="box-two">
+        <form action="" method="post">
+            <i class="fa-solid fa-database"></i>
+            <p style="margin-right: 10px;"><strong>املاء البيانات واضغط سحب</strong></p>
+
+
+            <div>
+                {% csrf_token %}
+                <label for="withdrawn_type">طريقة السحب</label>
+                <select required name="withdrawn_type" id="withdrawn_type" onchange="OnWithdrawMethodChange(this)">
+                    <option value selected disabled>--اختر--</option>
+                    {% for i in withdrawal_method %}
+                    <option value="{{i.0}}">{{i.1}}</option>
+                    {% endfor %}
+                </select>
+                <div style="display: none;" id="usdt_box">
+                    <label for="withdrawn_type">الشبكة</label>
+                    <select name="usdt_network" id="usdt_network">
+                        <option value selected disabled>--اختر--</option>
+                        {% for i in usdt_network_choices %}
+                        <option value="{{i.0}}">{{i.1}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="amount">عنوان المحفظة</label>
+                    <input type="text" name="usdt_address" id="usdt_address">
+
+                </div>
+
+                <div style="display: none;" id="bank_box">
+                    
+                    <div class="mb-3">
+                        <label for="amount">الاسم كامل في الحساب البنكي</label>
+                        <input type="text" name="full_name" id="full_name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="amount">اسم البنك</label>
+                        <input type="text" name="bank_name" id="bank_name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="amount">رقم الحساب</label>
+                        <input type="text" name="bank_account_number" id="bank_account_number">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="amount">رقم الاي بان (IBAN)</label>
+                        <input type="text" name="IBAN_number" id="IBAN_number">
+                    </div>
+
+                </div>
+
+                <label for="amount">كمية السحب</label>
+                <input required type="number" name="amount" id="amount">
+
+                <label for="desc">ملاحظات عن السحب</label>
+                <textarea name="desc" id="desc" rows="3" cols="6"></textarea>
+
+                <button class="btn btn-danger" style="display: block;" id="button-addon1">
+                    <div><strong><i class="fa-solid fa-dollar-sign"></i> سحب</strong>
+
+                    </div>
+                </button>
+            </div>
+
+        </form>
+
+
+    </div>
+
+
+
+    <div class="container">
+
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">تاريخ السحب</th>
+                    <th scope="col">الحالة</th>
+                    <th scope="col">كمية السحب</th>
+                    <th scope="col">طريقة السحب</th>
+                    <th scope="col">رسالة السحب</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for withdraw in withdraws %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{withdraw.id}}</td>
+                    <td>{{withdraw.withdraw_date}}</td>
+                    <td>{{withdraw.get_status_ar}}</td>
+                    <td>{{withdraw.total_amount}}</td>
+                    <td>{{withdraw.get_withdrawal_method}}</td>
+                    <td>{{withdraw.desc}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+
+
+
+</div>
+
+
+<script>
+    function OnWithdrawMethodChange(obj){
+        let usdt_box = document.getElementById('usdt_box')
+        let bank_box = document.getElementById('bank_box')
+
+        if (obj.value == '1') {
+            usdt_box.style.display = 'block'
+            usdt_box.querySelectorAll('input, select, textaria').forEach(el=>{
+                el.required = true
+            })
+        } else {
+            usdt_box.style.display = 'none'
+            usdt_box.querySelectorAll('input, select, textaria').forEach(el=>{
+                el.required = false
+            })
+        }
+
+        if (obj.value == '2') {
+            bank_box.style.display = 'block'
+            bank_box.querySelectorAll('input, select, textaria').forEach(el=>{
+                el.required = true
+            })
+        } else {
+            bank_box.style.display = 'none'
+            bank_box.querySelectorAll('input, select, textaria').forEach(el=>{
+                el.required = false
+            })
+        }
+    }
+</script>
+{% endblock sheri %}

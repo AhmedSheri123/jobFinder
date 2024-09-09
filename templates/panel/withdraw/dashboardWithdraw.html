@@ -1,0 +1,365 @@
+{% extends 'panel_base.html' %}
+{% load static %}
+
+{% block links %}
+
+
+{% endblock %}
+
+{% block sheri %}
+<style>
+    .item-box {
+        display: flex;
+    }
+
+    .modal {
+        z-index: 2000;
+    }
+</style>
+
+<style>
+    .fa-2x {font-size: 30px;}
+    .details-card{
+        color: white;
+        max-width:270px;
+        padding-top: 4px;
+        display: block;margin: 20px; width: -webkit-fill-available; margin-top: 13px; min-height: 100px;
+    }
+
+    .ico-with-value{ display: flex; align-items: center; justify-content: space-around;
+    padding: 20px 5px
+    }
+    .menu-box {
+        display:flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    .item-box {
+        display: block;
+        
+        padding-bottom: 40px;
+
+        }
+    .box-two {
+        max-width: 500px;
+        margin: 0px 10px;
+        
+        border-radius: 7px;
+        padding: 15px 8px;
+    }
+
+    .box-two select, .box-two textarea, .box-two input {
+        margin-bottom: 15px;
+        display: block;
+        width: 100%;
+        border: rgb(223, 223, 223) solid 1px;
+        border-radius: 4px;
+        box-shadow: rgb(223, 222, 222) 1px 2px 3px;
+
+    }
+    .box-two form {
+        text-align: right;
+    }
+    select:focus, textarea:focus {
+        outline: rgb(100, 100, 100) solid 1px;
+    }
+    select {
+        padding-right: 30px;
+    }
+    
+    .filter-form label{
+        margin-right: 30px;
+    }
+
+    .filter-form input[type='submit']{
+        margin-right: 30px;
+    }
+    .filter-form{
+        padding: 20px 0px;
+    }
+</style>
+
+<div class="container" dir="rtl">
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 >السحب</h1>
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header>
+
+</div>
+
+{% for message in messages %}
+            
+{% if message.tags == 'error' %}
+<div class="alert alert-danger d-flex align-items-center" role="alert">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+    <div>
+        {{message}}
+    </div>
+    
+  </div>
+  {% elif message.tags == 'success' %}
+  <div class="alert alert-success d-flex align-items-center" role="alert">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+    <div>
+      {{message}}
+    </div>
+
+  </div>
+  {% endif %}
+  {% endfor %}
+<div dir="rtl" class="item-box">
+    <div class="menu-box">
+
+        <button class="btn btn-warning details-card"
+        id="button-addon1"><strong>قيد الانتظار</strong>
+        <div class="ico-with-value"><strong>{{Pending}}</strong>
+            <svg style="width: 2.2em;" xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-hourglass-split" viewBox="0 0 16 16">
+                <path  d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2h-7zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48V8.35zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z"/>
+              </svg>
+        </div>
+        </button>
+
+        <button class="btn btn-primary details-card"
+        id="button-addon1"><strong>وافق</strong>
+        <div class="ico-with-value"><strong>{{accepted}}</strong>
+            <i class="bi bi-clipboard-check fa-2x"></i>
+
+        </div>
+        </button>
+
+        <button class="btn btn-success details-card"
+        id="button-addon1"><strong>مكتمل</strong>
+        <div class="ico-with-value"><strong>{{Completed}}</strong>
+
+            <i class="bi bi-check2-circle fa-2x"></i>
+        </div>
+        </button>
+
+        <button class="btn btn-danger details-card"
+        id="button-addon1"><strong>ملغي</strong>
+        <div class="ico-with-value"><strong>{{Canceled}}</strong>
+
+            <i class="bi bi-ban fa-2x"></i>
+        </div>
+        </button>
+
+    </div>
+
+
+
+    <div class="container">
+        
+        <form class="filter-form" action="" method="get">
+            <label for="filter_enabled">تشغيل الفلتر</label>
+            <input {%if filter_enabled %}checked{% endif %} type="checkbox" value="1" id="filter_enabled" name="filter_enabled">
+
+
+            <label for="Pending">قيد الانتظار</label>
+            <input {%if Pending_form %}checked{% endif %} type="checkbox" value="1" id="Pending" name="Pending">
+
+            <label for="Accepted">وافق</label>
+            <input {%if Accepted_form %}checked{% endif %} type="checkbox" value="1" id="Accepted" name="Accepted">
+
+            <label for="Completed">مكتمل</label>
+            <input {%if Completed_form %}checked{% endif %} type="checkbox" value="1" id="Completed" name="Completed">
+
+            <label for="Canceled">ملغي</label>
+            <input {%if Canceled_form %}checked{% endif %} type="checkbox" value="1" id="Canceled" name="Canceled">
+
+            <input type="submit" value="بحث">
+        </form>
+
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">تاريخ السحب</th>
+                <th scope="col">الحالة</th>
+                <th scope="col">كمية السحب</th>
+                <th scope="col">طريقة السحب</th>
+                <th scope="col">رسالة السحب</th>
+                <th scope="col">وافق</th>
+                <th scope="col">الغاء</th>
+                <th scope="col">حذف</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for withdraw in withdraws %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{withdraw.id}}</td>
+                <td>{{withdraw.withdraw_date}}</td>
+                <td>{{withdraw.get_status_ar}}</td>
+                <td>{{withdraw.total_amount}}</td>
+                <td>{{withdraw.get_withdrawal_method}}</td>
+
+
+                <td>
+                    
+                    <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropdesc{{withdraw.id}}">
+                        عرض
+                    </button>
+                
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdropdesc{{withdraw.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">رسالة السحب</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                                <div dir="rtl" class="box-two">
+
+
+
+                                    
+                                    <label for="withdrawn_type">طريقة السحب</label>
+                                    <select required name="withdrawn_type" id="withdrawn_type" onchange="OnWithdrawMethodChange(this)" disabled>
+                                        <option value disabled>--اختر--</option>
+                                        {% for i in withdrawal_method %}
+                                        <option {%if withdraw.withdrawal_method == i.0%} selected {% endif %} value="{{i.0}}">{{i.1}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% if withdraw.withdrawal_method == '1' %}
+                                    <div id="usdt_box">
+                                        <label for="withdrawn_type">الشبكة</label>
+                                        <select name="usdt_network" id="usdt_network" disabled>
+                                            <option value disabled>--اختر--</option>
+                                            {% for i in usdt_network_choices %}
+                                            <option {%if withdraw.usdt_network == i.0%} selected {% endif %} value="{{i.0}}">{{i.1}}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                        <label for="amount">عنوان المحفظة</label>
+                                        <input type="text" name="usdt_address" id="usdt_address" value="{{withdraw.usdt_address}}" disabled>
+                    
+                                    {% elif withdraw.withdrawal_method == '2' %}
+
+                    
+                                        <div class="mb-3">
+                                            <label for="amount">الاسم كامل في الحساب البنكي</label>
+                                            <input type="text" value="{{withdraw.full_name}}" name="full_name" id="full_name">
+                                        </div>
+                    
+                                        <div class="mb-3">
+                                            <label for="amount">اسم البنك</label>
+                                            <input type="text" value="{{withdraw.bank_name}}" name="bank_name" id="bank_name">
+                                        </div>
+                    
+                                        <div class="mb-3">
+                                            <label for="amount">رقم الحساب</label>
+                                            <input type="text" value="{{withdraw.bank_account_number}}" name="bank_account_number" id="bank_account_number">
+                                        </div>
+                    
+                                        <div class="mb-3">
+                                            <label for="amount">رقم الاي بان (IBAN)</label>
+                                            <input type="text" value="{{withdraw.IBAN_number}}" name="IBAN_number" id="IBAN_number">
+                                        </div>
+                    
+                                    {% endif %}
+
+                                    <label for="amount">كمية السحب</label>
+                                    <input required type="text" name="amount" id="amount" disabled value="{{withdraw.total_amount}}" >
+                    
+                                    <label for="desc">ملاحظات عن السحب</label>
+                                    <textarea name="desc" id="desc" rows="3" cols="6" disabled>{{withdraw.desc}}</textarea>
+                
+                                </div>
+
+                                    <div>
+                                        <div class="m-3">
+                                            {% if withdraw.status == '0' %}
+                                            <a href="{% url 'WithdrawAccept' withdraw.id %}" class="btn btn-primary">وافق</a>
+                                            {% elif withdraw.status == '1' %}
+                                            <a href="{% url 'WithdrawComplete' withdraw.id %}" class="btn btn-primary">اكتملت</a>
+                                            {% elif withdraw.status == '2' %}
+                                            <button  disabled class="btn btn-primary">اكتملت</button>
+                                            {% elif withdraw.status == '3' %}
+                                            <button  disabled class="btn btn-primary">اكتملت</button>
+                                            {%endif%}
+        
+                                        <button {% if withdraw.status == '3' %}disabled{%endif%} type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{withdraw.id}}">
+                                            الغاء
+                                        </button>                                    
+                                        </div>
+                                        
+        
+                                    </div>
+
+                            </div>
+
+                            {% comment %} <div style="min-height: 200px;">
+                                
+                            </div> {% endcomment %}
+                            
+                        </div>
+                        </div>
+                    </div>
+                </td>
+
+
+
+
+
+
+                {% if withdraw.status == '0' %}
+                <td><a href="{% url 'WithdrawAccept' withdraw.id %}" class="btn btn-primary">وافق</a></td>
+                {% elif withdraw.status == '1' %}
+                <td><a href="{% url 'WithdrawComplete' withdraw.id %}" class="btn btn-primary">اكتملت</a></td>
+                {% elif withdraw.status == '2' %}
+                <td><button  disabled class="btn btn-primary">اكتملت</button></td>
+                {% elif withdraw.status == '3' %}
+                <td><button  disabled class="btn btn-primary">اكتملت</button></td>
+                {%endif%}
+
+                <!-- Button trigger modal -->
+                <td>
+                    
+                    <button {% if withdraw.status == '3' %}disabled{%endif%} type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{withdraw.id}}">
+                        الغاء
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop{{withdraw.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">الغاء طلب السحب</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="{% url 'WithdrawCancel' withdraw.id %}" method="post">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                    <textarea name="msg" id="msg" rows="8" style="width: 100%;"></textarea>
+                                </div>
+                                <input type="submit" class="btn btn-danger m-3" value="الغاء الطلب">
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </td>
+                <td><a href="{% url 'WithdrawDelete' withdraw.id %}" class="btn btn-danger">حذف</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+    </div>
+</div>
+
+
+
+</div>
+
+
+{% endblock sheri %}

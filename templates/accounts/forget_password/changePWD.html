@@ -23,10 +23,19 @@
                 {% csrf_token %}
  
                 <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">ادخل كلمة المرور الجديدة</label>
+                  <label for="exampleInputPassword1" class="form-label">ادخل كلمة المرور الحالية</label>
 
                   <div style="position: relative;">
                     <input type="password" name="password" id="password" class="form-control" id="exampleInputPassword1">
+                    <i class="bi bi-eye-fill" style="position: absolute; top: 7px; left: 10px;" onclick="checkPassword()"></i>
+                  </div>
+                </div>
+ 
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">ادخل كلمة المرور الجديدة</label>
+
+                  <div style="position: relative;">
+                    <input type="password" name="new_password" id="password2" class="form-control" id="exampleInputPassword1">
                     <i class="bi bi-eye-fill" style="position: absolute; top: 7px; left: 10px;" onclick="checkPassword()"></i>
                   </div>
                 </div>
@@ -45,10 +54,18 @@
 <script>
   function checkPassword(){
     let obj = document.querySelector('#password');
+    let obj2 = document.querySelector('#password2');
+    
     if (obj.type=='text') {
       obj.type = 'password'
     } else {
       obj.type = 'text'
+    }
+
+    if (obj2.type=='text') {
+      obj2.type = 'password'
+    } else {
+      obj2.type = 'text'
     }
     
   }
