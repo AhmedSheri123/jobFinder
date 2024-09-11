@@ -13,10 +13,11 @@ from .fields import dialCode
 email_from = settings.EMAIL_HOST_USER
 
 def phoneCleaner(phone=''):
-    phone = phone.replace(' ', '')
-    if phone.startswith('0'):
-        phone = phone[1:]
-    return phone
+    if phone:
+        phone = phone.replace(' ', '')
+        if phone.startswith('0'):
+            phone = phone[1:]
+        return phone
 
 def DatetimeNow(user):
     datetime_now = timezone.now()
