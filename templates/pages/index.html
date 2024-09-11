@@ -20,7 +20,7 @@
             {% get_random_ad_main request.session.ip_info as ad %}
             {% if ad %}
             <a href="{{ad.redirect_url}}" target="_blank" class="ad-main-box mt-3">
-                <img class="mb-3" style="width: 100%;" src="{{ad.img.url}}" alt="">
+                <img class="mb-3 p-2" style="width: 100%;" src="{{ad.img.url}}" alt="">
             </a>
             {% endif %}
             
@@ -315,6 +315,7 @@
                             
                             
                             <div class="tab-pane fade" id="nav-contact{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-contact-tab{{forloop.counter|add:-1}}" tabindex="0" style="max-width:700px;">
+                                {% if request.user.is_authenticated %}
 
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
@@ -322,12 +323,11 @@
                                   </div>
                           
                           
-                                    
                                   {% if userprofile.subscription.subscription.show_phone %}
-                                  {% if userprofile.show_phone and userprofile.employee_profile.phone %}
+                                  {% if userprofile.show_phone and userprofile.employeeprofile.phone %}
                                   <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
-                                    <input value="{{userprofile.employee_profile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
+                                    <input value="{{userprofile.employeeprofile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
                                       aria-describedby="basic-addon1">
                                   </div>
                                     {% endif %}
@@ -335,29 +335,29 @@
 
                     
                                     {% if userprofile.subscription.subscription.show_instgram %}
-                                    {% if userprofile.show_instgram and userprofile.employee_profile.instgram %}
+                                    {% if userprofile.show_instgram and userprofile.employeeprofile.instgram %}
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-instagram"></i></span>
-                                        <input value="{{userprofile.employee_profile.instgram}}" disabled type="text" name="instgram" class="form-control" placeholder="انستغرام" aria-label="Username"
+                                        <input value="{{userprofile.employeeprofile.instgram}}" disabled type="text" name="instgram" class="form-control" placeholder="انستغرام" aria-label="Username"
                                           aria-describedby="basic-addon1">
                                       </div>
                                     {% endif %}
                                     {% endif %}
 
                                     {% if userprofile.subscription.subscription.show_snap %}
-                                    {% if userprofile.show_snap and userprofile.employee_profile.snapshat %}
+                                    {% if userprofile.show_snapshat and userprofile.employeeprofile.snapshat %}
                                       <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-snapchat"></i></span>
-                                        <input value="{{userprofile.employee_profile.snapshat}}" disabled type="text" name="snapshat" class="form-control" placeholder="سناب شات" aria-label="Username"
+                                        <input value="{{userprofile.employeeprofile.snapshat}}" disabled type="text" name="snapshat" class="form-control" placeholder="سناب شات" aria-label="Username"
                                           aria-describedby="basic-addon1">
                                       </div>
                                     {% endif %}
                                     {% endif %}
                                     {% if userprofile.subscription.subscription.show_tiktok %}
-                                    {% if userprofile.show_tiktok and userprofile.employee_profile.tiktok %}
+                                    {% if userprofile.show_tiktok and userprofile.employeeprofile.tiktok %}
                                       <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-tiktok"></i></span>
-                                        <input value="{{userprofile.employee_profile.tiktok}}" disabled type="text" name="tiktok" class="form-control" placeholder="تيك توك" aria-label="Username"
+                                        <input value="{{userprofile.employeeprofile.tiktok}}" disabled type="text" name="tiktok" class="form-control" placeholder="تيك توك" aria-label="Username"
                                           aria-describedby="basic-addon1">
                                       </div>
                                 {% endif %}
@@ -378,17 +378,27 @@
                                             {% endif %}
 
                                             {% if userprofile.subscription.subscription.show_whats %}
-                                            {% if userprofile.show_whats and userprofile.employeeprofile.whatsapp %}
+                                            {% if userprofile.show_whatsapp and userprofile.employeeprofile.whatsapp %}
                                             <a href="{{userprofile.employeeprofile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
                                             {% endif %}
                                             {% endif %}
                                         </div>
                                     </div>
+                                    {% if request.user.id != userprofile.user.id %}
+                                        {% if userprofile.dont_receive_msg_from_companys and request.user.userprofile.is_company %}
+                                        {% elif userprofile.dont_receive_msg_from_employees and request.user.userprofile.is_employee %}
+                                        {% else %}
+                                            <a href="{% url 'createMessager' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">تواصل داخلي</a>
 
-                                        <a href="{% url 'createMessager' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">تواصل داخلي</a>
-
-
+                                        {% endif %}
+                                    
+                                    {% endif %}
+                                    {% else %}
+                                    <p>يرجى انشاء حساب لتتمكن من رؤية معلومات التواصل للتسجيل <a href="{% url 'Login' %}?is_signup=true">اضغط هنا</a> او التسجيل الدخول <a href="{% url 'Login' %}">من هنا</a></p>
+                                    {% endif %}
                             </div>
+
+
                         </div>
                     </div>
                     <button class="btn btn-primary more-info" style="width: 105px;" onclick="showHideMoreDetailes('{{forloop.counter|add:-1}}', this)">

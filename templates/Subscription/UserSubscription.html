@@ -18,8 +18,13 @@
 
         <div style="display: flex;align-items: flex-end; margin-top: 50px;" >
             <div style="display: flex;">
-                <p style="padding: 0; margin: 0;">{{subscription.currency}}</p>
-                <span style="font-size: 80px; padding: 0; margin: 0;line-height: 1;">{{subscription.subscription.price|stringformat:'d'}}</span>
+                <p style="padding: 0; margin: 0;">{{subscription.subscription.currency}}</p>
+                {% if subscription.is_default_Subscription %}
+                <span style="font-size: 35px; padding: 0; margin: 0;line-height: 1;">مجاني</span>
+                {% else %}
+                <span style="font-size: 80px; padding: 0; margin: 0;line-height: 1;">{{subscription.price|stringformat:'d'}}</span>
+
+                {% endif %}
             </div>
 
             <p style="padding: 0; margin: 0;">/متبقي {{request.user.userprofile.reminding_subscription_days}} يوم</p>
@@ -162,7 +167,11 @@
 
 
             <div style="display: grid;">
+            {% if not subscription.subscription.is_default_Subscription %}
+
                 <a href="{% url 'UserPayment' subscription.subscription.id %}" class="btn btn-outline-light mt-5 p-2" >تجديد الاشتراك</a>
+            {% endif %}
+            <a href="{% url 'Subscriptions' %}" class="btn btn-outline-light mt-5 p-2" >ترقية الاشتراك</a>
                 <a href="{% url 'DisableUserSubscription' %}" class="btn btn-danger mt-5 p-2" >الغاء الاشتراك</a>
 
             </div>

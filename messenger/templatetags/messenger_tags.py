@@ -10,7 +10,10 @@ register = template.Library()
 @stringfilter
 def get_messengers(user_id):
     messengers = MessengerModel.objects.filter(messenger_users__id__in=[user_id])
-
+    for messenger in messengers:
+        msgs = MessagesModel.objects.filter(messenger=messenger)
+        if not msgs.exists():
+            messengers = messengers.exclude(id=messenger.id)
     return messengers
 
 @register.simple_tag

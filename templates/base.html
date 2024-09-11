@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>ceveve</title>
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.3/css/bootstrap.rtl.min.css'%}" integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous">
 
     {% comment %} <link href="{% static 'bootstrap-5.3.3/css/bootstrap.min.css'%}" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> {% endcomment %}
@@ -167,7 +167,7 @@
       
     
         <script>
-
+          {% if user.is_authenticated %}
           const user_id = '{{user.id}}'
       
           {% get_ws_type 1 as ws_type %}
@@ -191,7 +191,7 @@
               }
       
           }
-
+          {% endif %}
 
           function SetMsgMainBadge(text) {
             let Badge = document.getElementById('msg-main-badge')

@@ -17,12 +17,11 @@ from django.conf import settings
 from django.db.models import Q
 from dashboard.views import has_perm
 import json
-
+from .libs import get_dial_code_by_country_code, phoneCleaner
 # Create your views here.
 email_from = settings.EMAIL_HOST_USER
 BASE_DIR = settings.BASE_DIR
 
-        
 
 
 def cvSignup(request):
@@ -30,10 +29,12 @@ def cvSignup(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        phone = request.POST.get('full_phone')
+        phone = phoneCleaner(request.POST.get('phone'))
+        country_code = request.POST.get('country_code')
 
-        employee_profiles = EmployeeProfile.objects.filter(phone=phone)
-        if employee_profiles.exists():
+        company_profiles = CompanyProfile.objects.filter(phone=phone, phone_country_code=country_code)
+        employee_profiles = EmployeeProfile.objects.filter(phone=phone, phone_country_code=country_code)
+        if employee_profiles.exists() and company_profiles.exists():
             messages.error(request, 'الرقم مسجل من قبل الرجاء تسجيل الدخول')
             return redirect('Login')
 
@@ -41,6 +42,7 @@ def cvSignup(request):
         user.set_password(password)
         employee_profile = EmployeeProfile.objects.create()
         employee_profile.phone = phone
+        employee_profile.phone_country_code=country_code = country_code
 
         employee_profile.save()
         userprofile = UserProfile.objects.create(user=user, is_employee=True, employeeprofile=employee_profile)
@@ -81,15 +83,19 @@ def cvSignupVerifyEmail(request, alt_id):
             file_reader = open(path, 'r', encoding='UTF-8')
             data = json.loads(file_reader.read())
             msg = data['msg'].format(code=OPT.secret)
-            wa_send_msg(msg, co.phone)
+            dial_code = get_dial_code_by_country_code(co.phone_country_code)
+
+            wa_send_msg(msg, co.phone, dial_code)
             return redirect('EmployeeSendWhaCodeVerify', alt_id)
 
 
     if request.method == 'POST':
         if VerifyProccess == '1':
-            full_phone = request.POST.get('full_phone')
+            phone = phoneCleaner(request.POST.get('phone'))
+            country_code = request.POST.get('country_code')
             co = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
-            co.phone = full_phone
+            co.phone = phone
+            co.phone_country_code = country_code
             co.save()
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
@@ -97,7 +103,10 @@ def cvSignupVerifyEmail(request, alt_id):
             file_reader = open(path, 'r', encoding='UTF-8')
             data = json.loads(file_reader.read())
             msg = data['msg'].format(code=OPT.secret)
-            wa_send_msg(msg, full_phone)
+
+            dial_code = get_dial_code_by_country_code(co.phone_country_code)
+            
+            wa_send_msg(msg, co.phone, dial_code)
             return redirect('EmployeeSendWhaCodeVerify', alt_id)
 
 
@@ -201,16 +210,19 @@ def companySignup(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        phone = request.POST.get('full_phone')
+        phone = phoneCleaner(request.POST.get('phone'))
+        country_code = request.POST.get('country_code')
 
-        company_profiles = CompanyProfile.objects.filter(phone=phone)
-        if company_profiles.exists():
+        employee_profiles = EmployeeProfile.objects.filter(phone=phone, phone_country_code=country_code)
+        company_profiles = CompanyProfile.objects.filter(phone=phone, phone_country_code=country_code)
+        if company_profiles.exists() and employee_profiles.exists():
             messages.error(request, 'الرقم مسجل من قبل الرجاء تسجيل الدخول')
             return redirect('Login')
         user = User.objects.create()
         user.set_password(password)
         company_profile = CompanyProfile.objects.create()
         company_profile.phone = phone
+        company_profile.phone_country_code=country_code
         company_profile.save()
 
         userprofile = UserProfile.objects.create(user=user, is_company=True, companyprofile=company_profile)
@@ -244,6 +256,7 @@ def companySignupConf(request, alt_id):
         company_profile.save()
         userprofile.company_signup_process = '4'
         userprofile.save()
+        EnableDefaultUserSubscription(userprofile.id)
         messages.success(request, '( تم التسجيل بنجاح وهو قيد المراجعة الان . وقد يستغرق ذلك ٢٤ الى ٤٨ ساعة ) . حتى تتمكن من استخدام خدمات المنصة')
 
         return redirect('SignupSetupProcess', userprofile.alt_id)
@@ -293,7 +306,9 @@ def companySignupVerifyEmail(request, alt_id):
             file_reader = open(path, 'r', encoding='UTF-8')
             data = json.loads(file_reader.read())
             msg = data['msg'].format(code=OPT.secret)
-            wa_send_msg(msg, co.phone)
+            dial_code = get_dial_code_by_country_code(co.phone_country_code)
+
+            wa_send_msg(msg, co.phone, dial_code)
             return redirect('SendWhaCodeVerify', alt_id)
 
 
@@ -301,9 +316,11 @@ def companySignupVerifyEmail(request, alt_id):
     if request.method == 'POST':
 
         if VerifyProccess == '1':
-            full_phone = request.POST.get('full_phone')
+            phone = phoneCleaner(request.POST.get('phone'))
+            country_code = request.POST.get('country_code')
             co = CompanyProfile.objects.get(id=userprofile.companyprofile.id)
-            co.phone = full_phone
+            co.phone = phone
+            co.phone_country_code = country_code
             co.save()
             OPT = WhatsappOTP.objects.create(user=user)
             OPT.save()
@@ -311,7 +328,11 @@ def companySignupVerifyEmail(request, alt_id):
             file_reader = open(path, 'r', encoding='UTF-8')
             data = json.loads(file_reader.read())
             msg = data['msg'].format(code=OPT.secret)
-            wa_send_msg(msg, full_phone)
+
+            dial_code = get_dial_code_by_country_code(co.phone_country_code)
+
+
+            wa_send_msg(msg, co.phone, dial_code)
             return redirect('SendWhaCodeVerify', alt_id)
 
         elif VerifyProccess == '2':
@@ -348,7 +369,9 @@ def SendWhaCodeVerify(request, alt_id):
             file_reader = open(path, 'r', encoding='UTF-8')
             data = json.loads(file_reader.read())
             msg = data['msg'].format(code=OPT.secret)
-            wa_send_msg(msg, co.phone)
+            dial_code = get_dial_code_by_country_code(co.phone_country_code)
+            
+            wa_send_msg(msg, co.phone, dial_code)
             return redirect('SendWhaCodeVerify', alt_id)
 
 
@@ -378,7 +401,9 @@ def EmployeeSendWhaCodeVerify(request, alt_id):
             file_reader = open(path, 'r', encoding='UTF-8')
             data = json.loads(file_reader.read())
             msg = data['msg'].format(code=OPT.secret)
-            wa_send_msg(msg, co.phone)
+            dial_code = get_dial_code_by_country_code(co.phone_country_code)
+
+            wa_send_msg(msg, co.phone, dial_code)
             return redirect('EmployeeSendWhaCodeVerify', alt_id)
 
         if code:
@@ -504,7 +529,7 @@ def Login(request):
     if request.method == 'POST':
         type = request.POST.get('type')
         email = request.POST.get('email')
-        full_phone = request.POST.get('full_phone')
+        full_phone = phoneCleaner(request.POST.get('phone'))
         password = request.POST.get('password')
         if type == '2':
             email = full_phone
@@ -629,12 +654,12 @@ def CompanySettingGernral(request):
 
         if form.is_valid():
             username = request.POST.get('username')
-            email = request.POST.get('email')
+            # email = request.POST.get('email')
             img_base64 = request.POST.get('profile_img')
 
             # user.username = username
-            user.email = email
-            user.save()
+            # user.email = email
+            # user.save()
             form2 = form.save(commit=False)
             form2.img_base64 = img_base64
             form2.save()
@@ -1096,8 +1121,9 @@ def ForgetPassword(request):
                 send_mail( subject, msg, email_from, [email] )
             messages.success(request, 'اذا كان البيات التي ادخلتها صحيحاََ فسوف تستلم رابط تغير كلمة المرور عبر البريد الالكتروني')
         elif type == '2':
-            phone = request.POST.get('full_phone')
-            users = User.objects.filter(Q(userprofile__employeeprofile__phone=phone) | Q(userprofile__companyprofile__phone=phone))
+            phone = phoneCleaner(request.POST.get('phone'))
+            country_code = request.POST.get('country_code')
+            users = User.objects.filter(Q(userprofile__employeeprofile__phone=phone, userprofile__employeeprofile__phone_country_code=country_code) | Q(userprofile__companyprofile__phone=phone, userprofile__companyprofile__phone_country_code=country_code))
             if users.exists():
                 user = users.first()
                 userprofile = UserProfile.objects.get(user=user)
@@ -1109,8 +1135,10 @@ def ForgetPassword(request):
                 profile_reverced_url = reverse('ResetPassword', kwargs={'code': code.secret})
                 callBackUrl = index_url+profile_reverced_url
 
+                dial_code = get_dial_code_by_country_code(country_code)
+                
                 msg = f'تغير كلمة المرور من هذا الرابط : {callBackUrl}'
-                wa_send_msg(msg, phone)
+                wa_send_msg(msg, phone, dial_code)
             messages.success(request, 'اذا كان البيات التي ادخلتها صحيحاََ فسوف تستلم رابط تغير كلمة المرور عبر الواتساب')
             return redirect('ForgetPassword')
 
@@ -1202,3 +1230,62 @@ def Withdrawn(request):
 
 
 
+def change_phone(request):
+    if request.method == 'POST':
+        phone = phoneCleaner(request.POST.get('phone'))
+        country_code = request.POST.get('country_code')
+
+        company_profiles = CompanyProfile.objects.filter(phone=phone, phone_country_code=country_code)
+        employee_profiles = EmployeeProfile.objects.filter(phone=phone, phone_country_code=country_code)
+        if not employee_profiles.exists() and not company_profiles.exists():
+            user = request.user
+            OPT = WhatsappOTP.objects.create(user=user, phone=phone, country_code=country_code)
+            OPT.save()
+
+            path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+            file_reader = open(path, 'r', encoding='UTF-8')
+            data = json.loads(file_reader.read())
+            msg = data['msg'].format(code=OPT.secret)
+            dial_code = get_dial_code_by_country_code(country_code)
+
+            wa_send_msg(msg, phone, dial_code)
+            messages.success(request, 'تم ارسال رمز التأكيد للرقم المدخل')
+            return redirect('verify_change_phone')
+        else:
+            messages.error(request, 'الرقم مسجل من قبل الرجاء تسجيل الدخول')
+
+    return render(request, 'accounts/change_phone/change_phone.html')
+
+
+def verify_change_phone(request):
+    user = request.user
+    userprofile = user.userprofile
+    
+
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        if code:
+            OPTS = WhatsappOTP.objects.filter(user=user, secret=code, is_finshed=False)
+            if OPTS.exists():
+                OPT = OPTS.first()
+                redirect_user = 'index'
+                if userprofile.is_company:
+                    redirect_user = 'CompanySettingGernral'
+                    company_profile = CompanyProfile.objects.get(id=userprofile.companyprofile.id)
+                    company_profile.phone = OPT.phone
+                    company_profile.phone_country_code = OPT.country_code
+                    company_profile.save()
+                elif userprofile.is_employee:
+                    redirect_user = 'CVSettingsGernral'
+                    employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
+                    employee_profile.phone = OPT.phone
+                    employee_profile.phone_country_code = OPT.country_code
+                    employee_profile.save()
+                OPT.is_finshed = True
+                OPT.save()
+                
+                messages.success(request, 'تم تغير وتأكيد رقم الهاتف بنجاح')
+                return redirect(redirect_user)
+            else:
+                messages.error(request, 'رمز تأكيد رقم الهاتف خاطئ')
+    return render(request, 'accounts/change_phone/verify_change_phone.html')

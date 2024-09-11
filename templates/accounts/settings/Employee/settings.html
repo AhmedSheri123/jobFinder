@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block links %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/css/intlTelInput.css">
 
 {% endblock links %}
 
@@ -36,28 +37,44 @@
         </div>
 
         <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">الهاتف</label>
-          <input type="text" name="phone" disabled value="{{employee_profile.phone}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <label for="exampleInputEmail1"  class="form-label">الهاتف</label>
+
+          <!-- <input type="text" name="phone" disabled dir="ltr" value="{{employee_profile.phone}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+          <input type="tel" disabled id="tel" value="{{employee_profile.phone}}"  class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
+          
+          <div class="form-text">لتغير رقم الهاتف <a href="{% url 'change_phone' %}">اضغط هنا</a></div>
         </div>
 
 
       <button class="btn btn-primary">حفظ</button>
 
       </form>
-
+      {{employee_profile.phone_country_code}}
       <a href="{% url 'changePWD' %}" class="btn btn-outline-primary mt-5"> تغير كلمة المرور</a>
     </div>
 
   </div>
-  
+
 
   
 </div>
 <div class="mt-5"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/intlTelInput.min.js"></script>
+<script>
+  const telInput = document.querySelector("#tel");
+  window.intlTelInput(telInput, {
+    initialCountry: "{{employee_profile.phone_country_code}}",
+    hiddenInput: () => ({ phone: "full_phone", country: "country_code", dialCode:"dialCode"}),
 
+    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.js",
+  });
+</script>
 
 <style>
+    .iti  {
+        width:100%;
+    }
   .bg-f1 {
     background-color: #f1f1f1;
   }

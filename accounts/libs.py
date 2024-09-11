@@ -8,8 +8,15 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.contrib.auth.models import User
 from django.utils import timezone
+from .fields import dialCode
 
 email_from = settings.EMAIL_HOST_USER
+
+def phoneCleaner(phone=''):
+    phone = phone.replace(' ', '')
+    if phone.startswith('0'):
+        phone = phone[1:]
+    return phone
 
 def DatetimeNow(user):
     datetime_now = timezone.now()
@@ -224,3 +231,12 @@ def send_msg_email_phone_noti(subject, msg, sender_id, receiver_ids):
         send_mail(subject, msg, email_from, [email] )
         wa_send_msg(msg, phone)
     create_notifications(sender_id, receiver_ids, msg)
+
+
+def get_dial_code_by_country_code(country_code=''):
+    if country_code:
+        country_code = country_code.upper()
+        for dial in dialCode:
+            if dial['code'] == country_code:
+                return dial['dial_code']
+    return ''

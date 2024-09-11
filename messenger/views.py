@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
 from accounts.libs import get_user_img
+from django.contrib import messages as dj_messages
 # Create your views here.
 
 
@@ -12,8 +13,13 @@ def messageRoom(request, room_id):
     user = request.user
 
     messenger = MessengerModel.objects.get(room_id=room_id)
-    
     receiver = messenger.messenger_users.exclude(id=user.id).first()
+
+    if receiver.userprofile.dont_receive_msg_from_companys and user.userprofile.is_company:
+        dj_messages.error(request, 'لقد الغى المستلم امكانية استقبال الرسائل')
+    elif receiver.userprofile.dont_receive_msg_from_employees and user.userprofile.is_employee:
+        dj_messages.error(request, 'لقد الغى المستلم امكانية استقبال الرسائل')
+
     is_blocked = BlockUserModel.objects.filter(creator=user, user=receiver).exists()
     is_favorite = FavoriteUserModel.objects.filter(creator=user, user=receiver).exists()
     messages_list = []

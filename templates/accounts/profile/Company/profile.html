@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load custom_tags %}
 {% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
 
 {% endblock links %}
 
@@ -66,6 +67,7 @@
                 <p>صاحب شركة</p>
             </div>
         </div>
+        <p style="line-height: 0; text-align: center; opacity: .8; font-size:14px;">رقم العضوية:{{userprofile.user.username}}</p>
 
         <div class="profile-nav-main" >
             <nav dir="rtl" class="mt-5 profile-nav">
@@ -74,6 +76,11 @@
                   {% comment %} <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">المعلومات الشخصية</button> {% endcomment %}
                   <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">التواصل</button>
                   <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false">احصائيات</button>
+                
+                  {% if request.user.id == userprofile.user.id %}
+                  <button onclick="{window.location = ('{% url 'CompanyNotificationsSettings' %}')}" class="nav-link" aria-selected="false">الاعدادات</button>
+                  <button onclick="{window.location = ('{% url 'CompanyUserSubscription' %}')}" class="nav-link" aria-selected="false">باقتي</button>
+                  {% endif %}
                 </div>
               </nav>
               {% if request.user.id == userprofile.user.id %}
@@ -132,55 +139,170 @@
         
         
         <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
-                <input value="{{user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-              </div>
-      
-      
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
-                  <input value="{{company_profile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
-                    aria-describedby="basic-addon1">
-                </div>
-      
-      
-                {% comment %} <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-facebook"></i></span>
-                  <input value="{{company_profile.facebook_profile}}" disabled type="text" name="facebook" class="form-control" placeholder="ملف الفيسبوك" aria-label="Username"
-                    aria-describedby="basic-addon1">
-                </div>
-      
-      
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-linkedin"></i></span>
-                  <input value="{{company_profile.linkedin}}" disabled type="text" name="linkedin" class="form-control" placeholder="ملف لينكدان" aria-label="Username"
-                    aria-describedby="basic-addon1">
-                </div>
-      
-      
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1"><i class="bi bi-whatsapp"></i></span>
-                  <input value="{{company_profile.whatsapp}}" disabled type="text" name="whatsapp" class="form-control" placeholder="رقم واتساب" aria-label="Username"
-                    aria-describedby="basic-addon1">
-                </div> {% endcomment %}
+            {% if request.user.is_authenticated %}
 
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
+                                    <input value="{{userprofile.user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                                  </div>
+                          
+                                  {% if userprofile.subscription.subscription.show_phone %}
+                                  {% if userprofile.show_phone and company_profile.phone %}
+                                  <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
+                                    <input value="{{company_profile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
+                                      aria-describedby="basic-addon1">
+                                  </div>
+                                    {% endif %}
+                                    {% endif %}
 
+                    
+                                    {% if userprofile.subscription.subscription.show_instgram %}
+                                    {% if userprofile.show_instgram and company_profile.instgram %}
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-instagram"></i></span>
+                                        <input value="{{company_profile.instgram}}" disabled type="text" name="instgram" class="form-control" placeholder="انستغرام" aria-label="Username"
+                                          aria-describedby="basic-addon1">
+                                      </div>
+                                    {% endif %}
+                                    {% endif %}
 
-                <div class="contact-info">
-                    <a href="{{company_profile.facebook_profile}}" target="_blank"><i class="bi bi-facebook"></i></a>
-                    <a href="{{company_profile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
-                    <a href="{{company_profile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                                    {% if userprofile.subscription.subscription.show_snap %}
+                                    {% if userprofile.show_snapshat and company_profile.snapshat %}
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-snapchat"></i></span>
+                                        <input value="{{company_profile.snapshat}}" disabled type="text" name="snapshat" class="form-control" placeholder="سناب شات" aria-label="Username"
+                                          aria-describedby="basic-addon1">
+                                      </div>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% if userprofile.subscription.subscription.show_tiktok %}
+                                    {% if userprofile.show_tiktok and company_profile.tiktok %}
+                                      <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-tiktok"></i></span>
+                                        <input value="{{company_profile.tiktok}}" disabled type="text" name="tiktok" class="form-control" placeholder="تيك توك" aria-label="Username"
+                                          aria-describedby="basic-addon1">
+                                      </div>
+                                {% endif %}
+                                {% endif %}
+                                    <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
+                                        <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
+                                        <div class="contact-info-soshial">
+                                            {% if userprofile.subscription.subscription.show_facebook %}
+                                            {% if userprofile.show_facebook and company_profile.facebook%}
+                                            <a href="{{company_profile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
+                                            {% endif %}
+                                            {% endif %}
 
-                </div>
+                                            {% if userprofile.subscription.subscription.show_linkedin %}
+                                            {% if userprofile.show_linkedin and company_profile.linkedin %}
+                                            <a href="{{company_profile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+
+                                            {% if userprofile.subscription.subscription.show_whats %}
+                                            {% if userprofile.show_whatsapp and company_profile.whatsapp %}
+                                            <a href="{{company_profile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
         </div>
 
 
-        <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
+        <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">
+
+
+            <div style="background-color: #f1f1f1;" class="menu-box">
+                {% if userprofile.is_has_subscription %}
+                <button class="btn btn-primary details-card" id="button-addon1"><strong>ايام الباقية للاشتراك</strong>
+                    <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                            {{userprofile.reminding_subscription_days}}</strong>
+                        <i class="bi bi-arrows fa-2x"></i>
+                    </div>
+                </button>
+                {% endif %}
+                <button class="btn btn-primary details-card" id="button-addon1"><strong>عدد المعجبين</strong>
+                    <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                        {% get_user_likes userprofile.user.id as likes_count %}
+                        {{likes_count}}
+                            </strong>
+                        <i class="bi bi-hand-thumbs-up fa-2x"></i>
+                    </div>
+                </button>
+                <button class="btn btn-primary details-card" id="button-addon1"><strong>عدد المشاهدات</strong>
+                    <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                        {% get_user_views userprofile.user.id as views_count %}
+                        {{views_count}}
+                            </strong>
+                        <i class="bi bi-eye fa-2x"></i>
+                    </div>
+                </button>
+
+
+
+            </div>
+
+        </div>
     </div>
 
       
 </div>
+
+
+<style>
+
+
+    .fa-2x {
+    font-size:30px;
+}
+
+.ico-with-value {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px 5px
+}
+.details-card {
+    color: white;
+    padding-top: 20px;
+    display: block;
+    margin: auto;
+    width: -webkit-fill-available;
+    margin-top: 13px;
+    min-height: 100px;
+}
+
+
+.menu-box {
+    /* max-width: 300px; */
+    width: 100%;
+    display: inline-block;
+    margin: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.menu-box button {
+    max-width: 300px;
+    margin: 10px;
+}
+
+@media (max-width: 767px) {
+    .menu-box {
+        grid-template-columns: auto auto;
+    }
+}
+
+@media (max-width: 420px) {
+    .menu-box {
+        grid-template-columns: auto;
+    }
+}
+</style>
+
+
 
 <style>
     .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
@@ -199,6 +321,7 @@
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
+  
 
     .bg-f1 {
         background-color: #f1f1f1;
@@ -227,13 +350,14 @@
 
     .contents-box p{
         background-color: #ffffff82;
-        border: 1px solid #ffffff; padding: 10px; border-radius: 10px; margin-left: 20px; margin-top: 15px;
+        border: 1px solid #ffffff; padding: 10px; border-radius: 10px; margin: 0; margin-bottom: 10px; margin-left: 10px;
     }
 
     .contents-box .questtion, .contents-box .answer{
         display: block;
         text-align: center;
         font-weight: 100;
+        width: 133px;
     }
 
     .contents-box .answer{
@@ -243,10 +367,18 @@
 
     .contents-box {
         display: flex; flex-wrap: wrap;
+        padding: 10px;
+        padding-bottom: 0;
+        padding-left: 0;
     }
 
 
 
+    .contact-info a {
+        margin-left: 5px;
+        margin-top: 5px;
+        display: flex;
+    }
 
     .contact-info {
     flex-wrap: wrap;
@@ -276,6 +408,7 @@
 
 }
 
+
 .profile-nav-main {
     display: flex;
     justify-content: center;
@@ -286,6 +419,7 @@
 @media only screen and (max-width: 768px) {
     .contents-box {
         justify-content: center;
+        flex-direction: column;
         }
 
         .profile-nav {
@@ -299,7 +433,9 @@
             border-radius: 10px;
         }
 
+
     }
 
 </style>
+
 {%endblock%}

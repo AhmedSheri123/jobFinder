@@ -4,6 +4,8 @@
 {% block links %}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/css/intlTelInput.css">
+
 {% endblock links %}
 
 
@@ -123,6 +125,16 @@
           <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
           <input type="email" name="email" disabled value="{{user.email}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
         </div>
+          
+
+        <div class="mb-3">
+          <label for="exampleInputEmail1"  class="form-label">الهاتف</label>
+
+          <!-- <input type="text" name="phone" disabled dir="ltr" value="{{employee_profile.phone}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+          <input type="tel" disabled id="tel" value="{{user.userprofile.companyprofile.phone}}"  class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
+          
+          <div class="form-text">لتغير رقم الهاتف <a href="{% url 'change_phone' %}">اضغط هنا</a></div>
+        </div>
 
         {{form}}
 
@@ -233,7 +245,25 @@ position: absolute; bottom: 0; right: 50%; transform: translate(50%, 21%); color
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>	
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/intlTelInput.min.js"></script>
+<script>
+  const telInput = document.querySelector("#tel");
+  window.intlTelInput(telInput, {
+    initialCountry: "{{user.userprofile.companyprofile.phone_country_code}}",
+    hiddenInput: () => ({ phone: "full_phone", country: "country_code", dialCode:"dialCode"}),
 
+    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.js",
+  });
+</script>
+
+<style>
+    .iti  {
+        width:100%;
+    }
+  .bg-f1 {
+    background-color: #f1f1f1;
+  }
+</style>
 <script>
   
 $(document).ready(function(){

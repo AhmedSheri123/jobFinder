@@ -266,6 +266,8 @@ class EmployeeProfile(models.Model):
     marital_status = models.CharField(max_length=255, choices = StateFields, null=True, verbose_name="الحالة الإجتماعية")
     health_status = models.ForeignKey(HealthStatusModel, on_delete=models.SET_NULL, null=True, verbose_name='الحالة الصحية')
     phone = models.CharField(max_length=250, null=True, verbose_name="الهاتف")
+    phone_country_code = models.CharField(max_length=50, null=True, default='')
+
     country = models.ForeignKey('CountrysModel', on_delete=models.SET_NULL, null=True, verbose_name='الدولة')
     employee_city = models.CharField(max_length=255, null=True, verbose_name="المدينة")
     district = models.CharField(max_length=250, null=True, verbose_name="الحي")
@@ -309,6 +311,7 @@ class CompanyProfile(models.Model):
     company_name = models.CharField(max_length=250, null=True, verbose_name="اسم المنشئة")
     complite_name = models.CharField(max_length=250, null=True, verbose_name="اسم مقدم الطلب")
     phone = models.CharField(max_length=250, null=True, verbose_name="الهاتف")
+    phone_country_code = models.CharField(max_length=50, null=True, default='')
     about_me = models.TextField(verbose_name='نبذة عني', null=True)
     img_base64 = models.TextField(blank=True, null=True)
 
@@ -449,6 +452,10 @@ class UserPaymentOrderModel(models.Model):
 class WhatsappOTP(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     secret = models.CharField(max_length=250, default=WhatsappOTPCodeGen, null=True)
+
+    phone = models.CharField(max_length=250, blank=True, null=True)
+    country_code = models.CharField(max_length=250, blank=True, null=True)
+    
     is_finshed = models.BooleanField(default=False)
 
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")

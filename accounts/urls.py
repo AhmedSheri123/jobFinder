@@ -61,4 +61,8 @@ urlpatterns = [
     path('changePWD', views.changePWD, name='changePWD'),
     path('ForgetPassword', views.ForgetPassword, name='ForgetPassword'),
     path('ResetPassword/<str:code>', views.ResetPassword, name='ResetPassword'),
+
+    path('change_phone', views.change_phone, name='change_phone'),
+    path('verify_change_phone', views.verify_change_phone, name='verify_change_phone'),
+
 ]
