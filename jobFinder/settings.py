@@ -140,7 +140,7 @@ STATICFILES_DIRS = [BASE_DIR / 'jobFinder/static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-WS_TYPE = 'ws' #set 'ws' when ssl disabled or set 'wss' on ssl enabled
+WS_TYPE = 'wss' #set 'ws' when ssl disabled or set 'wss' on ssl enabled
 
 
 
