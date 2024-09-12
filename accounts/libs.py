@@ -234,10 +234,13 @@ def send_msg_email_phone_noti(subject, msg, sender_id, receiver_ids):
     create_notifications(sender_id, receiver_ids, msg)
 
 
-def get_dial_code_by_country_code(country_code=''):
+def get_dial_code_by_country_code(country_code='', without_plus=False):
     if country_code:
         country_code = country_code.upper()
         for dial in dialCode:
             if dial['code'] == country_code:
-                return dial['dial_code']
+                dial_code = dial['dial_code']
+                if without_plus:
+                    dial_code = dial_code.replace('+', '')
+                return dial_code
     return ''

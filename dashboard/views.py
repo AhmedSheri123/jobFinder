@@ -10,7 +10,7 @@ from jobs.forms import JobsModelForm
 from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm, NationalityModelForm, AdminPermissionModelForm, HealthStatusModelForm
 from pages.models import ContactUsModel
 from django.utils import timezone
-from accounts.libs import send_msg_email_phone_noti, get_user_img, create_notifications
+from accounts.libs import send_msg_email_phone_noti, get_user_img, create_notifications, get_dial_code_by_country_code
 from django.conf import settings
 from django.core.mail import send_mail
 import datetime, json
@@ -248,6 +248,7 @@ def PanelShowEmployee(request, id):
 
     if request.user.is_superuser or has_perm(request.user):
         employee = EmployeeProfile.objects.get(id=id)
+        dial_code = get_dial_code_by_country_code(employee.phone_country_code, without_plus=True)
         userprofile = UserProfile.objects.get(employeeprofile=employee)
         if request.method == 'POST':
             state = request.POST.get('state')
@@ -258,7 +259,7 @@ def PanelShowEmployee(request, id):
             userprofile.save()
 
             send_msg_email_phone_noti(subject, msg, request.user.id, [userprofile.user.id])
-        return render(request, 'panel/employee/PanelShowEmployee.html', {'employee':employee, 'EmployeeJobStateFields':CVSignupProcessChoices, 'userprofile':userprofile})
+        return render(request, 'panel/employee/PanelShowEmployee.html', {'employee':employee, 'EmployeeJobStateFields':CVSignupProcessChoices, 'userprofile':userprofile, 'dial_code':dial_code})
 
 
 def DeleteEmployees(request, id):
@@ -345,6 +346,7 @@ def Companys(request):
 def Company(request, id):
     if request.user.is_superuser or has_perm(request.user):            
         company = UserProfile.objects.get(id=id)
+        dial_code = get_dial_code_by_country_code(company.companyprofile.phone_country_code, without_plus=True)
         img = get_user_img(company.user)
 
         if request.method == 'POST':
@@ -356,7 +358,7 @@ def Company(request, id):
             company.save()
             send_msg_email_phone_noti(subject, msg, request.user.id, [company.user.id])
 
-        return render(request, 'panel/company/company/Company.html', {'company':company, 'img':img, 'CompanySignupProcessChoices':CompanySignupProcessChoices})
+        return render(request, 'panel/company/company/Company.html', {'company':company, 'img':img, 'CompanySignupProcessChoices':CompanySignupProcessChoices, 'dial_code':dial_code})
     
 def DeleteCompanys(request, id):
     if request.user.is_superuser or has_perm(request.user):

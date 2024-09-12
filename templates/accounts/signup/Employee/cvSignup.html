@@ -169,7 +169,12 @@
         function verfiyPhone() {
           let input = document.querySelector('#tel')
           let value = input.value
-          let accepted_char = '0123456789+'
+                    if (value) {
+            if (value.startsWith('0')) {
+              value = value.substring(1, value.length)
+            }
+          }
+          let accepted_char = '0123456789'
           out = ''
           for (var i = 0; i < value.length; i++) {
             if (accepted_char.includes(value[i])){

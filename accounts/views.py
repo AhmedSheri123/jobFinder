@@ -1247,10 +1247,11 @@ def change_phone(request):
             data = json.loads(file_reader.read())
             msg = data['msg'].format(code=OPT.secret)
             dial_code = get_dial_code_by_country_code(country_code)
-
-            wa_send_msg(msg, phone, dial_code)
-            messages.success(request, 'تم ارسال رمز التأكيد للرقم المدخل')
-            return redirect('verify_change_phone')
+            print(request.POST)
+            if phone and dial_code:
+                wa_send_msg(msg, phone, dial_code)
+                messages.success(request, 'تم ارسال رمز التأكيد للرقم المدخل')
+                return redirect('verify_change_phone')
         else:
             messages.error(request, 'الرقم مسجل من قبل الرجاء تسجيل الدخول')
 
