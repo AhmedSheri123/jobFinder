@@ -226,11 +226,12 @@ def send_msg_email_phone_noti(subject, msg, sender_id, receiver_ids):
         userprofile = receiver.userprofile
         email = receiver.email
         phone = None
-        if userprofile.is_employee:phone=userprofile.employeeprofile.phone
-        else:phone=userprofile.companyprofile.phone
-
+        dial_code = None
+        if userprofile.is_employee:phone=userprofile.employeeprofile.phone;dial_code=get_dial_code_by_country_code(userprofile.employeeprofile.phone_country_code)
+        else:phone=userprofile.companyprofile.phone;dial_code=get_dial_code_by_country_code(userprofile.companyprofile.phone_country_code)
+        print(phone, dial_code)
         send_mail(subject, msg, email_from, [email] )
-        wa_send_msg(msg, phone)
+        wa_send_msg(msg, phone, dial_code)
     create_notifications(sender_id, receiver_ids, msg)
 
 
