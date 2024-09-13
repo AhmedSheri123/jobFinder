@@ -135,7 +135,7 @@
                         </button>
                         
                     </div>
-                    {% if profile_images and userprofile.subscription.subscription.distinctive_mark %}
+                    {% if userprofile.subscription.subscription.distinctive_mark %}
                     <div class="form-text mb-1 text-center fw-bold text-warning">عضو مميز</div>
                     {% endif %}
                     <a href="{% url 'Profile' userprofile.user.id %}" class="btn btn-primary mt-1" style="font-size: 12px; font-weight: bold; padding: 5px;">سيرتي</a>
@@ -321,6 +321,7 @@
                             
                             <div class="tab-pane fade" id="nav-contact{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-contact-tab{{forloop.counter|add:-1}}" tabindex="0" style="max-width:700px;">
                                 {% if request.user.is_authenticated %}
+                                {% if request.user.userprofile.is_has_subscription %}
 
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
@@ -397,6 +398,9 @@
 
                                         {% endif %}
                                     
+                                    {% endif %}
+                                    {% else %}
+                                    <p>يرجى الاشتراك باحد الباقات لمشاهدة معلومات التواصل <a href="{% url 'Subscriptions' %}">اضغط هنا لاظهار الباقات</a></p>
                                     {% endif %}
                                     {% else %}
                                     <p>يرجى انشاء حساب لتتمكن من رؤية معلومات التواصل للتسجيل <a href="{% url 'Login' %}?is_signup=true">اضغط هنا</a> او التسجيل الدخول <a href="{% url 'Login' %}">من هنا</a></p>

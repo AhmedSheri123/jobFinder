@@ -61,7 +61,7 @@
             <span class="visually-hidden">Next</span>
             </button>
         </div>
-        {% if profile_images and userprofile.subscription.subscription.distinctive_mark %}
+        {% if userprofile.subscription.subscription.distinctive_mark %}
         <div class="form-text mb-3 text-center fw-bold text-warning">عضو مميز</div>
         {% endif %}
         <div class="text-center mt-3 mb-3" style="display: flex;justify-content: center;">
@@ -108,7 +108,7 @@
 
 
             {% if request.user.id == userprofile.user.id %}
-            {% if profile_images and userprofile.subscription.subscription.referral_link_to_earn %}
+            {% if userprofile.subscription.subscription.referral_link_to_earn %}
             <a href="{% url 'MyReferralLink' %}" class="btn btn-primary m-3">
                 <i class="bi bi-coin"></i>
                 روابط الاحالة للارباح
@@ -294,6 +294,7 @@
         
         <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0" style="max-width:700px;">
             {% if request.user.is_authenticated %}
+            {% if request.user.userprofile.is_has_subscription %}
 
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
@@ -360,9 +361,15 @@
                                             <a href="{{userprofile.employeeprofile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
                                             {% endif %}
                                             {% endif %}
+
+                                            {% else %}
+                                            <p>يرجى الاشتراك باحد الباقات لمشاهدة معلومات التواصل <a href="{% url 'Subscriptions' %}">اضغط هنا لاظهار الباقات</a></p>
+                                            {% endif %}
+                                            {% else %}
+                                            <p>يرجى انشاء حساب لتتمكن من رؤية معلومات التواصل للتسجيل <a href="{% url 'Login' %}?is_signup=true">اضغط هنا</a> او التسجيل الدخول <a href="{% url 'Login' %}">من هنا</a></p>
+                                            {% endif %}
                                         </div>
                                     </div>
-                                    {% endif %}
         </div>
 
 
