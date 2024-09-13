@@ -34,14 +34,16 @@
     <div class="container p-5" style="padding-bottom: 0 !important;">
         <div class="carousel-inner carousel">
             <div class="carousel-item active">
-                {% if company_profile.img_base64 %}
-                <img src="{{company_profile.img_base64}}" class="d-block w-100" alt="...">
+                {% if company_profile.img_base64 and userprofile.subscription.subscription.show_userprofile_img %}
+                <img src="{{company_profile.img_base64}}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                 {% else %}
-                <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100" alt="...">
+                <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                 {% endif %}
             </div>
         </div>
-
+        {% if profile_images and userprofile.subscription.subscription.distinctive_mark %}
+        <div class="form-text mb-3 text-center fw-bold text-warning">عضو مميز</div>
+        {% endif %}
         <div class="text-center mt-3 mb-3" style="display: flex;justify-content: center;">
             {% if userprofile.is_active %}
             <span class="badge translate-middle p-2 bg-success border border-light rounded-circle"> </span>
@@ -223,6 +225,7 @@
                     </div>
                 </button>
                 {% endif %}
+                {% if userprofile.subscription.subscription.show_number_of_likes %}
                 <button class="btn btn-primary details-card" id="button-addon1"><strong>عدد المعجبين</strong>
                     <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
                         {% get_user_likes userprofile.user.id as likes_count %}
@@ -231,6 +234,8 @@
                         <i class="bi bi-hand-thumbs-up fa-2x"></i>
                     </div>
                 </button>
+                {% endif %}
+                {% if userprofile.subscription.subscription.show_number_of_appearances %}
                 <button class="btn btn-primary details-card" id="button-addon1"><strong>عدد المشاهدات</strong>
                     <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
                         {% get_user_views userprofile.user.id as views_count %}
@@ -239,7 +244,7 @@
                         <i class="bi bi-eye fa-2x"></i>
                     </div>
                 </button>
-
+                {% endif %}
 
 
             </div>

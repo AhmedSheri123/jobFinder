@@ -185,15 +185,15 @@
                         </div>
                             <div class="carousel-inner">
     
-                                {% if profile_images %}
+                                {% if profile_images and userprofile.subscription.subscription.show_userprofile_img %}
                                 {% for profile_image in profile_images %}
                                 <div class="carousel-item {%if forloop.counter == 1 %} active{%endif%}">
-                                    <img src="{{profile_image.img_base64}}" class="d-block w-100" alt="...">
+                                    <img src="{{profile_image.img_base64}}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                                 </div>
                                 {% endfor %}
                                 {% else %}
                                 <div class="carousel-item active">
-                                    <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100" alt="...">
+                                    <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                                 </div>
                                 {% endif %}
                             </div>
@@ -207,7 +207,9 @@
                             </button>
                             
                         </div>
-                            
+                        {% if profile_images and userprofile.subscription.subscription.distinctive_mark %}
+                        <div class="form-text mb-1 text-center fw-bold text-warning">عضو مميز</div>
+                        {% endif %}
                         <a href="{% url 'Profile' userprofile.user.id %}" class="btn btn-primary mt-1" style="font-size: 12px; font-weight: bold; padding: 5px;">سيرتي</a>
     
                         </div>
@@ -310,17 +312,20 @@
     
                             
                             <div style="display: flex;justify-content: space-around;">
+                                {% if userprofile.subscription.subscription.show_number_of_appearances %}
                                 <p style="margin: 0; margin-left: 20px;">
                                     <i class="bi bi-eye " ></i>
                                     {% get_user_views userprofile.user.id as views_count %}
                                     {{views_count}}
                                 </p>
-        
+                                {% endif %}
+                                {% if userprofile.subscription.subscription.show_number_of_likes %}
                                 <p style="margin: 0;">
                                     <i class="bi bi-hand-thumbs-up "></i>
                                     {% get_user_likes userprofile.user.id as likes_count %}
                                     {{likes_count}}
                                 </p>
+                                {% endif %}
                             </div>
                         </div>
                         

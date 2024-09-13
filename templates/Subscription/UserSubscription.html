@@ -19,7 +19,7 @@
         <div style="display: flex;align-items: flex-end; margin-top: 50px;" >
             <div style="display: flex;">
                 <p style="padding: 0; margin: 0;">{{subscription.subscription.currency}}</p>
-                {% if subscription.is_default_Subscription %}
+                {% if subscription.subscription.is_default_Subscription %}
                 <span style="font-size: 35px; padding: 0; margin: 0;line-height: 1;">مجاني</span>
                 {% else %}
                 <span style="font-size: 80px; padding: 0; margin: 0;line-height: 1;">{{subscription.price|stringformat:'d'}}</span>

@@ -73,6 +73,11 @@
     opacity: 1;
 }
 
+
+.border-prim {
+    border: double 6px gold;
+}
+
 .showDetailes .contents-box {
     grid-template-columns: auto !important;
 }
