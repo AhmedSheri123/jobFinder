@@ -20,7 +20,6 @@ def wa_send_msg(msg='', phone='', dial_code=''):
     
     dial_code = dial_code.replace('+', '')
     num = dial_code+phone
-    print(num)
     url = f'https://waapi.app/api/v1/instances/{wa_instances}/client/action/send-message'
 
     s = get_session()
