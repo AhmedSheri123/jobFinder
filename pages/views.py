@@ -13,6 +13,7 @@ from django.conf import settings
 BASE_DIR = settings.BASE_DIR
 
 def index(request):
+    user_ip = add_get_user_ip(request)
     nationalitys = NationalityModel.objects.all()
     countrys = CountrysModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True, cv_signup_process='6')
@@ -23,7 +24,7 @@ def index(request):
     #     u.append(i.user.id)
     # aa = create_notifications(request.user.id, receiver_ids=u, msg='sadas as daasd a dsa d')
     # print(aa)
-    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFields, 'nationalitys':nationalitys})
+    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFields, 'nationalitys':nationalitys, 'user_ip':user_ip})
 
 
 def Subscriptions(request):
