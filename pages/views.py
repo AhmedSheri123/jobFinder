@@ -5,7 +5,7 @@ from accounts.libs import filter_sub_price
 from .models import ContactUsModel
 from django.contrib import messages
 from django.utils import timezone
-from accounts.libs import add_get_user_ip
+from accounts.libs import add_get_user_ip, get_ip_info
 import random
 import datetime, json
 from django.conf import settings
@@ -13,7 +13,8 @@ from django.conf import settings
 BASE_DIR = settings.BASE_DIR
 
 def index(request):
-    user_ip = add_get_user_ip(request)
+    ip = request.META.get('REMOTE_ADDR')
+    user_ip = get_ip_info(ip)
     nationalitys = NationalityModel.objects.all()
     countrys = CountrysModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True, cv_signup_process='6')
