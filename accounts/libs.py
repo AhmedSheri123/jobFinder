@@ -95,8 +95,9 @@ def when_published(creation_date):
 
 
 def get_ip_info(ip):
-    # if ip == '127.0.0.1':
-    #     ip = '185.255.46.235'
+    ipp = ip
+    if ip == '127.0.0.1':
+        ip = '185.255.46.235'
         
     u = f'https://proxycheck.io/v2/{ip}?vpn=1&asn=1'
     r = requests.get(u)
@@ -111,6 +112,7 @@ def get_ip_info(ip):
             proxy = True
         obj = {
             'ip':ip,
+            'ipp':ipp,
             'country':jj.get('country'),
             'isocode':jj.get('isocode'),
             'country':jj.get('country'),
