@@ -152,7 +152,6 @@ def filter_sub_price(request, subs):
         return subs
     
     subsc = SubsPriceByCountry.objects.filter(country__name = ip_info.get('isocode'))
-    not_custimized_subs = []
 
     for sub in subs:
         sub_subsc = subsc.filter(subscription=sub)
