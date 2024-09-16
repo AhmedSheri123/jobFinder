@@ -157,7 +157,7 @@ def filter_sub_price(request, subs):
     for sub in subs:
         sub_subsc = subsc.filter(subscription=sub)
         if sub_subsc.exists():
-            subc = subsc.first()
+            subc = sub_subsc.first()
             sub.price = subc.price
             sub.currency = subc.currency
         else:
