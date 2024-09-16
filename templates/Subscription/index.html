@@ -180,7 +180,11 @@
                     <div style="display: grid;">
                         {% if subscription.is_default_Subscription %}
                             {% if request.user.is_authenticated %}
+                            {% if  request.user.userprofile.subscription.subscription.is_default_Subscription%}
+                            <a class="btn btn-light mt-5 p-2 disabled" >الباقه الحاليه</a>
+                            {% else %}
                             <a class="btn btn-light mt-5 p-2 disabled" >تم الاستخدام</a>
+                            {% endif %}
                             {% else %}
                             <a href="{% url 'Login' %}?is_signup=true" class="btn btn-outline-light mt-5 p-2" >انشاء حساب</a>
                             {% endif %}
