@@ -82,6 +82,45 @@
         <img style="width: 100%;" src="{{ad.img.url}}" alt="">
     </a>
     {% endif %}
+    <h2 style="text-align: center; padding: 70px 0;">
+        بعض السير المميزة
+    </h2>
+    <style>
+        .scrollable-cvs {
+            overflow-x: scroll; display: flex;
+        }
+
+        .scrollable-cvs .carousel-inner {
+            display:table
+        }
+
+        .scrollable-cvs img {
+            width: 90px !important;
+            height: 90px !important;
+        }
+        
+        .scrollable-cvs::-webkit-scrollbar{display: none;}
+    </style>
+    <div class="scrollable-cvs">
+        {% for i in '123456123456123456' %}
+        {% for userprofile in userprofiles|slice:6 %}
+        {% get_cv_imgs userprofile.id as profile_images %}
+
+
+        <div class="carousel-inner carousel ms-1">
+        <a href="{% url 'Profile' userprofile.user.id %}" class="carousel-item active">
+            {% if profile_images.0 and userprofile.subscription.subscription.show_userprofile_img %}
+            <img src="{{profile_images.0.img_base64}}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+            {% else %}
+            <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+            {% endif %}
+        </a>
+    </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+
+
 
     <h2 style="text-align: center; padding: 70px 0;">
         بعض الباحثين عن العمل

@@ -11,7 +11,9 @@
 <div class="Subscriptions-main-box" dir="rtl" style="display: flex; justify-content: space-between; flex-wrap: wrap; align-items: flex-start;">
     <div class="Subscriptions-card {{subscription.subscription.Theem}}" style="width: 100%;">
         <div class="subscriptions-main-ico">
-            {{subscription.subscription.ico|safe}}
+            {% if subscription.ico %}
+            <img src="{{subscription.ico.url}}" width="80" alt="">
+            {% endif %}
         </div>
         <h4 class="pt-4">{{subscription.subscription.title}}</h4>
         <p >{{subscription.subscription.subtitle}}</p>
