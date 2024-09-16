@@ -155,13 +155,17 @@ def filter_sub_price(request, subs):
 
     for sub in subs:
         sub_subsc = subsc.filter(subscription=sub)
+        if not sub_subsc.exists():
+            if not sub.is_default_Subscription:
+                subs = subs.exclude(set_defult_price=False, id=sub.id)
+
+    for sub in subs:
+        sub_subsc = subsc.filter(subscription=sub)
         if sub_subsc.exists():
             subc = sub_subsc.first()
             sub.price = subc.price
             sub.currency = subc.currency
-        else:
-            if not sub.is_default_Subscription:
-                subs = subs.exclude(set_defult_price=False, id=sub.id)
+            
     return subs
 
 
