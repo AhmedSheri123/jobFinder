@@ -144,28 +144,35 @@ def add_get_user_ip(request):
 
 def filter_sub_price(request, subs):
     from .models import SubscriptionPriceByCountry as SubsPriceByCountry
+
+    user = request.user
+    userprofile = user.userprofile
+    phone_country_code = None
+    if userprofile.is_employee:phone_country_code=userprofile.employeeprofile.phone_country_code;
+    else:phone_country_code=userprofile.companyprofile.phone_country_code;
     
-    ip_info = add_get_user_ip(request)
+    if phone_country_code:
+        ip_info = add_get_user_ip(request)
 
 
-    if not ip_info:
-        return subs
-    
-    subsc = SubsPriceByCountry.objects.filter(country__name = ip_info.get('isocode'))
+        if not ip_info:
+            return subs
+        
+        subsc = SubsPriceByCountry.objects.filter(country__name = phone_country_code)
 
-    for sub in subs:
-        sub_subsc = subsc.filter(subscription=sub)
-        if not sub_subsc.exists():
-            if not sub.is_default_Subscription:
-                subs = subs.exclude(set_defult_price=False, id=sub.id)
+        for sub in subs:
+            sub_subsc = subsc.filter(subscription=sub)
+            if not sub_subsc.exists():
+                if not sub.is_default_Subscription:
+                    subs = subs.exclude(set_defult_price=False, id=sub.id)
 
-    for sub in subs:
-        sub_subsc = subsc.filter(subscription=sub)
-        if sub_subsc.exists():
-            subc = sub_subsc.first()
-            sub.price = subc.price
-            sub.currency = subc.currency
-            
+        for sub in subs:
+            sub_subsc = subsc.filter(subscription=sub)
+            if sub_subsc.exists():
+                subc = sub_subsc.first()
+                sub.price = subc.price
+                sub.currency = subc.currency
+                
     return subs
 
 
