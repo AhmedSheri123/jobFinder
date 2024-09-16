@@ -22,7 +22,9 @@
             {% for subscription in subscriptions %}
             <div class="Subscriptions-card {{subscription.Theem}}">
                 <div class="subscriptions-main-ico">
-                    {{subscription.ico|safe}}
+                    {% if subscription.ico %}
+                    <img src="{{subscription.ico.url}}" width="40" alt="">
+                    {% endif %}
                 </div>
                 <h4 class="pt-4">{{subscription.title}}</h4>
                 <p >{{subscription.subtitle}}</p>

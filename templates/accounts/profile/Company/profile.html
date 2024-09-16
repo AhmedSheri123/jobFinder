@@ -159,7 +159,7 @@
                                     {% endif %}
 
                     
-                                    {% if userprofile.subscription.subscription.show_instgram %}
+                                    {% comment %} {% if userprofile.subscription.subscription.show_instgram %}
                                     {% if userprofile.show_instgram and company_profile.instgram %}
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-instagram"></i></span>
@@ -186,25 +186,43 @@
                                           aria-describedby="basic-addon1">
                                       </div>
                                 {% endif %}
-                                {% endif %}
+                                {% endif %} {% endcomment %}
                                     <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
                                         <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
                                         <div class="contact-info-soshial">
+                                            {% if userprofile.subscription.subscription.show_instgram %}
+                                            {% if userprofile.show_instgram and userprofile.employeeprofile.instgram%}
+                                            <a href="{{userprofile.employeeprofile.instgram}}" target="_blank"><i class="bi bi-instagram"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+
+                                            {% if userprofile.subscription.subscription.show_snap %}
+                                            {% if userprofile.show_snapshat and userprofile.employeeprofile.snapshat%}
+                                            <a href="{{userprofile.employeeprofile.snapshat}}" target="_blank"><i class="bi bi-snapchat"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+
+                                            {% if userprofile.subscription.subscription.show_tiktok %}
+                                            {% if userprofile.show_tiktok and userprofile.employeeprofile.tiktok%}
+                                            <a href="{{userprofile.employeeprofile.tiktok}}" target="_blank"><i class="bi bi-tiktok"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+
                                             {% if userprofile.subscription.subscription.show_facebook %}
-                                            {% if userprofile.show_facebook and company_profile.facebook%}
-                                            <a href="{{company_profile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
+                                            {% if userprofile.show_facebook and userprofile.employeeprofile.facebook%}
+                                            <a href="{{userprofile.employeeprofile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
                                             {% endif %}
                                             {% endif %}
 
                                             {% if userprofile.subscription.subscription.show_linkedin %}
-                                            {% if userprofile.show_linkedin and company_profile.linkedin %}
-                                            <a href="{{company_profile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                                            {% if userprofile.show_linkedin and userprofile.employeeprofile.linkedin %}
+                                            <a href="{{userprofile.employeeprofile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
                                             {% endif %}
                                             {% endif %}
 
                                             {% if userprofile.subscription.subscription.show_whats %}
-                                            {% if userprofile.show_whatsapp and company_profile.whatsapp %}
-                                            <a href="{{company_profile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                                            {% if userprofile.show_whatsapp and userprofile.employeeprofile.whatsapp %}
+                                            <a href="{{userprofile.employeeprofile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
                                             {% endif %}
                                             {% endif %}
                                             {% else %}

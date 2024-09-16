@@ -4,6 +4,7 @@ from .forms import JobsModelForm
 from django.utils import timezone
 from django.db.models import Q
 from django.contrib import messages
+from accounts.libs import filter_job_msg
 # Create your views here.
 
 def index(request):
@@ -65,6 +66,7 @@ def applyJob(request, job_id):
             msg = request.POST.get('msg')
             appliers = JobAppliersModel.objects.filter(user=user, job=job)
             if not appliers.exists():
+                msg = filter_job_msg(msg)
                 applier = JobAppliersModel.objects.create(user=user, job=job, msg=msg)
                 applier.creation_date = timezone.now()
                 applier.save()

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+
+{% endblock links %}
+
+
+{% block sheri %}
+
+<div class="pt-5 main-box-flex" style="display: flex;" dir="rtl">
+    
+
+
+    <div class="container mt-5 p-5">
+        <h4>تغير بريد الالكتروني </h4>
+        <p>الرجاء إكمال البيانات بالاسفل</p>
+
+
+        <div style="max-width: 500px;" dir="rtl">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class=" mb-3">
+                    <label for="" class="form-label">كود التأكيد</label>
+                    <!-- <span class="input-group-text" id="basic-addon1">@</span> -->
+                    <input type="text" id="code" class="form-control" oninput="verfiyCode()" name="code" placeholder="كود التاكيد" aria-label="Username" aria-describedby="basic-addon1">
+                  </div>
+
+                <input type="hidden" name="resend" value="" id="resend">
+
+                <button type="submit" class="btn btn-warning mb-2">الخطوة التالية</button>
+                {% comment %} <button type="button" onclick="{document.querySelector('#resend').value='1';document.querySelector('form').submit()}" class="btn btn-primary mb-2">اعادة ارسال رمز التاكيد</button> {% endcomment %}
+                <a href="{% url 'change_email' %}" class="btn btn-primary mb-2">تعديل البريد الالكتروني</a>
+
+              </form>
+        </div>
+
+    </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+    function verfiyCode() {
+        let input = document.querySelector('input[name="code"]')
+        let value = input.value
+        let accepted_char = '0123456789'
+        out = ''
+        for (var i = 0; i < value.length; i++) {
+          if (accepted_char.includes(value[i])){
+            
+            out = out+value[i]
+          }
+        }
+        input.value = out
+      }
+</script>
+{% endblock sheri %}

@@ -65,4 +65,7 @@ urlpatterns = [
     path('change_phone', views.change_phone, name='change_phone'),
     path('verify_change_phone', views.verify_change_phone, name='verify_change_phone'),
 
+    path('change_email', views.change_email, name='change_email'),
+    path('verify_change_email', views.verify_change_email, name='verify_change_email'),
+
 ]

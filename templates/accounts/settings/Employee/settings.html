@@ -34,6 +34,7 @@
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
           <input type="email" name="email" disabled value="{{user.email}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <div class="form-text">لتغير البريد الالكتروني <a href="{% url 'change_email' %}">اضغط هنا</a></div>
         </div>
 
         <div class="mb-3">

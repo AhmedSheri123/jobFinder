@@ -394,83 +394,76 @@
                                 
                                 
                                 <div class="tab-pane fade" id="nav-contact{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-contact-tab{{forloop.counter|add:-1}}" tabindex="0" style="max-width:700px;">
-                                {% if request.user.is_authenticated %}
-                                {% if request.user.userprofile.is_has_subscription %}
-
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
-                                    <input value="{{userprofile.user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                                  </div>
-                          
-                          
-                                  {% if userprofile.subscription.subscription.show_phone %}
-                                  {% if userprofile.show_phone and userprofile.employeeprofile.phone %}
-                                  <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
-                                    <input value="{{userprofile.employeeprofile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
-                                      aria-describedby="basic-addon1">
-                                  </div>
-                                    {% endif %}
-                                    {% endif %}
-
-                    
-                                    {% if userprofile.subscription.subscription.show_instgram %}
-                                    {% if userprofile.show_instgram and userprofile.employeeprofile.instgram %}
+                                    {% if request.user.is_authenticated %}
+                                    {% if request.user.userprofile.is_has_subscription %}
+    
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-instagram"></i></span>
-                                        <input value="{{userprofile.employeeprofile.instgram}}" disabled type="text" name="instgram" class="form-control" placeholder="انستغرام" aria-label="Username"
-                                          aria-describedby="basic-addon1">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
+                                        <input value="{{userprofile.user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
                                       </div>
-                                    {% endif %}
-                                    {% endif %}
-
-                                    {% if userprofile.subscription.subscription.show_snap %}
-                                    {% if userprofile.show_snapshat and userprofile.employeeprofile.snapshat %}
+                              
+                              
+                                      {% if userprofile.subscription.subscription.show_phone %}
+                                      {% if userprofile.show_phone and userprofile.employeeprofile.phone %}
                                       <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-snapchat"></i></span>
-                                        <input value="{{userprofile.employeeprofile.snapshat}}" disabled type="text" name="snapshat" class="form-control" placeholder="سناب شات" aria-label="Username"
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
+                                        <input value="{{userprofile.employeeprofile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
                                           aria-describedby="basic-addon1">
                                       </div>
-                                    {% endif %}
-                                    {% endif %}
-                                    {% if userprofile.subscription.subscription.show_tiktok %}
-                                    {% if userprofile.show_tiktok and userprofile.employeeprofile.tiktok %}
-                                      <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-tiktok"></i></span>
-                                        <input value="{{userprofile.employeeprofile.tiktok}}" disabled type="text" name="tiktok" class="form-control" placeholder="تيك توك" aria-label="Username"
-                                          aria-describedby="basic-addon1">
-                                      </div>
-                                {% endif %}
-                                {% endif %}
-                                    <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
-                                        <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
-                                        <div class="contact-info-soshial">
-                                            {% if userprofile.subscription.subscription.show_facebook %}
-                                            {% if userprofile.show_facebook and userprofile.employeeprofile.facebook%}
-                                            <a href="{{userprofile.employeeprofile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
-                                            {% endif %}
-                                            {% endif %}
-
-                                            {% if userprofile.subscription.subscription.show_linkedin %}
-                                            {% if userprofile.show_linkedin and userprofile.employeeprofile.linkedin %}
-                                            <a href="{{userprofile.employeeprofile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
-                                            {% endif %}
-                                            {% endif %}
-
-                                            {% if userprofile.subscription.subscription.show_whats %}
-                                            {% if userprofile.show_whatsapp and userprofile.employeeprofile.whatsapp %}
-                                            <a href="{{userprofile.employeeprofile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
-                                            {% endif %}
-                                            {% endif %}
+                                        {% endif %}
+                                        {% endif %}
+    
+    
+    
+    
+                                        <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
+                                            <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
+                                            <div class="contact-info-soshial">
+                                                {% if userprofile.subscription.subscription.show_instgram %}
+                                                {% if userprofile.show_instgram and userprofile.employeeprofile.instgram%}
+                                                <a href="{{userprofile.employeeprofile.instgram}}" target="_blank"><i class="bi bi-instagram"></i></a>
+                                                {% endif %}
+                                                {% endif %}
+    
+                                                {% if userprofile.subscription.subscription.show_snap %}
+                                                {% if userprofile.show_snapshat and userprofile.employeeprofile.snapshat%}
+                                                <a href="{{userprofile.employeeprofile.snapshat}}" target="_blank"><i class="bi bi-snapchat"></i></a>
+                                                {% endif %}
+                                                {% endif %}
+    
+                                                {% if userprofile.subscription.subscription.show_tiktok %}
+                                                {% if userprofile.show_tiktok and userprofile.employeeprofile.tiktok%}
+                                                <a href="{{userprofile.employeeprofile.tiktok}}" target="_blank"><i class="bi bi-tiktok"></i></a>
+                                                {% endif %}
+                                                {% endif %}
+    
+                                                {% if userprofile.subscription.subscription.show_facebook %}
+                                                {% if userprofile.show_facebook and userprofile.employeeprofile.facebook%}
+                                                <a href="{{userprofile.employeeprofile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
+                                                {% endif %}
+                                                {% endif %}
+    
+                                                {% if userprofile.subscription.subscription.show_linkedin %}
+                                                {% if userprofile.show_linkedin and userprofile.employeeprofile.linkedin %}
+                                                <a href="{{userprofile.employeeprofile.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                                                {% endif %}
+                                                {% endif %}
+    
+                                                {% if userprofile.subscription.subscription.show_whats %}
+                                                {% if userprofile.show_whatsapp and userprofile.employeeprofile.whatsapp %}
+                                                <a href="{{userprofile.employeeprofile.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                                                {% endif %}
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                    </div>
                                         {% if request.user.id != userprofile.user.id %}
                                             {% if userprofile.dont_receive_msg_from_companys and request.user.userprofile.is_company %}
                                             {% elif userprofile.dont_receive_msg_from_employees and request.user.userprofile.is_employee %}
                                             {% else %}
                                                 <a href="{% url 'createMessager' userprofile.user.id %}" class="btn btn-primary mt-3" style="margin: auto; display: block;">تواصل داخلي</a>
-
+    
                                             {% endif %}
+                                        
                                         {% endif %}
                                         {% else %}
                                         <p>يرجى الاشتراك باحد الباقات لمشاهدة معلومات التواصل <a href="{% url 'Subscriptions' %}">اضغط هنا لاظهار الباقات</a></p>
@@ -478,9 +471,9 @@
                                         {% else %}
                                         <p>يرجى انشاء حساب لتتمكن من رؤية معلومات التواصل للتسجيل <a href="{% url 'Login' %}?is_signup=true">اضغط هنا</a> او التسجيل الدخول <a href="{% url 'Login' %}">من هنا</a></p>
                                         {% endif %}
-    
-    
                                 </div>
+
+                                
                             </div>
                         </div>
                         <button class="btn btn-primary more-info" style="width: 105px;" onclick="showHideMoreDetailes('{{forloop.counter|add:-1}}', this)">

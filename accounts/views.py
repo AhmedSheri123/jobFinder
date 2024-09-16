@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .froms import CompanyProfileForm
 from django.contrib.sites.shortcuts import get_current_site
-from .libs import DatetimeNow, get_ip_info, filter_sub_price
+from .libs import DatetimeNow, get_ip_info, filter_sub_price, extract_soshial_profile_url
 from .payment import addInvoice, getInvoice
 from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse
@@ -733,12 +733,12 @@ def SettingsCV(request):
 
 
         phone = request.POST.get('phone')
-        facebook = request.POST.get('facebook')
-        linkedin = request.POST.get('linkedin')
-        whatsapp = request.POST.get('whatsapp')
-        instgram = request.POST.get('instgram')
-        snapshat = request.POST.get('snapshat')
-        tiktok = request.POST.get('tiktok')
+        facebook = extract_soshial_profile_url(request.POST.get('facebook'), 'facebook')
+        linkedin = extract_soshial_profile_url(request.POST.get('linkedin'), 'linkedin')
+        whatsapp = extract_soshial_profile_url(request.POST.get('whatsapp'), 'whatsapp')
+        instgram = extract_soshial_profile_url(request.POST.get('instgram'), 'instgram')
+        snapshat = extract_soshial_profile_url(request.POST.get('snapshat'), 'snapchat')
+        tiktok = extract_soshial_profile_url(request.POST.get('tiktok'), 'tiktok')
 
         user = User.objects.get(id=request.user.id)
         userprofile = UserProfile.objects.get(user=user)
@@ -1253,7 +1253,7 @@ def change_phone(request):
                 messages.success(request, 'تم ارسال رمز التأكيد للرقم المدخل')
                 return redirect('verify_change_phone')
         else:
-            messages.error(request, 'الرقم مسجل من قبل الرجاء تسجيل الدخول')
+            messages.error(request, 'الرقم مسجل من قبل الرجاء ادخال رقم اخر')
 
     return render(request, 'accounts/change_phone/change_phone.html')
 
@@ -1290,3 +1290,64 @@ def verify_change_phone(request):
             else:
                 messages.error(request, 'رمز تأكيد رقم الهاتف خاطئ')
     return render(request, 'accounts/change_phone/verify_change_phone.html')
+
+
+
+
+def change_email(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if email:
+                
+            users = User.objects.filter(email = email)
+            if not users.exists():
+                user = request.user
+                OPT = WhatsappOTP.objects.create(user=user, email=email)
+                OPT.save()
+
+                path = str(BASE_DIR / 'accounts/jsons/verification_msg.json')
+                file_reader = open(path, 'r', encoding='UTF-8')
+                data = json.loads(file_reader.read())
+                subject = data['subject']
+                msg = data['msg'].format(code=OPT.secret)
+                send_mail( subject, msg, email_from, [email] )
+                messages.success(request, 'تم ارسال رمز التأكيد للرقم المدخل')
+                return redirect('verify_change_email')
+
+            else:
+                messages.error(request, 'البريد مسجل من قبل الرجاء ادخال بريد اخر')
+        else:
+            messages.error(request, 'ادخل بريد الكتروني صالح')
+
+    return render(request, 'accounts/change_email/change_email.html')
+
+
+def verify_change_email(request):
+    user = request.user
+    userprofile = user.userprofile
+    
+
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        if code:
+            OPTS = WhatsappOTP.objects.filter(user=user, secret=code, is_finshed=False)
+            if OPTS.exists():
+                OPT = OPTS.first()
+                redirect_user = 'index'
+                if userprofile.is_employee:
+                    redirect_user = 'CompanySettingGernral'
+                elif userprofile.is_company:
+                    redirect_user = 'CVSettingsGernral'
+
+                user = User.objects.get(id=OPT.user.id)
+                user.email = OPT.email
+                user.save()
+
+                OPT.is_finshed = True
+                OPT.save()
+                
+                messages.success(request, 'تم تغير وتأكيد البريد بنجاح')
+                return redirect(redirect_user)
+            else:
+                messages.error(request, 'رمز تأكيد البريد خاطئ')
+    return render(request, 'accounts/change_email/verify_change_email.html')

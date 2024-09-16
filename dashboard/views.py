@@ -463,8 +463,11 @@ def PanelViewSubscriptions(request):
 def PanelAddSubscriptions(request):
     form = SubscriptionModelForm()
     if request.method == 'POST':
-        form = SubscriptionModelForm(request.POST)
-        form.save()
+        form = SubscriptionModelForm(data=request.POST, files=request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return redirect('PanelViewSubscriptions')
         
     return render(request, 'panel/subscriptions/sub/addSubscriptions.html', {'form':form})
 
@@ -473,7 +476,7 @@ def PanelEditSubscriptions(request, id):
     subscription = SubscriptionsModel.objects.get(id=id)
     form = SubscriptionModelForm(instance=subscription)
     if request.method == 'POST':
-        form = SubscriptionModelForm(request.POST, instance=subscription)
+        form = SubscriptionModelForm(data=request.POST, files=request.FILES,  instance=subscription)
         form.save()
 
     return render(request, 'panel/subscriptions/sub/addSubscriptions.html', {'form':form})

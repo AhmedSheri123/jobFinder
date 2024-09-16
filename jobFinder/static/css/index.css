@@ -383,6 +383,12 @@ header {
 .bi-whatsapp {
     color: #075E54 !important;
 }
+.bi-instagram {
+    color: #E1306C !important;
+}
+.bi-snapchat {
+    color: #FFFC00 !important;
+}
 
 @media only screen and (max-width: 349px) {
     .contents-box {

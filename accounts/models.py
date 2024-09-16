@@ -380,14 +380,16 @@ class ViewersCounterByIPADDR(models.Model):
 
 class SubscriptionsModel(models.Model):
     title = models.CharField(max_length=255, verbose_name='العنوان')
-    subtitle = models.CharField(max_length=255, verbose_name='العنوان الفرعي')
-    ico = models.TextField(verbose_name='الأيقونة')
+    subtitle = models.TextField(verbose_name='العنوان الفرعي')
+    ico = models.ImageField(upload_to='subscription/ico/', blank=True)
 
     Theem = models.CharField(max_length=255, choices=SubscriptionsTheemChoices, null=True, verbose_name='الثيم')
 
     is_default_Subscription = models.BooleanField(default=False, verbose_name='هل هذه الباقة الافتراضية عند التسجيل')
 
     number_of_days = models.IntegerField(default=30, verbose_name='عدد الأيام')
+
+    set_defult_price = models.BooleanField(default=False, verbose_name='عرض الباقة في الدول الغير مخصصة')
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='السعر')
     currency = models.CharField(max_length=250, choices=CurrencyChoices, default='USD', null=True, verbose_name='العملة')
 
@@ -455,6 +457,7 @@ class WhatsappOTP(models.Model):
 
     phone = models.CharField(max_length=250, blank=True, null=True)
     country_code = models.CharField(max_length=250, blank=True, null=True)
+    email = models.CharField(max_length=250, blank=True, null=True)
     
     is_finshed = models.BooleanField(default=False)
 

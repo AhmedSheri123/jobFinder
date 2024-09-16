@@ -11,7 +11,7 @@
 
 <div class="container" style="max-width: 600px;">
 
-    <form method='post'>
+    <form method='post' enctype="multipart/form-data">
         {% csrf_token %}
         {{form}}
         <button type="submit" class="btn btn-primary mt-3 mb-5">انشاء وحفظ</button>
@@ -25,11 +25,13 @@
     let Forminputs = document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="number"], select, textarea')
     Forminputs.forEach(element => {
         element.classList.add('form-control')
+        element.classList.add('mb-3')
     }); 
 
     let Formchecks = document.querySelectorAll('input[type="checkbox"]')
     Formchecks.forEach(element => {
         element.classList.add('form-check-input')
+        element.classList.add('mb-3')
         element.insertAdjacentHTML("afterend", '<div class="mt-3"></div>')
     }); 
 </script>

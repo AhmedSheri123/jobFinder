@@ -27,7 +27,6 @@
             <h1 >البحث عن أصحاب المهارات</h1>
             <div style="margin-top: 10px;">
                 <p class="arial title_desc">وظف افضل المواهب واشخاص ذوي الاختصاصات العلية</p>
-                <p class="arial title_desc">{{user_ip}}</p>
                 <br><br>
             </div>
 
@@ -340,38 +339,30 @@
                                     {% endif %}
                                     {% endif %}
 
-                    
-                                    {% if userprofile.subscription.subscription.show_instgram %}
-                                    {% if userprofile.show_instgram and userprofile.employeeprofile.instgram %}
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-instagram"></i></span>
-                                        <input value="{{userprofile.employeeprofile.instgram}}" disabled type="text" name="instgram" class="form-control" placeholder="انستغرام" aria-label="Username"
-                                          aria-describedby="basic-addon1">
-                                      </div>
-                                    {% endif %}
-                                    {% endif %}
 
-                                    {% if userprofile.subscription.subscription.show_snap %}
-                                    {% if userprofile.show_snapshat and userprofile.employeeprofile.snapshat %}
-                                      <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-snapchat"></i></span>
-                                        <input value="{{userprofile.employeeprofile.snapshat}}" disabled type="text" name="snapshat" class="form-control" placeholder="سناب شات" aria-label="Username"
-                                          aria-describedby="basic-addon1">
-                                      </div>
-                                    {% endif %}
-                                    {% endif %}
-                                    {% if userprofile.subscription.subscription.show_tiktok %}
-                                    {% if userprofile.show_tiktok and userprofile.employeeprofile.tiktok %}
-                                      <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-tiktok"></i></span>
-                                        <input value="{{userprofile.employeeprofile.tiktok}}" disabled type="text" name="tiktok" class="form-control" placeholder="تيك توك" aria-label="Username"
-                                          aria-describedby="basic-addon1">
-                                      </div>
-                                {% endif %}
-                                {% endif %}
+
+
                                     <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
                                         <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
                                         <div class="contact-info-soshial">
+                                            {% if userprofile.subscription.subscription.show_instgram %}
+                                            {% if userprofile.show_instgram and userprofile.employeeprofile.instgram%}
+                                            <a href="{{userprofile.employeeprofile.instgram}}" target="_blank"><i class="bi bi-instagram"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+
+                                            {% if userprofile.subscription.subscription.show_snap %}
+                                            {% if userprofile.show_snapshat and userprofile.employeeprofile.snapshat%}
+                                            <a href="{{userprofile.employeeprofile.snapshat}}" target="_blank"><i class="bi bi-snapchat"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+
+                                            {% if userprofile.subscription.subscription.show_tiktok %}
+                                            {% if userprofile.show_tiktok and userprofile.employeeprofile.tiktok%}
+                                            <a href="{{userprofile.employeeprofile.tiktok}}" target="_blank"><i class="bi bi-tiktok"></i></a>
+                                            {% endif %}
+                                            {% endif %}
+
                                             {% if userprofile.subscription.subscription.show_facebook %}
                                             {% if userprofile.show_facebook and userprofile.employeeprofile.facebook%}
                                             <a href="{{userprofile.employeeprofile.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>

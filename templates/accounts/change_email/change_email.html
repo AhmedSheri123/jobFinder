@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/css/intlTelInput.css">
+
+{% endblock links %}
+
+
+{% block sheri %}
+
+
+<div class="pt-5 main-box-flex" style="display: flex;" dir="rtl">
+    
+    <div class="container mt-5 p-5">
+        <h4>تغير بريد الالكتروني </h4>
+        <p>الرجاء إكمال البيانات بالاسفل</p>
+
+        <div style="max-width: 500px;" dir="rtl">
+            <form method="post" class="pt-3">
+                {% csrf_token %}
+                {% comment %} <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
+                  <input required type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div> {% endcomment %}
+
+                <div class=" mb-3">
+                    <label for="" class="form-label">ادخل البريد الجديد</label>
+                    <input type="email" id="email" class="form-control" name="email" placeholder="البريد الالكتروني" aria-label="Username" aria-describedby="basic-addon1">
+                    <div id="emailHelp" class="form-text"><strong>مهم!</strong> يرجى ادخل بريد صالح لتلقي رمز التاكيد</div>
+
+                </div>
+
+   
+                <button type="submit" class="btn btn-warning mt-3">الخطوة التالية</button>
+              </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<style>
+
+    .intl-tel-input {
+      display: table-cell;
+    }
+    .intl-tel-input .selected-flag {
+      z-index: 4;
+    }
+    .intl-tel-input .country-list {
+      z-index: 5;
+    }
+    #tel {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 0;
+    }
+    .iti  {
+        width:100%;
+    }
+    </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/intlTelInput.min.js"></script>
+    <script>
+      const telInput = document.querySelector("#tel");
+      window.intlTelInput(telInput, {
+        
+        initialCountry: "sa",
+        hiddenInput: () => ({ phone: "full_phone", country: "country_code", dialCode:"dialCode"}),
+    
+        utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.3.4/build/js/utils.js",
+      });
+    </script>
+
+    <script>
+        function checkPassword(){
+          let obj = document.querySelector('#password');
+          if (obj.type=='text') {
+            obj.type = 'password'
+          } else {
+            obj.type = 'text'
+          }
+          
+        }
+
+        function verfiyPhone() {
+          let input = document.querySelector('#tel')
+          let value = input.value
+          if (value) {
+            if (value.startsWith('0')) {
+              value = value.substring(1, value.length)
+            }
+          }
+          let accepted_char = '0123456789'
+          out = ''
+          for (var i = 0; i < value.length; i++) {
+            if (accepted_char.includes(value[i])){
+              
+              out = out+value[i]
+            }
+          }
+          input.value = out
+        }
+
+      </script>
+{% endblock sheri %}

@@ -9,15 +9,17 @@ from asgiref.sync import async_to_sync
 from django.contrib.auth.models import User
 from django.utils import timezone
 from .fields import dialCode
+import re, string
 
 email_from = settings.EMAIL_HOST_USER
 
 def phoneCleaner(phone=''):
     if phone:
-        phone = phone.replace(' ', '')
-        if phone.startswith('0'):
-            phone = phone[1:]
-        return phone
+        phone = ''.join([n for n in phone if n.isdigit()])
+        if phone:
+            phone = str(int(phone))
+            return phone
+    else:return ''
 
 def DatetimeNow(user):
     datetime_now = timezone.now()
@@ -95,7 +97,6 @@ def when_published(creation_date):
 
 
 def get_ip_info(ip):
-    ipp = ip
     if ip == '127.0.0.1':
         ip = '185.255.46.235'
         
@@ -112,7 +113,6 @@ def get_ip_info(ip):
             proxy = True
         obj = {
             'ip':ip,
-            'ipp':ipp,
             'country':jj.get('country'),
             'isocode':jj.get('isocode'),
             'country':jj.get('country'),
@@ -151,14 +151,18 @@ def filter_sub_price(request, subs):
     if not ip_info:
         return subs
     
-    subsc = SubsPriceByCountry.objects.all()
+    subsc = SubsPriceByCountry.objects.filter(country__name = ip_info.get('isocode'))
+    not_custimized_subs = []
 
     for sub in subs:
-        for subc in subsc:
-            if sub == subc.subscription:
-                if subc.country.name == ip_info.get('isocode'):
-                    sub.price = subc.price
-                    sub.currency = subc.currency
+        sub_subsc = subsc.filter(subscription=sub)
+        if sub_subsc.exists():
+            subc = subsc.first()
+            sub.price = subc.price
+            sub.currency = subc.currency
+        else:
+            if not sub.is_default_Subscription:
+                subs = subs.exclude(set_defult_price=False, id=sub.id)
     return subs
 
 
@@ -245,4 +249,56 @@ def get_dial_code_by_country_code(country_code='', without_plus=False):
                 if without_plus:
                     dial_code = dial_code.replace('+', '')
                 return dial_code
+    return ''
+
+
+def extract_urls(text):
+    pattern = r"((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))([-%()_.!~*';/?:@&=+$,A-Za-z0-9])+)"
+    regex = re.compile(pattern)
+    matches = regex.findall(text)
+    return matches
+
+def extract_soshial_profile_url(user_or_url='', type=''):
+    result = ''
+    if user_or_url:
+        user_or_url = user_or_url.replace('@', '')
+
+        matches = extract_urls(user_or_url)
+        if not matches:
+            urls = {
+                'snapchat': 'https://www.snapchat.com/add/{username}',
+                'tiktok': 'https://www.tiktok.com/@{username}',
+                'instgram': 'https://www.instagram.com/{username}',
+                'facebook': 'https://www.facebook.com/{username}',
+                'linkedin': 'https://www.linkedin.com/in/{username}',
+            }
+            if type in urls:
+                result = urls[type].format(username=user_or_url)
+            elif type == 'whatsapp':
+                result = 'https://wa.me/{phone}'.format(phone=phoneCleaner(user_or_url))
+        else:result=user_or_url
+    
+    return result
+
+
+def filter_job_msg(msg=''):
+    if msg:
+        words = ['واحد', 'اثنان', 'ثلاثة', 'اربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة', 'صفر']
+        urls = extract_urls(msg)
+        digits = [i for i in string.digits]
+
+        for ban in words:
+            ban_msg = ''.join(['*' for i in range(0, len(ban))])
+            msg = msg.replace(ban, f' "{ban_msg}" ')
+
+        for ban in urls:
+            url = ban[0]
+            print(url)
+            msg = msg.replace(url, ' "حذفت الرابط من قبل النظام" ')
+
+        for ban in digits:
+            msg = msg.replace(ban, '*')
+    
+        return msg
+    
     return ''
