@@ -146,13 +146,21 @@ def filter_sub_price(request, subs):
     from .models import SubscriptionPriceByCountry as SubsPriceByCountry
 
     user = request.user
-    userprofile = user.userprofile
     phone_country_code = None
-    if userprofile.is_employee:phone_country_code=userprofile.employeeprofile.phone_country_code
-    else:phone_country_code=userprofile.companyprofile.phone_country_code
-    
-    if phone_country_code:
+
+    if user.is_authenticated:
+
+        userprofile = user.userprofile
+        if userprofile.is_employee:phone_country_code=userprofile.employeeprofile.phone_country_code
+        else:phone_country_code=userprofile.companyprofile.phone_country_code
+        
+    else:
         ip_info = add_get_user_ip(request)
+        if ip_info:
+            phone_country_code = ip_info.get('isocode')
+
+    if phone_country_code:
+        
 
         phone_country_code = phone_country_code.upper()
         if not ip_info:
