@@ -163,9 +163,6 @@ def filter_sub_price(request, subs):
         
 
         phone_country_code = phone_country_code.upper()
-        if not ip_info:
-            return subs
-        
         subsc = SubsPriceByCountry.objects.filter(country__name = phone_country_code)
 
         for sub in subs:

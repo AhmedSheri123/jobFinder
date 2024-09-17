@@ -565,7 +565,6 @@ def Login(request):
         # userprofile = UserProfile.objects.get(user=user)
 
         # return redirect('index',)
-    print(is_signup)
     return render(request, 'accounts/login/login.html', {'is_signup':is_signup})
 
 

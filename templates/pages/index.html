@@ -88,6 +88,9 @@
     <style>
         .scrollable-cvs {
             overflow-x: scroll; display: flex;
+            -webkit-overflow-scrolling: touch;
+
+
         }
 
         .scrollable-cvs .carousel-inner {
@@ -100,6 +103,9 @@
         }
         
         .scrollable-cvs::-webkit-scrollbar{display: none;}
+
+        .link-active {
+        }
     </style>
     <div class="scrollable-cvs">
         {% for i in '123456123456123456' %}
@@ -108,19 +114,88 @@
 
 
         <div class="carousel-inner carousel ms-1">
-        <a href="{% url 'Profile' userprofile.user.id %}" class="carousel-item active">
-            {% if profile_images.0 and userprofile.subscription.subscription.show_userprofile_img %}
-            <img src="{{profile_images.0.img_base64}}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
-            {% else %}
-            <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
-            {% endif %}
-        </a>
-    </div>
+            <a href="{% url 'Profile' userprofile.user.id %}" class="carousel-item active">
+                {% if profile_images.0 and userprofile.subscription.subscription.show_userprofile_img %}
+                <img src="{{profile_images.0.img_base64}}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                {% else %}
+                <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                {% endif %}
+            </a>
+        </div>
         {% endfor %}
         {% endfor %}
     </div>
 
+    <script>
+let slider = document.querySelector('.scrollable-cvs')
 
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  slider.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    isDown = true;
+    slider.classList.add('link-active');
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+    cancelMomentumTracking();
+  });
+  
+  
+  slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.classList.remove('link-active');
+  });
+  
+  
+  slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.classList.remove('link-active');
+    beginMomentumTracking();
+  });
+  
+  
+  slider.addEventListener('mousemove', (e) => {
+    if(!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 1; //scroll-fast
+    var prevScrollLeft = slider.scrollLeft;
+    slider.scrollLeft = scrollLeft - walk;
+    velX = slider.scrollLeft - prevScrollLeft;
+  });
+  
+  // Momentum 
+  
+  var velX = 0;
+  var momentumID;
+  
+  slider.addEventListener('wheel', (e) => {
+    cancelMomentumTracking();
+  });  
+  
+  function beginMomentumTracking(){
+    cancelMomentumTracking();
+    momentumID = requestAnimationFrame(momentumLoop);
+  }
+  function cancelMomentumTracking(){
+    cancelAnimationFrame(momentumID);
+  }
+  function momentumLoop(){
+    slider.scrollLeft += velX;
+    velX *= 0.95; 
+    if (Math.abs(velX) > 0.5){
+      momentumID = requestAnimationFrame(momentumLoop);
+    }
+  }
+
+
+
+    </script>
+    
 
     <h2 style="text-align: center; padding: 70px 0;">
         بعض الباحثين عن العمل
