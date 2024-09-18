@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import JobsModel, JobAppliersModel
-from .forms import JobsModelForm
+from .models import JobsModel, JobAppliersModel, JobSalariesModel
+from .forms import JobsModelForm, JobSalariesModelForm
 from django.utils import timezone
 from django.db.models import Q
 from django.contrib import messages
@@ -75,4 +75,6 @@ def applyJob(request, job_id):
                 applier.save()
 
             return redirect('viewJob', job_id)
-    else:return redirect('Login')   
+    else:return redirect('Login')
+
+

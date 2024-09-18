@@ -5,8 +5,8 @@ from calendar import monthrange
 from django.contrib.auth.models import User
 from django.contrib import messages
 from messenger.models import MessengerModel
-from jobs.models import JobAppliersModel, JobsModel, JobStateChoices
-from jobs.forms import JobsModelForm
+from jobs.models import JobAppliersModel, JobsModel, JobStateChoices, JobSalariesModel
+from jobs.forms import JobsModelForm, JobSalariesModelForm
 from accounts.froms import SubscriptionModelForm, SubscriptionPriceByCountryModelForm, AdminADSModelForm, CountrysModelForm, NationalityModelForm, AdminPermissionModelForm, HealthStatusModelForm
 from pages.models import ContactUsModel
 from django.utils import timezone
@@ -983,3 +983,39 @@ def dashboardWithdraw(request):
     'Accepted_form': data.get('Accepted'), 'Completed_form' : data.get('Completed'), 'Canceled_form': data.get('Canceled'), 'filter_enabled': filter_enabled,
     'withdrawal_method':withdrawal_method_list, 'usdt_network_choices':usdt_network_choices
     })
+
+
+
+
+
+
+def ManageJobSalaries(request):
+    objs = JobSalariesModel.objects.all()
+
+    return render(request, 'panel/company/jobs/salaries/ManageJobSalaries.html', {'objs':objs})
+
+def AddJobSalaries(request):
+    form = JobSalariesModelForm()
+    if request.method == 'POST':
+        form = JobSalariesModelForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            ob = form.save()
+            ob.creation_date = timezone.now()
+            ob.save()
+            return redirect('ManageJobSalaries')
+    return render(request, 'panel/company/jobs/salaries/AddJobSalaries.html', {'form':form})
+
+def EditJobSalaries(request, id):
+    subscription = JobSalariesModel.objects.get(id=id)
+    form = JobSalariesModelForm(instance=subscription)
+    if request.method == 'POST':
+        form = JobSalariesModelForm(data=request.POST, files=request.FILES, instance=subscription)
+        if form.is_valid():
+            form.save()
+            return redirect('ManageJobSalaries')
+    return render(request, 'panel/company/jobs/salaries/EditJobSalaries.html', {'form':form})
+
+def DeleteJobSalaries(request, id):
+    subscription = JobSalariesModel.objects.get(id=id)
+    subscription.delete()
+    return redirect('ManageJobSalaries')

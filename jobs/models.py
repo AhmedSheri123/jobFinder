@@ -21,10 +21,16 @@ JobStateChoices = (
     ("3", "اخفاء"),
 )
 
+class JobSalariesModel(models.Model):
+    name = models.CharField(max_length=254, verbose_name='اسم الراتب')
+    def __str__(self):
+        return str(self.name)
+    
+
 class JobsModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     job_title = models.CharField(max_length=50, null=True, verbose_name="المسمى الوظيفي")
-    monthly_salary = models.CharField(max_length=50, null=True, verbose_name="الراتب الشهري")
+    monthly_salary = models.ForeignKey('JobSalariesModel', null=True, verbose_name="الراتب الشهري", on_delete=models.SET_NULL)
     cert_type = models.CharField(max_length=255, choices = CertTypeFields, null=True, verbose_name="المؤهل المطلوب")
     experiences = models.TextField(verbose_name="الخبرات المطلوبة")
     gender = models.CharField(max_length=255, choices=CompanyGenderFields, null=True, verbose_name="الجنس")

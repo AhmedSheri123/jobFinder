@@ -116,9 +116,12 @@
     {% endif %}
 
 </div>
-    <h2 style="text-align: center;margin-bottom: 0;" class="mt-5 bg-primary text-white p-3">
+<div style="display: flex; justify-content: center;">
+    <h2 style="text-align: center;margin-bottom: 0;" class="mt-5 bg-primary text-white p-3 rounded-top">
         اعضاء التميز
     </h2>
+</div>
+
     <style>
         .scrollable-cvs {
             overflow-x: scroll; display: flex;
@@ -151,8 +154,8 @@
 
     </style>
     <div class="scrollable-cvs p-2" style="background-color: #f1f1f1;box-shadow: inset #cecece 0px 0px 6px;">
-        {% for i in '123456123456123456' %}
-        {% for userprofile in userprofiles|slice:6 %}
+
+        {% for userprofile in distinctive_users %}
         {% get_cv_imgs userprofile.id as profile_images %}
 
 
@@ -163,15 +166,19 @@
                 {% else %}
 
                 {% if userprofile.employeeprofile.gender == '1' %}
-                <img src="{% static 'img/smiling-people-avatars-male.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                <img src="{% static 'img/smiling-people-avatars-male.png' %}" class="d-block w-100 {% if userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                 {% else %}
-                <img src="{% static 'img/smiling-people-avatars-female.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                <img src="{% static 'img/smiling-people-avatars-female.png' %}" class="d-block w-100 {% if userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                 {% endif %}
 
                 {% endif %}
             </a>
         </div>
-        {% endfor %}
+        {% empty %}
+        <p class="text-center fw-bold">لا يوجد اعضاء مميزين حالياََ</p>
+        <script>
+            document.querySelector('.scrollable-cvs').style.display = 'block'
+        </script>
         {% endfor %}
     </div>
 
@@ -246,10 +253,12 @@ let slider = document.querySelector('.scrollable-cvs')
 
     </script>
     
-
-    <h2 style="text-align: center;" class="mt-5 mb-3 bg-primary text-white p-3">
+    <div class="d-flex justify-content-center ">
+    <h2 style="text-align: center;" class="mt-5 mb-3 bg-primary text-white p-3 rounded">
         الباحثين عن العمل
     </h2>
+    </div>
+
 <div class="container">
     
     <div class="cv-flex-main">
@@ -287,9 +296,9 @@ let slider = document.querySelector('.scrollable-cvs')
                             {% else %}
                             <div class="carousel-item active">
                                 {% if userprofile.employeeprofile.gender == '1' %}
-                                <img src="{% static 'img/smiling-people-avatars-male.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                                <img src="{% static 'img/smiling-people-avatars-male.png' %}" class="d-block w-100 {% if  userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                                 {% else %}
-                                <img src="{% static 'img/smiling-people-avatars-female.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                                <img src="{% static 'img/smiling-people-avatars-female.png' %}" class="d-block w-100 {% if  userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                                 {% endif %}
                             </div>
                             {% endif %}

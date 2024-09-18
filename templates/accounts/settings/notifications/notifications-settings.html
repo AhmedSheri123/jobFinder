@@ -21,41 +21,50 @@
   </div>
   <hr>
   <div class="form-check form-switch">
-    <input class="form-check-input" name="show_phone" value="1" {% if userprofile.show_email %} checked {% endif %} type="checkbox" role="switch" id="show_phone">
-    <label class="form-check-label" for="show_phone">اظهار البريد الالكتروني</label>
+    <input class="form-check-input" name="show_email" value="1" {% if userprofile.show_email %} checked {% endif %} type="checkbox" role="switch" id="show_phone">
+    <label class="form-check-label" for="show_email">اظهار البريد الالكتروني</label>
   </div>
+
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_phone" value="1" {% if userprofile.show_phone %} checked {% endif %} type="checkbox" role="switch" id="show_phone">
     <label class="form-check-label" for="show_phone">اظهار رقم الاتصال</label>
   </div>
-  <div class="form-check form-switch">
-    <input class="form-check-input" name="show_phone" value="1" {% if userprofile.show_phone %} checked {% endif %} type="checkbox" role="switch" id="show_phone">
-    <label class="form-check-label" for="show_phone">اظهار رقم الاتصال</label>
-  </div>
+  {% if userprofile.subscription.subscription.show_whats %}
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_whatsapp" value="1" {% if userprofile.show_whatsapp %} checked {% endif %} type="checkbox" role="switch" id="show_whatsapp">
     <label class="form-check-label" for="show_whatsapp">اظهار رقم الواتس اب</label>
   </div>
+  {% endif %}
+  {% if userprofile.subscription.subscription.show_snap %}
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_snapshat" value="1" {% if userprofile.show_snapshat %} checked {% endif %} type="checkbox" role="switch" id="show_snapshat">
     <label class="form-check-label" for="show_snapshat">اظهار حساب السناب شات</label>
   </div>
+  {% endif %}
+  {% if userprofile.subscription.subscription.show_tiktok %}
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_tiktok" value="1" {% if userprofile.show_tiktok %} checked {% endif %} type="checkbox" role="switch" id="show_tiktok">
     <label class="form-check-label" for="show_tiktok">اظهار حساب التيك توك</label>
   </div>
+  {% endif %}
+  {% if userprofile.subscription.subscription.show_instgram %}
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_instgram" value="1" {% if userprofile.show_instgram %} checked {% endif %} type="checkbox" role="switch" id="show_instgram">
     <label class="form-check-label" for="show_instgram">اظهار حساب الانستقرام</label>
   </div>
+  {% endif %}
+  {% if userprofile.subscription.subscription.show_linkedin %}
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_linkedin" value="1" {% if userprofile.show_linkedin %} checked {% endif %} type="checkbox" role="switch" id="show_linkedin">
     <label class="form-check-label" for="show_linkedin">اظهار حساب لينك ان</label>
   </div>
+  {% endif %}
+  {% if userprofile.subscription.subscription.show_facebook %}
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_facebook" value="1" {% if userprofile.show_facebook %} checked {% endif %} type="checkbox" role="switch" id="show_facebook">
     <label class="form-check-label" for="show_facebook">اظهار حساب الفيس بوك</label>
   </div>
+  {% endif %}
   <!-- <div class="form-check form-switch">
     <input class="form-check-input" name="dont_receive_msg_from_employees" value="1" {% if userprofile.dont_receive_msg_from_employees %} checked {% endif %} type="checkbox" role="switch" id="flexSwitchCheckChecked">
     <label class="form-check-label" for="flexSwitchCheckChecked">اظهار حساب تويتر</label>

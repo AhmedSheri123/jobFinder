@@ -313,7 +313,7 @@ class CompanyProfile(models.Model):
     complite_name = models.CharField(max_length=250, null=True, verbose_name="اسم مقدم الطلب")
     phone = models.CharField(max_length=250, null=True, verbose_name="الهاتف")
     phone_country_code = models.CharField(max_length=50, null=True, default='')
-    about_me = models.TextField(verbose_name='نبذة عني', null=True)
+    about_me = models.TextField(verbose_name='نبذه مختصرة عن الشركة او النشاط', null=True)
     img_base64 = models.TextField(blank=True, null=True)
 
     country = models.ForeignKey('CountrysModel', on_delete=models.SET_NULL, null=True, verbose_name='الدولة')

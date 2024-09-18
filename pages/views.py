@@ -17,6 +17,7 @@ def index(request):
     nationalitys = NationalityModel.objects.all()
     countrys = CountrysModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True, cv_signup_process='6')
+    distinctive_users = userprofiles.filter(subscription__subscription__show_in_distinctive_users=True)
     subscriptions = filter_sub_price(request, SubscriptionsModel.objects.all())
 
     # u = []
@@ -24,7 +25,7 @@ def index(request):
     #     u.append(i.user.id)
     # aa = create_notifications(request.user.id, receiver_ids=u, msg='sadas as daasd a dsa d')
     # print(aa)
-    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFields, 'nationalitys':nationalitys})
+    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFields, 'nationalitys':nationalitys, 'distinctive_users':distinctive_users})
 
 
 def Subscriptions(request):
@@ -38,6 +39,7 @@ def AdvancedSearch(request):
     userprofiles = UserProfile.objects.filter(is_employee=True, cv_signup_process='6')
     employee_profile = EmployeeProfile.objects.all()
     countrys = CountrysModel.objects.all()
+    distinctive_users = userprofiles.filter(subscription__subscription__show_in_distinctive_users=True)
 
     desires = request.GET.get('desires')
     cert_type = request.GET.get('cert_type')
@@ -52,7 +54,6 @@ def AdvancedSearch(request):
     if age_from and age_to:
         ages = list(range(int(age_from), (int(age_to)+1)))
         userprofiles = userprofiles.filter(employeeprofile__age__in=ages)
-    
     
     if desires:
         filtered = []
@@ -99,7 +100,7 @@ def AdvancedSearch(request):
         'marital_status': marital_status,
     }
 
-    dic = {'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFields, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys, 'healthes_status':healthes_status}
+    dic = {'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFields, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys, 'healthes_status':healthes_status, 'distinctive_users':distinctive_users}
     objs = {}
     objs.update(dic)
     objs.update(inputs)

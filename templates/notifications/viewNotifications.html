@@ -51,7 +51,7 @@
             
 
             <div style="position: relative;">
-                <h6 style="margin: 0;">{{notification.sender.username}}</h6>
+                <h6 style="margin: 0;">{% if notification.sender.is_superuser %} أدارة {% else %}{{notification.sender.username}}{% endif %}</h6>
                 {% if not notification.is_readed %}
                     <span class="position-absolute top-0 end-0 translate-middle p-2 bg-danger border border-light rounded-circle">
                         <span class="visually-hidden">New alerts</span>

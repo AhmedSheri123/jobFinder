@@ -11,8 +11,8 @@
 <div class="Subscriptions-main-box" dir="rtl" style="display: flex; justify-content: space-between; flex-wrap: wrap; align-items: flex-start;">
     <div class="Subscriptions-card {{subscription.subscription.Theem}}" style="width: 100%;">
         <div class="subscriptions-main-ico">
-            {% if subscription.ico %}
-            <img src="{{subscription.ico.url}}" width="80" alt="">
+            {% if subscription.subscription.ico %}
+            <img src="{{subscription.subscription.ico.url}}" width="80" alt="">
             {% endif %}
         </div>
         <h4 class="pt-4">{{subscription.subscription.title}}</h4>
@@ -150,7 +150,7 @@
             </p>
             
             <p style="display: flex; align-items: center;">
-                {% if subscription.show_on_first_search %}
+                {% if subscription.subscription.show_on_first_search %}
                 <i class="bi bi-check2 ms-2" ></i>
                 {% else %}
                 <i class="bi bi-x ms-2" ></i>
@@ -159,7 +159,7 @@
             </p>
 
             <p style="display: flex; align-items: center;">
-                {% if subscription.show_in_distinctive_users %}
+                {% if subscription.subscription.show_in_distinctive_users %}
                 <i class="bi bi-check2 ms-2" ></i>
                 {% else %}
                 <i class="bi bi-x ms-2" ></i>

@@ -222,9 +222,9 @@
                                 {% else %}
                                 <div class="carousel-item active">
                                     {% if userprofile.employeeprofile.gender == '1' %}
-                                    <img src="{% static 'img/smiling-people-avatars-male.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                                    <img src="{% static 'img/smiling-people-avatars-male.png' %}" class="d-block w-100 {% if  userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                                     {% else %}
-                                    <img src="{% static 'img/smiling-people-avatars-female.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                                    <img src="{% static 'img/smiling-people-avatars-female.png' %}" class="d-block w-100 {% if  userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                                     {% endif %}
                                 </div>
                                 {% endif %}

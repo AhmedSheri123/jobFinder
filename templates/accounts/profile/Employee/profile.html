@@ -46,9 +46,9 @@
             {% else %}
             <div class="carousel-item active">
                 {% if userprofile.employeeprofile.gender == '1' %}
-                <img src="{% static 'img/smiling-people-avatars-male.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                <img src="{% static 'img/smiling-people-avatars-male.png' %}" class="d-block w-100 {% if  userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                 {% else %}
-                <img src="{% static 'img/smiling-people-avatars-female.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                <img src="{% static 'img/smiling-people-avatars-female.png' %}" class="d-block w-100 {% if  userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
                 {% endif %}
             </div>
             {% endif %}
@@ -68,13 +68,13 @@
         {% if userprofile.subscription.subscription.distinctive_mark %}
         <div class="form-text mb-3 text-center fw-bold text-warning">عضو مميز</div>
         {% endif %}
-        <div class="text-center mt-3 mb-3" style="display: flex;justify-content: center;">
+        <div class="text-center mt-3 mb-3" style="display: flex;justify-content: center;     align-items: center;">
             {% if userprofile.is_active %}
-            <span class="badge translate-middle p-2 bg-success border border-light rounded-circle"> </span>
+            <span class="badge translate-middle p-2 mt-2 bg-success border border-light rounded-circle"> </span>
             {% else %}
-            <span class="badge translate-middle p-2 bg-danger border border-light rounded-circle"> </span>
+            <span class="badge translate-middle p-2 mt-2 bg-danger border border-light rounded-circle"> </span>
             {% endif %}
-            <h4 style="line-height: 0;">{{employee_profile.name}}</h4>
+            <h4>{{employee_profile.name}}</h4>
         </div>
         <div  class="main-info mb-3">
 

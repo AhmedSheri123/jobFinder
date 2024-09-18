@@ -93,8 +93,11 @@
                 </p>
             <div class="cp-info">
                 <div class="bg-white shadow-sm p-2 rounded-3 m-0 me-2">
-                    <label dir="rtl" class=" form-label">الشركة المعلنة: </label>
-                    <p dir="rtl" class="form-text m-0" >{{job.user.userprofile.companyprofile.company_name}} في {{job.user.userprofile.companyprofile.country.get_name_display}}/{{job.user.userprofile.companyprofile.employee_city}}</p>
+                    <label dir="rtl" class=" form-label m-0">الشركة المعلنة: </label>
+                    <label dir="rtl" class=" form-label m-0 d-block">
+                    <a href="{% url 'Profile' job.user.id %}">{{job.user.userprofile.companyprofile.company_name}}</a>
+                    </label>
+                    <p dir="rtl" class="form-text m-0" > في {{job.user.userprofile.companyprofile.country.get_name_display}}/{{job.user.userprofile.companyprofile.employee_city}}</p>
                 </div>
 
                 {% is_user_apllied job.id request.user.id as user_apllied %}

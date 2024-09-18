@@ -88,4 +88,9 @@ urlpatterns = [
 
 
     path('ContactUsSendReplay/<int:id>', views.ContactUsSendReplay, name='ContactUsSendReplay'),
+
+    path('ManageJobSalaries', views.ManageJobSalaries, name='ManageJobSalaries'),
+    path('AddJobSalaries', views.AddJobSalaries, name='AddJobSalaries'),
+    path('EditJobSalaries/<int:id>', views.EditJobSalaries, name='EditJobSalaries'),
+    path('DeleteJobSalaries/<int:id>', views.DeleteJobSalaries, name='DeleteJobSalaries'),
 ]
