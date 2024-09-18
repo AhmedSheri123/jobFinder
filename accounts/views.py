@@ -16,8 +16,9 @@ from messenger.models import FavoriteUserModel
 from django.conf import settings
 from django.db.models import Q
 from dashboard.views import has_perm
-import json
 from .libs import get_dial_code_by_country_code, phoneCleaner
+from jobs.models import JobAppliersModel, JobsModel
+import json
 # Create your views here.
 email_from = settings.EMAIL_HOST_USER
 BASE_DIR = settings.BASE_DIR
@@ -618,27 +619,28 @@ def Profile(request, id):
 def CVProfile(request, id):
     UserLikeURL = reverse('UserLike', kwargs={'liked_id':id})
     UserFavURL = reverse('AddDeleteFavorite', kwargs={'receiver_id':id})
+    user = User.objects.get(id=id)
     
-
+    applier = JobAppliersModel.objects.filter(user=user)
     is_liked = UserLikeModel.objects.filter(liker=request.user, liked__id=id).exists()
     is_fav = FavoriteUserModel.objects.filter(creator=request.user, user__id=id).exists()
 
-    user = User.objects.get(id=id)
     userprofile = user.userprofile
     employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
     profile_images = EmployeeProfileImages.objects.filter(user=user)
     if userprofile.cv_signup_process == '5':
         messages.error(request, 'حاليا لن يتم ظهور حسابك ضمن نتائج حتى تتم مراجعته واعتماده من قبل الادارة')
-    return render(request, 'accounts/profile/Employee/profile.html', {'is_fav':is_fav, 'is_liked':is_liked, 'UserFavURL':UserFavURL, 'UserLikeURL':UserLikeURL, 'employee_profile':employee_profile, 'profile_images':profile_images, 'userprofile':userprofile})
+    return render(request, 'accounts/profile/Employee/profile.html', {'is_fav':is_fav, 'is_liked':is_liked, 'UserFavURL':UserFavURL, 'UserLikeURL':UserLikeURL, 'employee_profile':employee_profile, 'profile_images':profile_images, 'userprofile':userprofile, 'applier':applier})
 
 def CPProfile(request, id):
 
     user = User.objects.get(id=id)
     userprofile = user.userprofile
     company_profile = userprofile.companyprofile
+    jobs = JobsModel.objects.filter(user=user)
     if userprofile.cv_signup_process == '4':
         messages.error(request, 'حاليا لن تتمكن من التواصل مع صاحب السير او عرض سيرتهم حتى تتم مراجعت حسابك واعتماده من قبل الادارة')
-    return render(request, 'accounts/profile/Company/profile.html', {'company_profile':company_profile, 'userprofile':userprofile})
+    return render(request, 'accounts/profile/Company/profile.html', {'company_profile':company_profile, 'userprofile':userprofile, 'jobs':jobs})
 
 def CompanySettingGernral(request):
     index_url = request.build_absolute_uri('/')

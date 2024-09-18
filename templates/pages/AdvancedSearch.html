@@ -221,7 +221,11 @@
                                 {% endfor %}
                                 {% else %}
                                 <div class="carousel-item active">
-                                    <img src="{% static '/img/default-profile-img-2.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                                    {% if userprofile.employeeprofile.gender == '1' %}
+                                    <img src="{% static 'img/smiling-people-avatars-male.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                                    {% else %}
+                                    <img src="{% static 'img/smiling-people-avatars-female.png' %}" class="d-block w-100 {% if profile_images and userprofile.subscription.subscription.distinctive_frame %} border-prim {% endif %}" alt="...">
+                                    {% endif %}
                                 </div>
                                 {% endif %}
                             </div>

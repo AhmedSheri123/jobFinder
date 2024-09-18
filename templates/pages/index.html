@@ -138,8 +138,17 @@
         
         .scrollable-cvs::-webkit-scrollbar{display: none;}
 
-        .link-active {
+        .link-active a{
+            pointer-events: none;
+            cursor: move;
+
         }
+
+        .link-active {
+            cursor: move;
+        }
+
+
     </style>
     <div class="scrollable-cvs p-2" style="background-color: #f1f1f1;box-shadow: inset #cecece 0px 0px 6px;">
         {% for i in '123456123456123456' %}
@@ -173,7 +182,7 @@ let slider = document.querySelector('.scrollable-cvs')
   let startX;
   let scrollLeft;
 
-  slider.addEventListener('mousedown', (e) => {
+  slider.addEventListener('dragstart', (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -201,6 +210,7 @@ let slider = document.querySelector('.scrollable-cvs')
   slider.addEventListener('mousemove', (e) => {
     if(!isDown) return;
     e.preventDefault();
+    e.stopPropagation();
     const x = e.pageX - slider.offsetLeft;
     const walk = (x - startX) * 1; //scroll-fast
     var prevScrollLeft = slider.scrollLeft;

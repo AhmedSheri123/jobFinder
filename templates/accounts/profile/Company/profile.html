@@ -242,6 +242,7 @@
 
 
             <div style="background-color: #f1f1f1;" class="menu-box">
+                {% if request.user.id == userprofile.user.id %}
                 {% if userprofile.is_has_subscription %}
                 <button class="btn btn-primary details-card" id="button-addon1"><strong>ايام الباقية للاشتراك</strong>
                     <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
@@ -249,6 +250,7 @@
                         <i class="bi bi-arrows fa-2x"></i>
                     </div>
                 </button>
+                {% endif %}
                 {% endif %}
                 {% if userprofile.subscription.subscription.show_number_of_likes %}
                 <button class="btn btn-primary details-card" id="button-addon1"><strong>عدد المعجبين</strong>
@@ -271,6 +273,12 @@
                 </button>
                 {% endif %}
 
+                <button class="btn btn-primary details-card" id="button-addon1"><strong>الوظائف المعلنة</strong>
+                    <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
+                            {{jobs.count}}</strong>
+                        <i class="bi bi-megaphone fa-2x"></i>
+                    </div>
+                </button>
 
             </div>
 
