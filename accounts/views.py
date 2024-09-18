@@ -960,6 +960,7 @@ def EmployeeNotificationsSettings(request):
     if request.method == 'POST':
         dont_receive_msg_from_companys = request.POST.get('dont_receive_msg_from_companys')
         dont_receive_msg_from_employees = request.POST.get('dont_receive_msg_from_employees')
+        show_email = request.POST.get('show_email')
         show_phone = request.POST.get('show_phone')
         show_facebook = request.POST.get('show_facebook')
         show_linkedin = request.POST.get('show_linkedin')
@@ -981,6 +982,11 @@ def EmployeeNotificationsSettings(request):
             userprofile.dont_receive_msg_from_employees = False
 
 
+
+        if show_email:
+            userprofile.show_email = True
+        else:
+            userprofile.show_email = False
 
         if show_phone:
             userprofile.show_phone = True
@@ -1025,6 +1031,15 @@ def CompanyNotificationsSettings(request):
     if request.method == 'POST':
         dont_receive_msg_from_companys = request.POST.get('dont_receive_msg_from_companys')
         dont_receive_msg_from_employees = request.POST.get('dont_receive_msg_from_employees')
+        show_email = request.POST.get('show_email')
+        show_phone = request.POST.get('show_phone')
+        show_facebook = request.POST.get('show_facebook')
+        show_linkedin = request.POST.get('show_linkedin')
+        show_whatsapp = request.POST.get('show_whatsapp')
+        show_instgram = request.POST.get('show_instgram')
+        show_snapshat = request.POST.get('show_snapshat')
+        show_tiktok = request.POST.get('show_tiktok')
+
         userprofile = UserProfile.objects.get(user=user)
         if dont_receive_msg_from_companys:
             userprofile.dont_receive_msg_from_companys = True
@@ -1036,6 +1051,48 @@ def CompanyNotificationsSettings(request):
         else:
             userprofile.dont_receive_msg_from_employees = False
             
+
+
+        if show_email:
+            userprofile.show_email = True
+        else:
+            userprofile.show_email = False
+
+        if show_phone:
+            userprofile.show_phone = True
+        else:
+            userprofile.show_phone = False
+
+        if show_facebook:
+            userprofile.show_facebook = True
+        else:
+            userprofile.show_facebook = False
+
+        if show_linkedin:
+            userprofile.show_linkedin = True
+        else:
+            userprofile.show_linkedin = False
+
+        if show_whatsapp:
+            userprofile.show_whatsapp = True
+        else:
+            userprofile.show_whatsapp = False
+
+        if show_instgram:
+            userprofile.show_instgram = True
+        else:
+            userprofile.show_instgram = False
+
+        if show_snapshat:
+            userprofile.show_snapshat = True
+        else:
+            userprofile.show_snapshat = False
+
+        if show_tiktok:
+            userprofile.show_tiktok = True
+        else:
+            userprofile.show_tiktok = False
+
         userprofile.save()
 
     return render(request, 'accounts/settings/Company/notifications-settings.html')

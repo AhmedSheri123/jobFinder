@@ -35,6 +35,15 @@
                 <i class="bi bi-search-heart"></i>
             </button>
 
+
+            <div class=" input-group-text mb-2 hideed last rounded" style="width: 100%;">
+                <input type="text" id="amount" readonly="" style="border:0; color:#3e3e3e; font-weight:bold;">
+                <input type="hidden" id="age_from" name="age_from">
+                <input type="hidden" id="age_to" name="age_to">
+               
+              <div id="slider-range"></div>
+            </div>
+
             <select class="form-control hideed last" name="marital_status" id="" >
                 <option value="">الحالة الإجتماعية</option>
                 {% for countr in StateFields %}
@@ -81,7 +90,26 @@
 
 </form>
 
+<script>
+    $( function() {
+      $( "#slider-range" ).slider({
+        range: true,
+        min: 13,
+        max: 99,
+        values: [ 18, 99 ],
+        slide: function( event, ui ) {
+          $( "#amount" ).val('العمر: '+ ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+          $( "#age_from" ).val(ui.values[ 0 ])
+          $( "#age_to" ).val(ui.values[ 1 ])
+        }
+      });
+      $( "#amount" ).val('العمر: '+  $( "#slider-range" ).slider( "values", 0 ) +
+        " - " + $( "#slider-range" ).slider( "values", 1 ) );
+      $( "#age_from" ).val($( "#slider-range" ).slider( "values", 0 ))
+      $( "#age_to" ).val($( "#slider-range" ).slider( "values", 1 ))
 
+    } );
+    </script>
 
 
 
@@ -303,7 +331,8 @@
 
                     <div class="mt-1" style="display: flex; justify-content: space-between;flex-direction: column; font-weight: bold;">
 
-                        <p style="font-size: 14px; text-align: center; margin: 0;" class="mb-2">
+
+                        <p style="font-size: 14px; text-align: center; margin: 0;" class="mb-2 btn-primary btn p-1 shadow-sm rounded-3">
                             <i class="bi bi-geo-alt "></i>يقيم في
                             {{userprofile.employeeprofile.country.get_name_display}}/{{userprofile.employeeprofile.employee_city}}
                         </p>
@@ -396,17 +425,18 @@
                                 <div class="tab-pane fade" id="nav-contact{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-contact-tab{{forloop.counter|add:-1}}" tabindex="0" style="max-width:700px;">
                                     {% if request.user.is_authenticated %}
                                     {% if request.user.userprofile.is_has_subscription %}
-    
+                                    {% if userprofile.show_email%}
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
+                                        <a href="mailto:{{userprofile.user.email}}" class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></a>
                                         <input value="{{userprofile.user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
                                       </div>
-                              
+                                      {% endif %}
                               
                                       {% if userprofile.subscription.subscription.show_phone %}
                                       {% if userprofile.show_phone and userprofile.employeeprofile.phone %}
                                       <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
+                                        <a class="input-group-text" href="tel:{{userprofile.employeeprofile.phone}}"  id="basic-addon1"><i class="bi bi-telephone-fill"></i></a>
+                                        
                                         <input value="{{userprofile.employeeprofile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
                                           aria-describedby="basic-addon1">
                                       </div>
@@ -417,7 +447,7 @@
     
     
                                         <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
-                                            <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
+                                            <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">وسائل التواصل الاجتماعي</p>
                                             <div class="contact-info-soshial">
                                                 {% if userprofile.subscription.subscription.show_instgram %}
                                                 {% if userprofile.show_instgram and userprofile.employeeprofile.instgram%}

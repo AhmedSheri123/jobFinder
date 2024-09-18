@@ -11,8 +11,11 @@
 
     {% comment %} <link href="{% static 'bootstrap-5.3.3/css/bootstrap.min.css'%}" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> {% endcomment %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+
     {% block links %}
     {% endblock links %}
 
@@ -132,6 +135,8 @@
 
 
         const default_img_profile = `{% static 'img/default-profile-img-2.png' %}`
+        const default_img_profile_male = `{% static 'img/smiling-people-avatars-male.png' %}`
+        const default_img_profile_female = `{% static 'img/smiling-people-avatars-female.png' %}`
         const toastBox = document.querySelector('#toast-box')
 
 

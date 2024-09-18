@@ -52,7 +52,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
-.cp-info {display: flex; justify-content: space-between; align-items: flex-end;}
+.cp-info {display: flex; justify-content: space-between; align-items: center;}
 .cp-info p {font-weight: bold;}
 </style>
 
@@ -92,11 +92,24 @@
                     {{job.about_job}}    
                 </p>
             <div class="cp-info">
-                <p dir="rtl">شركة {{job.user.userprofile.companyprofile.company_name}} في {{job.user.userprofile.companyprofile.country.get_name_display}}/{{job.user.userprofile.companyprofile.employee_city}}</p>
+                <div class="bg-white shadow-sm p-2 rounded-3 m-0 me-2">
+                    <label dir="rtl" class=" form-label">الشركة المعلنة: </label>
+                    <p dir="rtl" class="form-text m-0" >{{job.user.userprofile.companyprofile.company_name}} في {{job.user.userprofile.companyprofile.country.get_name_display}}/{{job.user.userprofile.companyprofile.employee_city}}</p>
+                </div>
 
-                <a href="{% url 'viewJob' job.id %}" class="btn btn-primary" style="margin-right: auto; display: table;">
-                    {% if job.state == '1' %}تقديم{% elif job.state == '2' %}عرض{% endif %}
-                </a>
+                {% is_user_apllied job.id request.user.id as user_apllied %}
+                <div style="display: flex; flex-direction: column;">
+                    {% if user_apllied %}
+                    <p class="btn btn-warning" style="font-size: 12px; font-weight: unset; text-wrap: nowrap;">
+                        <i class="bi bi-ticket-fill"></i>
+                        تم التقديم
+                    </p>
+                    {% endif %}
+                    <a href="{% url 'viewJob' job.id %}" class="btn btn-primary">
+                        {% if job.state == '2' or user_apllied %}عرض {% elif job.state == '1' %}تقديم{% endif %}
+                    </a>
+                </div>
+
             </div>
 
         <hr>

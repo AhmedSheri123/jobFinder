@@ -47,6 +47,12 @@ def AdvancedSearch(request):
     employee_city = request.GET.get('employee_city')
     gender = request.GET.get('gender')
     marital_status = request.GET.get('marital_status')
+    age_from = request.GET.get('age_from')
+    age_to = request.GET.get('age_to')
+    if age_from and age_to:
+        ages = list(range(int(age_from), (int(age_to)+1)))
+        userprofiles = userprofiles.filter(employeeprofile__age__in=ages)
+    
     
     if desires:
         filtered = []

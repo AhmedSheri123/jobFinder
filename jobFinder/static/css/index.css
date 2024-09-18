@@ -119,20 +119,16 @@
 }
 
 .contact-info-soshial i {
-        background-color: #f1f1f1;
-        color: rgb(48, 48, 48);
-        padding: 15px;
-        margin-left: 5px;
-        margin-top: 5px;
-        font-size: 22px;
-        border-radius: 10px;
-        box-shadow: inset rgb(100, 100, 100) 0px 0px 6px ;
-
+    border: solid 1px #adadad;
+    padding: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+    font-size: 21px;
+    border-radius: 10px;
 }
 
 .contact-info-soshial a {
-    margin-left: 5px;
-    margin-top: 5px;
+
     display: flex;
 }
 

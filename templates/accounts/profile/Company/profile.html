@@ -143,15 +143,16 @@
         <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
             {% if request.user.is_authenticated %}
             {% if request.user.userprofile.is_has_subscription %}
+                                {% if userprofile.show_email%}
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></span>
+                                    <a href="mailto:{{userprofile.user.email}}" class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></a>
                                     <input value="{{userprofile.user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
                                   </div>
-                          
+                                  {% endif %}
                                   {% if userprofile.subscription.subscription.show_phone %}
                                   {% if userprofile.show_phone and company_profile.phone %}
                                   <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone-fill"></i></span>
+                                    <a class="input-group-text" href="tel:{{company_profile.phone}}"  id="basic-addon1"><i class="bi bi-telephone-fill"></i></a>
                                     <input value="{{company_profile.phone}}" disabled name="phone" type="text" class="form-control" placeholder="الهاتف" aria-label="Username"
                                       aria-describedby="basic-addon1">
                                   </div>
@@ -188,7 +189,7 @@
                                 {% endif %}
                                 {% endif %} {% endcomment %}
                                     <div style="border-radius: 15px; border: 1px solid rgb(229, 229, 229);">
-                                        <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">تواصل اجتماعي</p>
+                                        <p style="margin: 0;text-align: center;background-color: #f1f1f1; padding: 20px">وسائل التواصل الاجتماعي</p>
                                         <div class="contact-info-soshial">
                                             {% if userprofile.subscription.subscription.show_instgram %}
                                             {% if userprofile.show_instgram and userprofile.employeeprofile.instgram%}

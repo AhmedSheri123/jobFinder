@@ -138,6 +138,8 @@
 
         {% if job.state == '1' %}
         {% if request.user.userprofile.is_employee %}
+        {% is_user_apllied job.id request.user.id as user_apllied %}
+        {% if not user_apllied %}
 
         <button type="button" data-bs-toggle="modal" data-bs-target="#apllyModal" class="btn btn-primary apply-btn">
             <i class="bi bi-joystick"></i>
@@ -167,6 +169,7 @@
     </div>
   </div>
   {% endif %}
+  {% endif %}
 
 {% endif %}
 
@@ -183,7 +186,7 @@
                         {% else %}
                         <img src="{% static '/img/default-profile-img-2.png' %}" alt="" style="width: 50px; border-radius: 100%;">
                         {% endif %}
-                    <p>{{applier.user.username}}</p>
+                    <p>{{applier.user.userprofile.employeeprofile.name}}</p>
                     </div>
 
                     <div class="job-details">

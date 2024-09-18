@@ -53,7 +53,10 @@ def companyCloseJob(request, id):
 
 def companyOpenJob(request, id):
     job = JobsModel.objects.get(id=id)
-    job.state = '0'
+    if job.has_complited:
+        job.state = '1'
+    else:job.state = '0'
+    
     job.save()
     return redirect('companyJobs')
 

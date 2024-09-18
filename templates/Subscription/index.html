@@ -158,6 +158,24 @@
                         {% endif %}
                         اظهار اطار مميز
                     </p>
+
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_on_first_search %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        الظهور في مقدمة البحث
+                    </p>
+
+                    <p style="display: flex; align-items: center;">
+                        {% if subscription.show_in_distinctive_users %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        الظهور ضمن الاعضاء التميز
+                    </p>
                     
                     <p style="display: flex; align-items: center;">
                         {% if subscription.show_number_of_likes %}

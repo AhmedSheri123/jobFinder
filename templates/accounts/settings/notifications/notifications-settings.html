@@ -6,6 +6,9 @@
 {% endblock links %}
 
 {% with userprofile=request.user.userprofile %}
+{% if request.user.userprofile.is_has_subscription %}
+
+
 <form action="" method="post">
   {% csrf_token %}
 <div class="form-check form-switch">
@@ -17,6 +20,14 @@
     <label class="form-check-label" for="flexSwitchCheckChecked">عدم استقبال الرسائل من اصحاب السيرة</label>
   </div>
   <hr>
+  <div class="form-check form-switch">
+    <input class="form-check-input" name="show_phone" value="1" {% if userprofile.show_email %} checked {% endif %} type="checkbox" role="switch" id="show_phone">
+    <label class="form-check-label" for="show_phone">اظهار البريد الالكتروني</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" name="show_phone" value="1" {% if userprofile.show_phone %} checked {% endif %} type="checkbox" role="switch" id="show_phone">
+    <label class="form-check-label" for="show_phone">اظهار رقم الاتصال</label>
+  </div>
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_phone" value="1" {% if userprofile.show_phone %} checked {% endif %} type="checkbox" role="switch" id="show_phone">
     <label class="form-check-label" for="show_phone">اظهار رقم الاتصال</label>
@@ -53,4 +64,8 @@
   <button type="submit" class="btn btn-primary mt-3">حفظ التعديلات</button>
 
 </form>
+{% else %}
+<p>يرجى الاشتراك باحد الباقات لتعديل الاعدادات <a href="{% url 'Subscriptions' %}">اضغط هنا لاظهار الباقات</a></p>
+{% endif %}
+
   {% endwith %}

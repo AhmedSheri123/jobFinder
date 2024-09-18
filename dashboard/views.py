@@ -437,6 +437,8 @@ def ViewCompanyPostJobs(request, id):
         if form.is_valid():
             job = form.save(commit=False)
             job.state = state
+            if state == '1':
+                job.has_complited = True
             job.save()
 
     

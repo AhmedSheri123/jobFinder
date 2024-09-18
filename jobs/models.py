@@ -36,6 +36,8 @@ class JobsModel(models.Model):
     number_of_days_closing_job = models.IntegerField(verbose_name="عدد الايام للاغلاق الوظيفة تلقائيا", default=30)
     about_job = models.TextField(verbose_name="نبذه مختصرة عن مهام الوظيفة")
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
+
+    has_complited = models.BooleanField(default=False, verbose_name='تم مراجعتها من قبل')
     state = models.CharField(max_length=255, choices = JobStateChoices, default='0', null=True, verbose_name="المؤهل المطلوب")
     def __str__(self):
         return str(self.user.username)

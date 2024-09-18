@@ -168,6 +168,7 @@ class UserProfile(models.Model):
     
 
 
+    show_email = models.BooleanField(default=True)
     show_phone = models.BooleanField(default=True)
     show_facebook = models.BooleanField(default=True)
     show_linkedin = models.BooleanField(default=True)
@@ -408,6 +409,8 @@ class SubscriptionsModel(models.Model):
 
     distinctive_mark = models.BooleanField(default=False, verbose_name='علامة مميزة')
     distinctive_frame = models.BooleanField(default=False, verbose_name='إطار مميز')
+    show_on_first_search = models.BooleanField(default=False, verbose_name='الظهور في مقدمة البحث')
+    show_in_distinctive_users = models.BooleanField(default=False, verbose_name='الظهور ضمن الاعضاء التميز')
 
     show_number_of_appearances = models.BooleanField(default=False, verbose_name='إظهار عدد الظهور')
     show_number_of_likes = models.BooleanField(default=False, verbose_name='إظهار عدد الإعجابات')

@@ -90,7 +90,7 @@
         <p>الرجاء إكمال البيانات بالاسفل</p>
 
         <div style="max-width: 500px;" dir="rtl">
-            <form method="post" class="pt-3">
+            <form method="post" class="pt-3 needs-validation" novalidate>
                 {% csrf_token %}
                 {% comment %} <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
@@ -102,12 +102,15 @@
                     <input type="tel" oninput="verfiyPhone()" id="tel" class="form-control" name="phone" placeholder="رقم الهاتف" aria-label="Username" aria-describedby="basic-addon1">
                     <div id="emailHelp" class="form-text"><strong>مهم!</strong> يرجى ادخل رقم هاتف يتواجد عليه حساب واتس اب</div>
 
-                </div>
-
-                
-                <div style="position: relative;">
+                  </div>
+                  
+                  
+                  <div style="position: relative;" class="password-box">
+                  <label for="" class="form-label">كلمة المرور</label>
                     <input required type="password" name="password" id="password" class="form-control" id="exampleInputPassword1">
                     <i class="bi bi-eye-fill" style="position: absolute; top: 7px; left: 10px;" onclick="checkPassword()"></i>
+                    <div class="invalid-feedback">
+                    </div>
                   </div>
    
                 <button type="submit" class="btn btn-warning mt-3">الخطوة التالية</button>
@@ -116,7 +119,36 @@
 
     </div>
 
+<script>
+(() => {
+  'use strict'
 
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+
+      }
+        let passwordBox = form.querySelector('.password-box')
+        let pwd = passwordBox.querySelector('input[type="password"]')
+        let pwd_validation = passwordBox.querySelector('.invalid-feedback')
+        if (pwd.value.length < 6) {
+          event.preventDefault()
+          event.stopPropagation()
+          pwd_validation.innerHTML = 'مطلوب ادخال 6 احرف او ارقام على الاقل'
+          pwd.classList.add('is-invalid');
+          return false
+        }
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
 </div>
 
 
