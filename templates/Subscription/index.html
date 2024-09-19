@@ -62,6 +62,17 @@
     
     
                     <p style="display: flex; align-items: center;">
+                        {% if subscription.show_email %}
+                        <i class="bi bi-check2 ms-2" ></i>
+                        {% else %}
+                        <i class="bi bi-x ms-2" ></i>
+                        {% endif %}
+                        إظهار البريد الالكتروني
+                    </p>
+    
+    
+    
+                    <p style="display: flex; align-items: center;">
                         {% if subscription.show_phone %}
                         <i class="bi bi-check2 ms-2" ></i>
                         {% else %}

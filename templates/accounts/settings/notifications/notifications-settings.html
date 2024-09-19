@@ -20,15 +20,19 @@
     <label class="form-check-label" for="flexSwitchCheckChecked">عدم استقبال الرسائل من اصحاب السيرة</label>
   </div>
   <hr>
+  {% if userprofile.subscription.subscription.show_email %}
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_email" value="1" {% if userprofile.show_email %} checked {% endif %} type="checkbox" role="switch" id="show_phone">
     <label class="form-check-label" for="show_email">اظهار البريد الالكتروني</label>
   </div>
-
+  {% endif %}
+  {% if userprofile.subscription.subscription.show_phone %}
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_phone" value="1" {% if userprofile.show_phone %} checked {% endif %} type="checkbox" role="switch" id="show_phone">
     <label class="form-check-label" for="show_phone">اظهار رقم الاتصال</label>
   </div>
+  {% endif %}
+
   {% if userprofile.subscription.subscription.show_whats %}
   <div class="form-check form-switch">
     <input class="form-check-input" name="show_whatsapp" value="1" {% if userprofile.show_whatsapp %} checked {% endif %} type="checkbox" role="switch" id="show_whatsapp">

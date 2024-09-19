@@ -399,6 +399,7 @@ class SubscriptionsModel(models.Model):
     number_of_send_msgs = models.IntegerField(default=1, verbose_name='عدد الرسائل المرسلة')
     number_of_view_profiles = models.IntegerField(default=1, verbose_name='عدد مرات مشاهدة الملفات الشخصية')
 
+    show_email = models.BooleanField(default=False, verbose_name='إظهار البريد الالكتروني')
     show_phone = models.BooleanField(default=False, verbose_name='إظهار رقم الهاتف')
     show_whats = models.BooleanField(default=False, verbose_name='إظهار رقم الواتساب')
     show_facebook = models.BooleanField(default=False, verbose_name='إظهار الفيسبوك')
