@@ -181,7 +181,7 @@
             {% for applier in appliers %}
             {% get_user_profile_img applier.user.id as profile_image %}
             <div>
-                <div class="title-box">
+                <div class="title-box p-0">
                     <div class="applyer-profile">
                         {% if profile_image.1 == 0 %}
                         <img src="{{profile_image.0}}" alt="" style="width: 50px; border-radius: 100%;">
@@ -191,33 +191,40 @@
                     <p>{{applier.user.userprofile.employeeprofile.name}}</p>
                     </div>
 
-                    <div class="job-details">
-                        <button class="btn btn-warning">
-                                
-                            <i class="bi bi-clipboard2-pulse-fill"></i>
-                        {{applier.get_state_display}}
-                        </button>
+                    <div style="display: flex; flex-direction: column;">
+
+
                     </div>
                 </div>
                     
                 
                 <div class="job-details">
-                    <p class="btn btn-light"><i class="bi bi-stopwatch-fill"></i>
+                    <p class="btn btn-light p-1 mb-1"><i class="bi bi-stopwatch-fill"></i>
+                        منذ
                         {{applier.whenpublished}}
                     </p>
-    
-                    <p class="btn btn-light">
+                    <p class="btn btn-light p-1 mb-1">
                         <i class="bi briefcase-fill"></i>
                         {{applier.user.userprofile.employeeprofile.job_title}}
                     </p>
+    
+
                 </div>
                 {% if request.user ==  job.user %}
                 <p class="bg-light p-2 rounded form-text shadow-sm fw-bold">                    
                     {{applier.msg}}
                 </p>
                 {% endif %}
+                <div class="job-details " style="justify-content: flex-end;">
+                    <button class="btn btn-warning">
+                            
+                        <i class="bi bi-clipboard2-pulse-fill"></i>
+                    {{applier.get_state_display}}
+                    </button>
+                </div>
             </div>
             <hr>
+            
             {% empty %}
                 <p style="text-align: center; padding: 10px 10px;">لا يوجد متقدمين</p>
             {% endfor %}
