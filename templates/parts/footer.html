@@ -1,12 +1,16 @@
+{% load pages_tags %}
+{% get_general_setting as site_settings %}
 {% if 'messageRoom' not in request.path %}
 <div class="bg-primary text-white">
 <div class="container" dir="rtl">
-    <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 mt-4 border-top">
+  {% if site_settings.img %}
+    <img src="{{site_settings.img.url}}" width="300" alt="" style="margin: auto;display: block;">
+  {% endif %}
+    <p class="mb-4 text-center">{{site_settings.about}}</p>
+    <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-3 pb-5">
 
   
-      <div class="col mb-3">
-  
-      </div>
+
   
       <div class="col mb-3">
         <h5>روابط هامة</h5>
@@ -22,29 +26,65 @@
       <div class="col mb-3">
         <h5>تواصل معنا</h5>
         <ul class="nav flex-column">
-          <li class="nav-item mb-2"><a href="mailto:mazaadat.com@gmail.com" class="nav-link p-0 ">mazaadat.com@gmail.com</a></li>
-          <li class="nav-item mb-2"><a href="https://wa.me/966552321272" target="_blank" class="nav-link p-0 ">واتساب</a></li>
-          <li class="nav-item mb-2"><a href="tel:+966552321272" class="nav-link p-0 ">هاتف:+966552321272</a></li>
-          <li class="nav-item mb-2"><a href="/#contact-us" class="nav-link p-0 ">اتصل بنا</a></li>
+          <li class="nav-item mb-2"><a href="mailto:{{site_settings.email}}" class="nav-link p-0 " style="text-wrap: nowrap;"><i class="bi bi-envelope-fill"></i>{{site_settings.email}}</a></li>
+          <li class="nav-item mb-2"><a href="tel:{{site_settings.phone}}" class="nav-link p-0 " style="text-wrap: nowrap;"><i class="bi bi-telephone-fill"></i>{{site_settings.phone}}</a></li>
+          <!-- <li class="nav-item mb-2"><a href="https://wa.me/966552321272" target="_blank" class="nav-link p-0 ">واتساب</a></li> -->
+          <li class="nav-item mb-2"><a href="/#contact-us" class="nav-link p-0 " style="text-wrap: nowrap;"><i class="bi bi-pen-fill"></i> نموذج التواصل</a></li>
         </ul>
+        
+        <div>
+          
+          <style>
+            .nav-contact-soshial {
+              text-wrap: nowrap;
+            }
+
+            .nav-contact-soshial i{
+              font-size: 25px !important;
+              
+            }
+            .nav-contact-soshial a{
+              line-height: 0px;
+            }
+
+            @media (max-width: 576px) {
+              footer .col {
+                text-align: center;
+              }
+            }
+          </style>
+
+
+
+
+        </div>
       </div>
   
       <div class="col mb-3">
-        <!-- <h5>Section</h5>
-        <ul class="nav flex-column">
-          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">Home</a></li>
-          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">Features</a></li>
-          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">Pricing</a></li>
-          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">FAQs</a></li>
-          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">About</a></li>
-        </ul> -->
-      </div>
+        <h5>وسائل التواصل الاجتماعي</h5>
+        <div class="nav-contact-soshial mb-3">
+          
+            <a class="btn btn-light p-2" href="{{site_settings.instgram}}" target="_blank"><i class="bi bi-instagram"></i></a>
 
-      <div class="col mb-3">
+            <a class="btn btn-light p-2" href="{{site_settings.snapshat}}" target="_blank"><i class="bi bi-snapchat"></i></a>
+
+            <a class="btn btn-light p-2" href="{{site_settings.tiktok}}" target="_blank"><i class="bi bi-tiktok"></i></a>
+
+            <a class="btn btn-light p-2" href="{{site_settings.facebook}}" target="_blank"><i class="bi bi-facebook"></i></a>
+
+            <a class="btn btn-light p-2" href="{{site_settings.linkedin}}" target="_blank"><i class="bi bi-linkedin"></i></a>
+
+            <a class="btn btn-light p-2" href="{{site_settings.whatsapp}}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+        </div>
+
+
+    <p class="mb-3">ceveve.com © 2024</p>
+      </div> 
+
+      <!-- <div class="col mb-3">
         <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
         </a>
-        <p class="">ceveve.com © 2024</p>
-      </div>
+      </div> -->
     </footer>
   </div>
 </div>

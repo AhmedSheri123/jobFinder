@@ -44,6 +44,21 @@ def companyCreateJob(request):
             return redirect('companyJobs')
     return render(request, 'jobs/company/CreateJob.html', {'form':form})
 
+def companyEditJob(request, id):
+    job = JobsModel.objects.get(id=id)
+    form = JobsModelForm(instance=job)
+
+    if request.method == 'POST':
+        form = JobsModelForm(request.POST, instance=job)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.has_complited = False
+            job.state = '0'
+            job.save()
+            messages.success(request, 'لقد تم استلام طلبك وهو قيد المراجعة الان وقد يستغرق ذلك ٢٤ ساعة . ستصلكم اشعار عند اعتمادة')
+            return redirect('companyJobs')
+    return render(request, 'jobs/company/EditJob.html', {'form':form})
+
 def companyCloseJob(request, id):
     job = JobsModel.objects.get(id=id)
     job.state = '2'

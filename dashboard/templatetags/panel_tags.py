@@ -3,6 +3,7 @@ from django import template
 import json
 from django.conf import settings
 from dashboard.views import get_permission_state
+
 register = template.Library()
 
 @register.simple_tag
@@ -10,6 +11,7 @@ def temp_get_permission_state(user_id, url, method):
     p = get_permission_state(user_id, url, method)
     
     return p
+
 
 # @register.simple_tag
 # def NumberOfPresenters(job_id):

@@ -117,7 +117,7 @@
 
 </div>
 <div style="display: flex; justify-content: center;">
-    <h2 style="text-align: center;margin-bottom: 0;" class="mt-5 bg-primary text-white p-3 rounded-top">
+    <h2 style="text-align: center;margin-bottom: 0;" class="mt-5 bg-primary text-white p-3 rounded">
         اعضاء التميز
     </h2>
 </div>
@@ -153,7 +153,7 @@
 
 
     </style>
-    <div class="scrollable-cvs p-2" style="background-color: #f1f1f1;box-shadow: inset #cecece 0px 0px 6px;">
+    <div class="scrollable-cvs p-2 mt-3" style="background-color: #f1f1f1;box-shadow: inset #cecece 0px 0px 6px;">
 
         {% for userprofile in distinctive_users %}
         {% get_cv_imgs userprofile.id as profile_images %}
@@ -609,10 +609,14 @@ let slider = document.querySelector('.scrollable-cvs')
     </div>
 
 
+    <div style="display: flex; justify-content: center;">
+        <h2 style="text-align: center; display: inline-block;" class="mt-5 bg-warning text-dark p-3 rounded mb-3">
+            نموذج التواصل
+        </h2>
+    </div>
 
 
-
-	<h1 style="margin-top: 100px; font-size: 25px; text-align: center;">نموذج التواصل</h1>
+	{% comment %} <h1 style="margin-top: 100px; font-size: 25px; text-align: center;">نموذج التواصل</h1> {% endcomment %}
 	<div id="contact-us" dir="rtl" style="background-color: #fff;  box-shadow: inset #d4d4d4 0px 0px 5px 3px; padding: 15px; max-width: 950px; margin: auto; border-radius: 20px;">
 		<form  action="{% url 'ContactUs' %}" method="post" class="contact-form">
 		{% csrf_token %}

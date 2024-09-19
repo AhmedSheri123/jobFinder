@@ -16,6 +16,8 @@ from django.core.mail import send_mail
 import datetime, json
 from decimal import Decimal
 from django.urls import reverse
+from .models import GeneralSettingsModel
+from .forms import GeneralSettingsModelForm
 
 BASE_DIR = settings.BASE_DIR
 email_from = settings.EMAIL_HOST_USER
@@ -441,6 +443,10 @@ def ViewCompanyPostJobs(request, id):
                 job.has_complited = True
             job.save()
 
+            msg = request.POST.get('msg')
+            subject = request.POST.get('subject')
+            if msg and subject:
+                send_msg_email_phone_noti(subject, msg, request.user.id, [job.user.id])
     
     return render(request, 'panel/company/jobs/ViewCompanyPostJobs.html', {'form':form, 'job':job, 'appliers':appliers, 'JobStateChoices':JobStateChoices, 'state':state})
 
@@ -1019,3 +1025,19 @@ def DeleteJobSalaries(request, id):
     subscription = JobSalariesModel.objects.get(id=id)
     subscription.delete()
     return redirect('ManageJobSalaries')
+
+
+
+def GeneralSettings(request):
+    settings = GeneralSettingsModel.objects.filter()
+    setting = None
+    if not settings.exists():
+        setting = settings.create().save()
+    else:setting = settings.first()
+    form = GeneralSettingsModelForm(instance=setting)
+    if request.method == 'POST':
+        form = GeneralSettingsModelForm(data=request.POST, files=request.FILES, instance=setting)
+        if form.is_valid():
+            form.save()
+
+    return render(request, 'panel/settings/GeneralSettings.html', {'form':form})

@@ -138,6 +138,7 @@
 
         {% if job.state == '1' %}
         {% if request.user.userprofile.is_employee %}
+        {% if request.user.userprofile.subscription.subscription.apply_jobs and request.user.userprofile.is_has_subscription %}
         {% is_user_apllied job.id request.user.id as user_apllied %}
         {% if not user_apllied %}
 
@@ -157,7 +158,7 @@
         <div class="modal-body">
                 {% csrf_token %}
                 <label class="form-label" for="">رسالة التقديم</label>
-                <textarea name="msg" id="" class="form-control" rows="6"></textarea>
+                <textarea name="msg" id="" maxlength="250" class="form-control" rows="6"></textarea>
                 <div class="form-text">ملاحظة! يرجى عدم اضافة اي ارقام او روابط الى رسالة التقديم قد يؤدي ذلك الى حظر حسابك</div>
 
         </div>
@@ -168,6 +169,7 @@
       </form>
     </div>
   </div>
+  {% endif %}
   {% endif %}
   {% endif %}
 
@@ -209,11 +211,11 @@
                         {{applier.user.userprofile.employeeprofile.job_title}}
                     </p>
                 </div>
-
-                <p class="custom-text-truncate">                    
+                {% if request.user ==  job.user %}
+                <p class="bg-light p-2 rounded form-text shadow-sm fw-bold">                    
                     {{applier.msg}}
                 </p>
-
+                {% endif %}
             </div>
             <hr>
             {% empty %}

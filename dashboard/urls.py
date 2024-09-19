@@ -93,4 +93,7 @@ urlpatterns = [
     path('AddJobSalaries', views.AddJobSalaries, name='AddJobSalaries'),
     path('EditJobSalaries/<int:id>', views.EditJobSalaries, name='EditJobSalaries'),
     path('DeleteJobSalaries/<int:id>', views.DeleteJobSalaries, name='DeleteJobSalaries'),
+
+
+    path('GeneralSettings', views.GeneralSettings, name='GeneralSettings'),
 ]

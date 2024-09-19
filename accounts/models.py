@@ -393,6 +393,7 @@ class SubscriptionsModel(models.Model):
     set_defult_price = models.BooleanField(default=False, verbose_name='عرض الباقة في الدول الغير مخصصة')
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='السعر')
     currency = models.CharField(max_length=250, choices=CurrencyChoices, default='USD', null=True, verbose_name='العملة')
+    referral_percentage_earn = models.IntegerField(default=0, verbose_name='النسبة المئوية لتسويق بلعمولة %')
 
     number_of_receive_msgs = models.IntegerField(default=1, verbose_name='عدد الرسائل المستلمة')
     number_of_send_msgs = models.IntegerField(default=1, verbose_name='عدد الرسائل المرسلة')
@@ -409,8 +410,9 @@ class SubscriptionsModel(models.Model):
 
     distinctive_mark = models.BooleanField(default=False, verbose_name='علامة مميزة')
     distinctive_frame = models.BooleanField(default=False, verbose_name='إطار مميز')
-    show_on_first_search = models.BooleanField(default=False, verbose_name='الظهور في مقدمة البحث')
     show_in_distinctive_users = models.BooleanField(default=False, verbose_name='الظهور ضمن الاعضاء التميز')
+    show_on_first_search = models.BooleanField(default=False, verbose_name='الظهور في مقدمة البحث')
+    apply_jobs = models.BooleanField(default=False, verbose_name='التقديم على الوظائف')
 
     show_number_of_appearances = models.BooleanField(default=False, verbose_name='إظهار عدد الظهور')
     show_number_of_likes = models.BooleanField(default=False, verbose_name='إظهار عدد الإعجابات')

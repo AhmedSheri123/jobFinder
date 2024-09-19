@@ -57,7 +57,7 @@
 
                 <div class="sender-form-box fixed-bottom bg-primary">
                     <form id="form" onsubmit="event.preventDefault();" style="display: contents;">
-                        <input type="text" class="form-control" placeholder="اكتب رسالة" id="senderMsg">
+                        <input type="text" class="form-control" {% if receiver_block_sender %} placeholder="لا يمكنك التواصل مع هذا المستخدم " disabled {% else %}{% if is_blocked %} placeholder="لقت حظرت هذه المستخدم " disabled {% else %}{% endif %} placeholder="اكتب رسالة" {% endif %} id="senderMsg">
         
         
                         <button class="btn btn-primary">

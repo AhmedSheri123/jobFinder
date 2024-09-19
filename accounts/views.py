@@ -50,6 +50,11 @@ def cvSignup(request):
         user.username = GenrateUserID(5)
         user.save()
         userprofile.cv_signup_process = '2'
+        referral_id = request.session['referral_id']
+        if referral_id:
+            referral = ReferralLinkModel.objects.get(id=referral_id)
+            userprofile.referral=referral
+
         userprofile.save()
         alt_id = userprofile.alt_id
 
@@ -232,6 +237,11 @@ def companySignup(request):
         alt_id = userprofile.alt_id
         user.save()
         userprofile.company_signup_process = '2'
+        referral_id = request.session['referral_id']
+        if referral_id:
+            referral = ReferralLinkModel.objects.get(id=referral_id)
+            userprofile.referral=referral
+
         userprofile.save()
         return redirect('SignupSetupProcess', userprofile.alt_id)
     return render(request, 'accounts/signup/Company/companySignup.html', {'alt_id':alt_id})
@@ -879,7 +889,7 @@ def WithdrawReferralLinkBalance(request, referral_id):
 def SignUpReferralLink(request, referral_id):
     request.session['referral_id'] = referral_id
     
-    return redirect('cvSignup')
+    return redirect(reverse('Login')+'?is_signup=1')
 
 
 def EnableUserSubscription(request, id):
@@ -1140,6 +1150,21 @@ def checkPaymentProcess(request, orderID):
     r = getInvoice(order.transactionNo)
     if r.get('success'):
         if r.get('orderStatus') == 'Paid':
+            buyed_user = order.user
+
+            try:
+                referrals = ReferralLinkModel.objects.filter(id=buyed_user.userprofile.referral.id)
+            except:referrals=None
+            
+            if referrals.exists():
+                referral = referrals.first()
+                subscription = order.subscription
+                price = subscription.price
+                referral_percentage = subscription.referral_percentage_earn / 100
+                total_earn = price * referral_percentage
+                referral.total_earn += total_earn
+                referral.save()
+
             return EnableUserSubscription(request, order.id)
     return redirect('index')
 

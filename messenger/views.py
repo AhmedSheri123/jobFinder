@@ -21,6 +21,7 @@ def messageRoom(request, room_id):
         dj_messages.error(request, 'لقد الغى المستلم امكانية استقبال الرسائل')
 
     is_blocked = BlockUserModel.objects.filter(creator=user, user=receiver).exists()
+    receiver_block_sender = BlockUserModel.objects.filter(creator=receiver, user=user).exists()
     is_favorite = FavoriteUserModel.objects.filter(creator=user, user=receiver).exists()
     messages_list = []
     last_date = None
@@ -51,7 +52,7 @@ def messageRoom(request, room_id):
     messages_list.append([last_date, msg_date])
 
     profile_image = get_user_img(receiver)
-    return render(request, 'messenger/viewMessage.html', {'is_blocked':is_blocked, 'is_favorite':is_favorite, 'messages_list':messages_list, 'room_id':room_id, 'receiver':receiver, 'profile_image':profile_image})
+    return render(request, 'messenger/viewMessage.html', {'receiver_block_sender':receiver_block_sender, 'is_blocked':is_blocked, 'is_favorite':is_favorite, 'messages_list':messages_list, 'room_id':room_id, 'receiver':receiver, 'profile_image':profile_image})
 
 
 def get_messenger_model(sender, receiver):

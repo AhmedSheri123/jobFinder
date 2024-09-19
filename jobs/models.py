@@ -18,7 +18,7 @@ JobStateChoices = (
     ("0", "قيد المراجعة"),
     ("1", "مفتوح"),
     ("2", "مغلق"),
-    ("3", "اخفاء"),
+    ("3", "رفض"),
 )
 
 class JobSalariesModel(models.Model):

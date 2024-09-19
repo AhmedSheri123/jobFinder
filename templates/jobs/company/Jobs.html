@@ -97,11 +97,16 @@
                 {{job.about_job}}
             </p>
             <div style="display: flex; justify-content: space-between;">
-                <a href="{% url 'companyviewJob' job.id %}" class="btn btn-primary mt-2">عرض</a>
+                <div>
+                    <a href="{% url 'companyEditJob' job.id %}" class="btn btn-primary mt-2">تعديل</a>
+                    <a href="{% url 'companyviewJob' job.id %}" class="btn btn-primary mt-2">عرض</a>
+                    
+                </div>
                 {% if job.state == '0' or job.state == '1' %}
-                <a href="{% url 'companyCloseJob' job.id %}" class="btn btn-danger mt-2">أغلاق</a>
+                <a href="{% url 'companyCloseJob' job.id %}" class="btn btn-danger mt-2">غلق التقديم 
+                </a>
                 {% elif job.state == '2' %}
-                <a href="{% url 'companyOpenJob' job.id %}" class="btn btn-success mt-2">فتح</a>
+                <a href="{% url 'companyOpenJob' job.id %}" class="btn btn-success mt-2">فتح التقديم</a>
                 {% endif %}
             </div>
         <hr>
