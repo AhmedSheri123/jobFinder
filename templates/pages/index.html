@@ -88,13 +88,13 @@
             max: 99,
             values: [ 18, 99 ],
             slide: function( event, ui ) {
-              $( "#amount" ).val('العمر: '+ ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+              $( "#amount" ).val('العمر: '+ ui.values[ 1 ] + " - " + ui.values[ 0 ] );
               $( "#age_from" ).val(ui.values[ 0 ])
               $( "#age_to" ).val(ui.values[ 1 ])
             }
           });
-          $( "#amount" ).val('العمر: '+  $( "#slider-range" ).slider( "values", 0 ) +
-            " - " + $( "#slider-range" ).slider( "values", 1 ) );
+          $( "#amount" ).val('العمر: '+  $( "#slider-range" ).slider( "values", 1 ) +
+            " - " + $( "#slider-range" ).slider( "values", 0 ) );
           $( "#age_from" ).val($( "#slider-range" ).slider( "values", 0 ))
           $( "#age_to" ).val($( "#slider-range" ).slider( "values", 1 ))
 
