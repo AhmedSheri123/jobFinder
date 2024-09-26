@@ -23,5 +23,5 @@ def send_noti_task(sender_id, title, msg, country, send_local, send_by_email, se
     noti.msgs_count = receivers.count()
     noti.save()
     receivers_ids = [user.id for user in receivers]
-    send_msg_email_phone_noti(title, msg, sender_id, receivers_ids, noti)
+    send_msg_email_phone_noti(title, msg, sender_id, receivers_ids, noti.id)
     return True
