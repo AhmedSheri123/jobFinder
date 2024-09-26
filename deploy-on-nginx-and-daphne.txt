@@ -109,3 +109,80 @@ sudo systemctl daemon-reload
 sudo systemctl restart daphne
 
 
+
+
+
+===========================================
+Celery Configuration
+===========================================
+1--> sudo nano /etc/default/celeryd
+
+CELERYD_NODES="jobFinder_worker"
+CELERY_BIN="/var/www/jobFinder/env/bin/celery"
+CELERY_APP="jobFinder"
+CELERYD_MULTI="multi"
+CELERYD_OPTS=" --time-limit=600 --concurrency=2"
+CELERYD_LOG_LEVEL="DEBUG"
+CELERYD_LOG_FILE="/var/log/celery/%n%I.log"
+CELERYD_PID_FILE="/var/run/celery/%n.pid"
+CELERYBEAT_PID_FILE="/var/run/celery/beat.pid"
+CELERYBEAT_LOG_FILE="/var/log/celery/beat.log"
+CELERYD_USER="root"
+CELERYD_GROUP="root"
+CELERY_CREATE_DIRS=1
+
+2--> Create a celery service file
+2-->sudo nano /etc/systemd/system/celery.service
+
+[Unit]
+Description=Celery Service
+After=network.target
+[Service]
+Type=forking
+User=root
+Group=root
+EnvironmentFile=/etc/default/celeryd
+WorkingDirectory=/var/www/jobFinder
+ExecStart=/bin/sh -c '${CELERY_BIN} -A $CELERY_APP multi start $CELERYD_NODES \
+--pidfile=${CELERYD_PID_FILE} --logfile=${CELERYD_LOG_FILE} \
+--loglevel="${CELERYD_LOG_LEVEL}" $CELERYD_OPTS'
+ExecStop=/bin/sh -c '${CELERY_BIN} multi stopwait $CELERYD_NODES \
+--pidfile=${CELERYD_PID_FILE} --loglevel="${CELERYD_LOG_LEVEL}"'
+ExecReload=/bin/sh -c '${CELERY_BIN} -A $CELERY_APP multi restart $CELERYD_NODES \
+--pidfile=${CELERYD_PID_FILE} --logfile=${CELERYD_LOG_FILE} \
+--loglevel="${CELERYD_LOG_LEVEL}" $CELERYD_OPTS'
+Restart=always
+[Install]
+WantedBy=multi-user.target
+
+
+3-->Create a celery beat service file
+3-->sudo nano /etc/systemd/system/celerybeat.service
+[Unit]
+Description=Celery beat service
+After=network.target celery.service
+[Service]
+Type=simple
+User=root
+Group=root
+EnvironmentFile=/etc/default/celeryd
+WorkingDirectory=/var/www/jobFinder
+ExecStart=/bin/sh -c '${CELERY_BIN} -A ${CELERY_APP} beat  \
+--pidfile=${CELERYBEAT_PID_FILE} \
+--logfile=${CELERYBEAT_LOG_FILE} --loglevel=${CELERYD_LOG_LEVEL}'
+ExecStop=/bin/systemctl kill celerybeat.service
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target
+
+
+4--> Run the following commands
+sudo systemctl daemon-reloadsudo systemctl enable celery.service
+sudo systemctl enable celerybeat.service
+sudo mkdir /var/log/celery
+sudo chown -R root:root /var/log/celery
+sudo mkdir /var/run/celery
+sudo chown -R root:root /var/run/celery
+
+sudo systemctl restart celerybeat.service
+sudo systemctl restart celery.service

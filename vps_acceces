@@ -15,5 +15,6 @@ git pull
 sudo systemctl restart nginx
 sudo systemctl daemon-reload
 sudo systemctl restart daphne
-
+sudo systemctl restart celerybeat.service
+sudo systemctl restart celery.service
 
