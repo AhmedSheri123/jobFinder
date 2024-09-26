@@ -156,3 +156,4 @@ EMAIL_USE_SSL = True
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CELERY_BROKER_URL = 'redis://:ahmedsheri@203.161.42.87:6379'

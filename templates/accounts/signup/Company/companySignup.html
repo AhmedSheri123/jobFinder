@@ -104,16 +104,22 @@
                 </div>
 
                 <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">كلمة مرور</label>
                 
                   <div style="position: relative;" class="password-box">
-                  <label for="exampleInputPassword1" class="form-label">كلمة مرور</label>
                     <input required type="password" name="password" id="password" class="form-control" id="exampleInputPassword1">
                     <i class="bi bi-eye-fill" style="position: absolute; top: 7px; left: 10px;" onclick="checkPassword()"></i>
                     <div class="invalid-feedback">
                     </div>
                   </div>
                 </div>
-   
+                <div class="mb-3 form-check">
+                  <input type="checkbox" class="form-check-input" required id="exampleCheck1">
+                  <label class="form-text fw-bold" for="exampleCheck1">بالضغط على زر "الخطة التالية" انت توافق على شروط <a href="{% url 'TermsConditions' %}">اتفاقية الاستخدام</a> و<a href="{% url 'PrivacyPolicy' %}">سياسة الخصوصية</a></label>
+                  <div class="invalid-feedback">
+                    يرجى الموافقة على الشروط
+                  </div>
+                </div>
                 <button type="submit" class="btn btn-warning mt-3">الخطوة التالية</button>
               </form>
         </div>

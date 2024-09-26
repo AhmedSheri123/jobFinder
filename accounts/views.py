@@ -543,36 +543,36 @@ def Login(request):
         full_phone = phoneCleaner(request.POST.get('phone'))
         password = request.POST.get('password')
         if type == '2':
-            email = full_phone
-        if email:    
+            country_code = request.POST.get('country_code')
+            users = User.objects.filter(Q(userprofile__employeeprofile__phone=full_phone, userprofile__employeeprofile__phone_country_code = country_code) | Q(userprofile__companyprofile__phone=full_phone, userprofile__companyprofile__phone_country_code=country_code))
+        else:
             users = User.objects.filter(email=email)
-            if not users.exists():
-                users = User.objects.filter(Q(userprofile__employeeprofile__phone=email) | Q(userprofile__companyprofile__phone=email))
-            if users.exists():
-                user = users.first()
-                user = authenticate(username=user.username, password=password)
-                if user is None:
-                    messages.error(request, "خطاء في البريد الالكتروني او كلمة المرور")
-                    return redirect('Login')
-                else:
-                    if not user.is_superuser:
-
-                        userprofile = UserProfile.objects.get(user=user)
-                        alt_id = userprofile.alt_id
-                        if userprofile.is_employee:
-                            if userprofile.cv_signup_process != '5' and userprofile.cv_signup_process != '6':
-                                return redirect('SignupSetupProcess', alt_id)
-                        elif userprofile.is_company:
-                            if userprofile.company_signup_process != '4' and userprofile.company_signup_process != '5':
-                                return redirect('SignupSetupProcess', alt_id)
-
-                    login(request, user)
-                        
-                    if user.is_superuser or has_perm(user):
-                        return redirect('PanelHome')
-                    return redirect('index')
+            
+        if users.exists():
+            user = users.first()
+            user = authenticate(username=user.username, password=password)
+            if user is None:
+                messages.error(request, "خطاء في البريد الالكتروني او كلمة المرور")
+                return redirect('Login')
             else:
-                messages.error(request, 'خطاء في البريد الالكتروني او كلمة المرور')
+                if not user.is_superuser:
+
+                    userprofile = UserProfile.objects.get(user=user)
+                    alt_id = userprofile.alt_id
+                    if userprofile.is_employee:
+                        if userprofile.cv_signup_process != '5' and userprofile.cv_signup_process != '6':
+                            return redirect('SignupSetupProcess', alt_id)
+                    elif userprofile.is_company:
+                        if userprofile.company_signup_process != '4' and userprofile.company_signup_process != '5':
+                            return redirect('SignupSetupProcess', alt_id)
+
+                login(request, user)
+                    
+                if user.is_superuser or has_perm(user):
+                    return redirect('PanelHome')
+                return redirect('index')
+        else:
+            messages.error(request, 'خطاء في البريد الالكتروني او كلمة المرور')
         # userprofile = UserProfile.objects.get(user=user)
 
         # return redirect('index',)

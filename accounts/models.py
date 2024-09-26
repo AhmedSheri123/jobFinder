@@ -616,3 +616,22 @@ class Withdraw(models.Model):
         for i in withdrawal_method_list:
             if i[0] == self.withdrawal_method:
                 return i[1]
+            
+SendNotificationsChoices = [
+    ('1', 'يتم الارسال'),
+    ('2', 'مكتمل')
+]
+
+class SendNotifications(models.Model):
+    title = models.CharField(max_length=250, verbose_name="")
+    msg = models.TextField(verbose_name="")
+    country = models.ForeignKey('CountrysModel', on_delete=models.SET_NULL, null=True, verbose_name="")
+
+    send_local = models.BooleanField(default=True, verbose_name="")
+    send_by_email = models.BooleanField(default=True, verbose_name="")
+    send_by_whatsapp = models.BooleanField(default=True, verbose_name="")
+
+    msgs_count = models.IntegerField(default=0)
+    sended_msgs_count = models.IntegerField(default=0)
+
+    status = models.CharField(max_length=250, default='1', choices=SendNotificationsChoices, verbose_name="")

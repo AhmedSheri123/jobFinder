@@ -96,4 +96,5 @@ urlpatterns = [
 
 
     path('GeneralSettings', views.GeneralSettings, name='GeneralSettings'),
+    path('ManageNotifications', views.ManageNotifications, name='ManageNotifications'),
 ]

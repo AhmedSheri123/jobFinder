@@ -1041,3 +1041,18 @@ def GeneralSettings(request):
             form.save()
 
     return render(request, 'panel/settings/GeneralSettings.html', {'form':form})
+
+from accounts.tasks import send_noti_task
+def ManageNotifications(request):
+    sender = request.user
+    countrys = CountrysModel.objects.all()
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        msg = request.POST.get('msg')
+        send_local = request.POST.get('send_local')
+        send_by_email = request.POST.get('send_by_email')
+        send_by_whatsapp = request.POST.get('send_by_whatsapp')
+        country = request.POST.get('country')
+
+        send_noti_task.delay(sender.id, title, msg, country, send_local, send_by_email, send_by_whatsapp)
+    return render(request, 'panel/notifications/ManageNotifications.html', {'countrys':countrys})
