@@ -1044,7 +1044,7 @@ def GeneralSettings(request):
 
 from accounts.tasks import send_noti_task
 def ManageNotifications(request):
-    sends_notifications = SendNotifications
+    sends_notifications = SendNotifications.objects.all()
     sender = request.user
     countrys = CountrysModel.objects.all()
     if request.method == 'POST':
