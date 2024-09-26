@@ -50,7 +50,7 @@ def cvSignup(request):
         user.username = GenrateUserID(5)
         user.save()
         userprofile.cv_signup_process = '2'
-        referral_id = request.session['referral_id']
+        referral_id = request.session.get('referral_id')
         if referral_id:
             referral = ReferralLinkModel.objects.get(id=referral_id)
             userprofile.referral=referral
@@ -237,7 +237,7 @@ def companySignup(request):
         alt_id = userprofile.alt_id
         user.save()
         userprofile.company_signup_process = '2'
-        referral_id = request.session['referral_id']
+        referral_id = request.session.get('referral_id')
         if referral_id:
             referral = ReferralLinkModel.objects.get(id=referral_id)
             userprofile.referral=referral

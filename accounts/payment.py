@@ -34,7 +34,7 @@ def addInvoice(orderID, total_price_amount, email, phone, clientName, ser_title,
                 "price": total_price_amount,
                 "qty": 1,
                 "description": ser_disc,
-                "isDigital": True,
+                "isDigital": False,
                 "imageSrc": None,
                 }
             ],
