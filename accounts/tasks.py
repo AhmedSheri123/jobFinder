@@ -10,7 +10,6 @@ email_from = settings.EMAIL_HOST_USER
 def send_noti_task(sender_id, title, msg, country, send_local, send_by_email, send_by_whatsapp):
     
     receivers = User.objects.filter()
-    sender = User.objects.get(id=sender_id)
     
     noti = SendNotifications.objects.create()
     noti.title = title
@@ -23,5 +22,5 @@ def send_noti_task(sender_id, title, msg, country, send_local, send_by_email, se
     noti.send_by_whatsapp = send_by_whatsapp
     noti.save()
     receivers_ids = [user.id for user in receivers]
-    send_msg_email_phone_noti(title, msg, sender, receivers_ids, send_local, send_by_email, send_by_whatsapp, noti)
+    send_msg_email_phone_noti(title, msg, sender_id, receivers_ids, send_local, send_by_email, send_by_whatsapp, noti)
     return True
