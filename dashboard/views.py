@@ -1054,5 +1054,5 @@ def ManageNotifications(request):
         send_by_whatsapp = request.POST.get('send_by_whatsapp')
         country = request.POST.get('country')
 
-        send_noti_task.delay(sender.id, title, msg, country, send_local, send_by_email, send_by_whatsapp)
+        send_noti_task.delay(sender.id, title, msg, int(country), send_local, send_by_email, send_by_whatsapp)
     return render(request, 'panel/notifications/ManageNotifications.html', {'countrys':countrys})
