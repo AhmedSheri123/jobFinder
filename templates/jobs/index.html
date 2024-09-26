@@ -100,13 +100,15 @@
                     <p dir="rtl" class="form-text m-0" > في {{job.user.userprofile.companyprofile.country.get_name_display}}/{{job.user.userprofile.companyprofile.employee_city}}</p>
                 </div>
 
-                {% is_user_apllied job.id request.user.id as user_apllied %}
                 <div style="display: flex; flex-direction: column;">
+                {% if request.user.is_authenticated %}
+                    {% is_user_apllied job.id request.user.id as user_apllied %}
                     {% if user_apllied %}
                     <p class="btn btn-warning" style="font-size: 12px; font-weight: unset; text-wrap: nowrap;">
                         <i class="bi bi-ticket-fill"></i>
                         تم التقديم
                     </p>
+                    {% endif %}
                     {% endif %}
                     <a href="{% url 'viewJob' job.id %}" class="btn btn-primary">
                         {% if job.state == '2' or user_apllied %}عرض {% elif job.state == '1' %}تقديم{% endif %}
