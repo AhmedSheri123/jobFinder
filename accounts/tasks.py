@@ -8,6 +8,7 @@ from .libs import send_msg_email_phone_noti
 email_from = settings.EMAIL_HOST_USER
 @shared_task
 def send_noti_task(sender_id, title, msg, country, send_local, send_by_email, send_by_whatsapp):
+    
     receivers = User.objects.filter()
     sender = User.objects.get(id=sender_id)
     
