@@ -137,7 +137,7 @@
                     <td>{{job.msgs_count}}</td>
                     <td>{{job.sended_msgs_count}}</td>
                     <td>{{job.get_status_display}}</td>
-                    <td><a href="{% url 'DeleteCountrys' job.id %}" class="ui  red button">حذف</a></td>
+                    <td><a href="{% url 'DeleteNotifications' job.id %}" class="ui  red button">حذف</a></td>
                   </tr>
                   {% endfor %}
                 </form>
