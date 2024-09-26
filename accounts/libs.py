@@ -240,8 +240,10 @@ def get_user_img(user):
     return img
 
 
-def send_msg_email_phone_noti(subject, msg, sender_id, receiver_ids, send_local=True, send_by_email=True, send_by_whatsapp=True, send_noti_model=None):
-    print(msg)
+def send_msg_email_phone_noti(subject, msg, sender_id, receiver_ids, send_local=True, send_by_email=True, send_by_whatsapp=True, send_noti_model_id=None):
+    from .models import SendNotifications
+    if send_noti_model_id:
+        send_noti_model = SendNotifications.objects.get(id = send_noti_model_id)
     if not msg:return
     receivers = User.objects.filter(id__in=receiver_ids)
     for receiver in receivers:
@@ -256,12 +258,12 @@ def send_msg_email_phone_noti(subject, msg, sender_id, receiver_ids, send_local=
             send_mail(subject, msg, email_from, [email] )
         if send_by_whatsapp:
             wa_send_msg(msg, phone, dial_code)
-        if send_noti_model:
+        if send_noti_model_id:
             send_noti_model.sended_msgs_count += 1
             send_noti_model.save()
     if send_local:
         create_notifications(sender_id, receiver_ids, msg)
-    if send_noti_model:
+    if send_noti_model_id:
         send_noti_model.status = '2'
         send_noti_model.save()
 
