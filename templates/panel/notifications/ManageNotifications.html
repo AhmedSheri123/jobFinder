@@ -61,7 +61,7 @@
 
           <div class="mb-3">
             <select name="country" class="form-select form-select mb-3" aria-label="Large select example">
-              <option selected>الجميع</option>
+              <option selected value="">الجميع</option>
               {% for country in countrys %}
               <option value="{{country.id}}">{{country.get_name_display}}</option>
               {% endfor %}
