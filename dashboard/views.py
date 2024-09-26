@@ -1055,6 +1055,7 @@ def ManageNotifications(request):
         send_by_whatsapp = (request.POST.get('send_by_whatsapp', False) == 'on')
         country = request.POST.get('country')
         send_noti_task.delay(sender.id, title, msg, country, send_local, send_by_email, send_by_whatsapp)
+        return redirect('ManageNotifications')
     return render(request, 'panel/notifications/ManageNotifications.html', {'countrys':countrys, 'sends_notifications':sends_notifications})
 
 def DeleteNotifications(request, id):
