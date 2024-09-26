@@ -241,9 +241,11 @@ def get_user_img(user):
 
 
 def send_msg_email_phone_noti(subject, msg, sender_id, receiver_ids, send_local=True, send_by_email=True, send_by_whatsapp=True, send_noti_model=None):
+    print(msg)
     if not msg:return
     receivers = User.objects.filter(id__in=receiver_ids)
     for receiver in receivers:
+        print(msg)
         userprofile = receiver.userprofile
         email = receiver.email
         phone = None
