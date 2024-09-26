@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel, AdminPermissionModel, HealthStatusModel, Withdraw, withdrawal_method_list, usdt_network_choices, ReferralLinkModel
+from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel, AdminPermissionModel, HealthStatusModel, Withdraw, withdrawal_method_list, usdt_network_choices, ReferralLinkModel, SendNotifications
 from accounts.fields import GenderFields
 from calendar import monthrange
 from django.contrib.auth.models import User
@@ -1044,6 +1044,7 @@ def GeneralSettings(request):
 
 from accounts.tasks import send_noti_task
 def ManageNotifications(request):
+    sends_notifications = SendNotifications
     sender = request.user
     countrys = CountrysModel.objects.all()
     if request.method == 'POST':
