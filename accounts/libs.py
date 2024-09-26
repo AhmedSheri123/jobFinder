@@ -254,7 +254,7 @@ def send_msg_email_phone_noti(subject, msg, sender_id, receiver_ids, send_local=
             send_mail(subject, msg, email_from, [email] )
         if send_by_whatsapp:
             wa_send_msg(msg, phone, dial_code)
-        print(send_noti_model)
+        print(phone)
         if send_noti_model:
             send_noti_model.sended_msgs_count += 1
             send_noti_model.save()
