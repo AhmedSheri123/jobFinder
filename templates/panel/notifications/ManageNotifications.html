@@ -117,7 +117,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="is_ExportExcel" id="is_ExportExcel" value="0">
           
-                    {% for job in objs %}
+                    {% for job in sends_notifications %}
 
                   <tr >
                     <th scope="row" style="position: relative; padding-right: 20px;">
