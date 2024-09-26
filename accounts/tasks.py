@@ -16,7 +16,7 @@ def send_noti_task(sender_id, title, msg, country, send_local, send_by_email, se
     noti.msg = msg
     if country:
         noti.country = CountrysModel.objects.get(id=country)
-        users = users.filter(Q(userprofile__employeeprofile__country__id=country) | Q(userprofile__companyprofile__country__id=country))
+        receivers = receivers.filter(Q(userprofile__employeeprofile__country__id=country) | Q(userprofile__companyprofile__country__id=country))
     noti.send_local = send_local
     noti.send_by_email = send_by_email
     noti.send_by_whatsapp = send_by_whatsapp
