@@ -103,9 +103,12 @@
                 <thead>
                   <tr>
                     <th scope="col">#</th>
+                    <th scope="col">العنوان</th>
                     <th scope="col">الدولة</th>
-                    <th scope="col">كود الدولة</th>
-                    <th scope="col">تعديل</th>
+                    <th scope="col">تم ارسال عبر</th>
+                    <th scope="col">عدد الرسائل</th>
+                    <th scope="col">رسائل المرسلة</th>
+                    <th scope="col">الحالة</th>
                     <th scope="col">حذف</th>
                   </tr>
                 </thead>
@@ -124,10 +127,17 @@
                       {{forloop.counter}}
                   </div>
                     </th>
-                    <td>{{job.get_name_display}}</td>
-                    <td>{{job.name}}</td>
-                    <td>{% temp_get_permission_state request.user.id 'countrys' 'edit' as del_per%}{% if del_per %}<a href="{% url 'EditCountrys' job.id %}" class="ui inverted blue button">تعديل</a>{% endif %}</td>
-                    <td>{% temp_get_permission_state request.user.id 'countrys' 'delete' as del_per%}{% if del_per %}<a href="{% url 'DeleteCountrys' job.id %}" class="ui  red button">حذف</a>{% endif %}</td>
+                    <td>{{job.title}}</td>
+                    <td>{{job.get_country_display}}</td>
+                    <td>
+                      {% if job.send_local %} <div>محلي</div> {% endif %}
+                      {% if job.send_by_email %} <div>بريد الكتروني</div> {% endif %}
+                      {% if job.send_by_whatsapp %} <div>واتساب</div> {% endif %}
+                    </td>
+                    <td>{{job.msgs_count}}</td>
+                    <td>{{job.sended_msgs_count}}</td>
+                    <td>{{job.get_status_display}}</td>
+                    <td><a href="{% url 'DeleteCountrys' job.id %}" class="ui  red button">حذف</a></td>
                   </tr>
                   {% endfor %}
                 </form>
