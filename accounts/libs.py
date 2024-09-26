@@ -244,7 +244,6 @@ def send_msg_email_phone_noti(subject, msg, sender_id, receiver_ids, send_local=
     if not msg:return
     receivers = User.objects.filter(id__in=receiver_ids)
     for receiver in receivers:
-        counter +=1
         userprofile = receiver.userprofile
         email = receiver.email
         phone = None
