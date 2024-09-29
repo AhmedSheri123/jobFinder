@@ -502,8 +502,8 @@ let slider = document.querySelector('.scrollable-cvs')
                             
                             <div class="tab-pane fade" id="nav-contact{{forloop.counter|add:-1}}" role="tabpanel" aria-labelledby="nav-contact-tab{{forloop.counter|add:-1}}" tabindex="0" style="max-width:700px;">
                                 {% if request.user.is_authenticated %}
-                                {% if request.user.userprofile.is_has_subscription and userprofile.subscription.subscription.show_email%}
-                                {% if userprofile.show_email%}
+                                {% if request.user.userprofile.is_has_subscription%}
+                                {% if userprofile.show_email and userprofile.subscription.subscription.show_email%}
                                 <div class="input-group mb-3">
                                     <a href="mailto:{{userprofile.user.email}}" class="input-group-text" id="basic-addon1"><i class="bi bi-envelope-fill"></i></a>
                                     <input value="{{userprofile.user.email}}" disabled type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">

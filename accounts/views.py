@@ -35,7 +35,7 @@ def cvSignup(request):
 
         company_profiles = CompanyProfile.objects.filter(phone=phone, phone_country_code=country_code)
         employee_profiles = EmployeeProfile.objects.filter(phone=phone, phone_country_code=country_code)
-        if employee_profiles.exists() and company_profiles.exists():
+        if employee_profiles.exists() or company_profiles.exists():
             messages.error(request, 'الرقم مسجل من قبل الرجاء تسجيل الدخول')
             return redirect('Login')
 
@@ -221,7 +221,7 @@ def companySignup(request):
 
         employee_profiles = EmployeeProfile.objects.filter(phone=phone, phone_country_code=country_code)
         company_profiles = CompanyProfile.objects.filter(phone=phone, phone_country_code=country_code)
-        if company_profiles.exists() and employee_profiles.exists():
+        if company_profiles.exists() or employee_profiles.exists():
             messages.error(request, 'الرقم مسجل من قبل الرجاء تسجيل الدخول')
             return redirect('Login')
         user = User.objects.create()
