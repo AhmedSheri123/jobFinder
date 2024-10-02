@@ -9,6 +9,7 @@ from accounts.libs import add_get_user_ip, get_ip_info
 import random
 import datetime, json
 from django.conf import settings
+from django.db.models import Q
 # Create your views here.
 BASE_DIR = settings.BASE_DIR
 
@@ -64,7 +65,7 @@ def AdvancedSearch(request):
                 if field:
                     if desires in str(field):
                         filtered.append(i.id)
-        userprofiles = userprofiles.filter(id__in=filtered)
+        userprofiles = userprofiles.filter(Q(id__in=filtered)|Q(employeeprofile__job_title__contains=desires))
     else:desires=''
 
     if major:userprofiles = userprofiles.filter(employeeprofile__major__contains=major)
