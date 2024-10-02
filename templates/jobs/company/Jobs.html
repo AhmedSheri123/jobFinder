@@ -4,7 +4,9 @@
 {% block sheri %}
 <style>
     h1 {font-size: 1.6em;}
-
+    .job_desc {
+        white-space: pre-line;
+    }
     .main {
         background-color: #fff;
         max-width: 992px;
@@ -92,10 +94,8 @@
                     {{number_of_accepted_apllyers}} مقبولين
                 </p> {% endcomment %}
             </div>
+            <p class="job_desc">{{job.about_job}}</p>
 
-            <p class="custom-text-truncate">
-                {{job.about_job}}
-            </p>
             <div style="display: flex; justify-content: space-between;">
                 <div>
                     <a href="{% url 'companyEditJob' job.id %}" class="btn btn-primary mt-2">تعديل</a>

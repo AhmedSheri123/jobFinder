@@ -14,6 +14,9 @@
     .job-details {
         display: flex;
     }
+    .job_desc {
+        white-space: pre-line;
+    }
 
     .job-details i{
         /* margin-right: 10px; */
@@ -88,9 +91,7 @@
 
 
             </div>
-                <p class="custom-text-truncate">
-                    {{job.about_job}}    
-                </p>
+                <p class="job_desc">{{job.about_job}}</p>
             <div class="cp-info">
                 <div class="bg-white shadow-sm p-2 rounded-3 m-0 me-2">
                     <label dir="rtl" class=" form-label m-0">الشركة المعلنة: </label>

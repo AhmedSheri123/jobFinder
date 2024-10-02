@@ -22,19 +22,22 @@
     <div class="main">
 
         <div class="search-main">
+    {% if not_adv %}
+    <h1 class="mt-3" style="text-align: center;">البحث العادي</h1>
+    {% else %}
     <h1 class="mt-3" style="text-align: center;">البحث المتقدم</h1>
+    {% endif %}
 <hr>
 
 
 <form action="{% url 'AdvancedSearch' %}" class="search-form-mob" style="padding: 20px;" method="get">
 
-    <div class="input-group mb-3" >
+    <div class="input-group m-0 mb-3" >
 
         
             <button style="padding: 15px 25px;font-size: 20px;border-radius: 0;" type="submit" class="input-group-text btn btn-primary rounded-end" >
                 <i class="bi bi-search-heart"></i>
             </button>
-
 
             <div class=" input-group-text mb-2 hideed last rounded" style="width: 100%;">
                 <input type="text" id="amount" readonly="" style="border:0; color:#3e3e3e; font-weight:bold;">
@@ -43,6 +46,7 @@
                
               <div id="slider-range"></div>
             </div>
+            {% if not not_adv %}
 
             <select class="form-control hideed last" name="marital_status" id="" >
                 <option value="">الحالة الإجتماعية</option>
@@ -52,6 +56,7 @@
             </select>
 
             <input type="text" placeholder="المدينة" value="{{employee_city}}" name="employee_city" class="form-control" style="border-radius: 0px !important;">
+            {% endif %}
 
 
             <select name="gender" id="" class="input-group-text mb-2" style="border-radius: 0px !important;">
@@ -67,14 +72,13 @@
                 <option {%if countr.id == nationality %} selected {% endif %} value="{{countr.id}}">{{countr.name}}</option>
                 {% endfor %}
             </select>
-
             <select name="country" id="" class="input-group-text no-border" style="border-radius: 0px !important;">
                 <option value="">الدولة</option>
                 {% for countr in countrys %}
                 <option {%if countr.id|stringformat:"i" == country %} selected {% endif %} value="{{countr.id}}">{{countr.get_name_display}}</option>
                 {% endfor %}
             </select>
-
+            {% if not not_adv %}
             <input type="text" name="major" placeholder="التخصص" style="border-radius: 0px !important;" class="form-control">
             <select class="form-control" name="cert_type" id="" style="border-radius: 0px !important;">
                 <option value="">المؤهل الدراسي</option>
@@ -82,11 +86,17 @@
                 <option {%if countr.0 == cert_type %} selected {% endif %} value="{{countr.0}}">{{countr.1}}</option>
                 {% endfor %}
             </select>
-
+            {% endif %}
         <input type="text" dir="rtl" name="desires" style="border-radius: 0;" class="form-control rounded-start" placeholder="الرغبات او المسمى الوظيفي او المهارات" aria-label="Username" aria-describedby="basic-addon1">
+
       </div>
-
-
+      <div class="text-center m-0">
+        <a href="{% url 'AdvancedSearch' %}" style="padding: 15px 25px;font-size: 20px;border-radius: 0;" class="btn btn-primary rounded d-inline-block" >
+            البحث المتقدم
+            <i class="bi bi-badge-ad-fill"></i>
+    
+          </a>    
+      </div>
 
 </form>
 
@@ -114,6 +124,7 @@
 
 
             <form action="" method="get" class="search-form">
+                {% if not not_adv %}
 
                 <div>              
                 <label class="form-label" >المهنة المطلوبة</label>
@@ -143,9 +154,9 @@
                         {% endfor %}
                     </select>
                     </div>
-
+                    {% endif %}
                 <div>
- 
+                    
                     <label class="form-label" >الدولة</label>
                     <select class="form-control" name="country" id="">
                         <option value="">غير محدد</option>
@@ -156,6 +167,7 @@
                 </div>
 
 
+                {% if not not_adv %}
 
                 <div>
                     <label class="form-label" >المدينة</label>
@@ -182,7 +194,7 @@
                         {% endfor %}
                     </select>
                 </div>
-
+                {% endif %}
                 <button class="btn btn-primary" style="margin: auto; margin-top: 20px; display: block;">بحث</button>
             </form>
         </div>

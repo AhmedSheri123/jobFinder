@@ -4,11 +4,15 @@ from .forms import JobsModelForm, JobSalariesModelForm
 from django.utils import timezone
 from django.db.models import Q
 from django.contrib import messages
-from accounts.libs import filter_job_msg
+from accounts.libs import filter_job_msg, add_get_user_ip
+
 # Create your views here.
 
 def index(request):
-    jobs = JobsModel.objects.filter(Q(state='1') | Q(state='2'))
+    ip_info = add_get_user_ip(request)
+    country_code = ip_info.get('isocode')
+
+    jobs = JobsModel.objects.filter(Q(state='1') | Q(state='2'), user__userprofile__companyprofile__country__name=str(country_code).upper())
     return render(request, 'jobs/index.html', {'jobs':jobs})
 
 def viewJob(request, id):

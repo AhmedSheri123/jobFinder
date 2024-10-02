@@ -43,6 +43,7 @@ def AdvancedSearch(request):
     distinctive_users = userprofiles.filter(subscription__subscription__show_in_distinctive_users=True)
 
     desires = request.GET.get('desires')
+    not_adv = request.GET.get('not_adv')
     cert_type = request.GET.get('cert_type')
     major = request.GET.get('major')
     nationality = request.GET.get('nationality')
@@ -101,7 +102,7 @@ def AdvancedSearch(request):
         'marital_status': marital_status,
     }
 
-    dic = {'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFields, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys, 'healthes_status':healthes_status, 'distinctive_users':distinctive_users}
+    dic = {'not_adv':not_adv, 'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFields, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys, 'healthes_status':healthes_status, 'distinctive_users':distinctive_users}
     objs = {}
     objs.update(dic)
     objs.update(inputs)
