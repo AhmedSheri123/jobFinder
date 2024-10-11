@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel, AdminPermissionModel, HealthStatusModel, Withdraw, withdrawal_method_list, usdt_network_choices, ReferralLinkModel, SendNotifications
+from accounts.models import UserProfile, ViewersCounterByIPADDR, CountrysModel, CVSignupProcessChoices, CompanySignupProcessChoices, EmployeeProfile, SubscriptionsModel, UserSubscriptionModel, SubscriptionPriceByCountry, AdminADSModel, NationalityModel, AdminPermissionModel, HealthStatusModel, Withdraw, withdrawal_method_list, usdt_network_choices, ReferralLinkModel, SendNotifications, CompanyProfile
 from accounts.fields import GenderFields
 from calendar import monthrange
 from django.contrib.auth.models import User
@@ -367,6 +367,8 @@ def DeleteCompanys(request, id):
         # if request.user.userprofile.admin_permission == '0':
         obj = User.objects.get(userprofile__id=id)
         obj.delete()
+        company = CompanyProfile.objects.get(id=obj.userprofile.companyprofile.id)
+        company.delete()
         # else:
         #     messages.error(request, 'لا يوجد لديك اذونات للوصول الى هذه الخاصية')
         return redirect('Companys')
