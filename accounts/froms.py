@@ -6,10 +6,10 @@ class CompanyProfileForm(forms.ModelForm):
     class Meta:
         model = CompanyProfile
         
-        fields = ['company_name', 'complite_name', 'about_me', 'country', 'employee_city', 'district', 'img_base64', 'land_line_number' ,'facebook_profile' ,'linkedin' ,'whatsapp' ,'instgram' ,'snapshat' ,'tiktok']
+        fields = ['complite_name', 'company_name', 'about_me', 'country', 'employee_city', 'district', 'img_base64', 'land_line_number' ,'facebook_profile' ,'linkedin' ,'whatsapp' ,'instgram' ,'snapshat' ,'tiktok']
         widgets = {
-            'company_name': forms.TextInput(attrs={'class': 'form-control mb-3'}),
             'complite_name': forms.TextInput(attrs={'class': 'form-control mb-3'}),
+            'company_name': forms.TextInput(attrs={'class': 'form-control mb-3'}),
             'about_me': forms.Textarea(attrs={'class': 'form-control mb-3', 'row':6}),
             'country': forms.Select(attrs={'class': 'form-control mb-3'}),
             'employee_city': forms.TextInput(attrs={'class': 'form-control mb-3'}),

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel, AdminADSModel, NationalityModel, HealthStatusModel
-from accounts.fields import CertTypeFields, GenderFields, StateFields, NationalityFields
+from accounts.fields import CertTypeFields, GenderFields, StateFields, NationalityFields, GenderFieldsV2
 from accounts.libs import filter_sub_price
 from .models import ContactUsModel
 from django.contrib import messages
@@ -26,7 +26,7 @@ def index(request):
     #     u.append(i.user.id)
     # aa = create_notifications(request.user.id, receiver_ids=u, msg='sadas as daasd a dsa d')
     # print(aa)
-    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFields, 'nationalitys':nationalitys, 'distinctive_users':distinctive_users})
+    return render(request, 'pages/index.html', {'userprofiles':userprofiles, 'subscriptions':subscriptions, 'countrys':countrys, 'GenderFields':GenderFieldsV2, 'nationalitys':nationalitys, 'distinctive_users':distinctive_users})
 
 
 def Subscriptions(request):
@@ -102,7 +102,7 @@ def AdvancedSearch(request):
         'marital_status': marital_status,
     }
 
-    dic = {'not_adv':not_adv, 'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFields, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys, 'healthes_status':healthes_status, 'distinctive_users':distinctive_users}
+    dic = {'not_adv':not_adv, 'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFieldsV2, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys, 'healthes_status':healthes_status, 'distinctive_users':distinctive_users}
     objs = {}
     objs.update(dic)
     objs.update(inputs)

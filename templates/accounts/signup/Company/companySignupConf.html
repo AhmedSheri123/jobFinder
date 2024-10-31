@@ -93,16 +93,19 @@
         <div style="max-width: 500px;" dir="rtl">
             <form method="post" class="pt-3" action="{% url 'SignupSetupProcess' alt_id %}">
                 {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">اسم مقدم الطلب</label>
+                    <input required type="text" name="complite_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                  </div>
+                  
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">اسم الشركة</label>
                     <input required type="text" name="company_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                   </div>
                   
   
-                  <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">اسم مقدم الطلب</label>
-                      <input required type="text" name="complite_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    </div>
+
 
 
                 
