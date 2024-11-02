@@ -251,7 +251,31 @@
 
                     <td><a href="{% url 'Company' job.id %}" class="ui inverted blue button">عرض</a></td>
                     
-                    <td>{% temp_get_permission_state request.user.id 'companys' 'delete' as del_per%}{% if del_per %}<a href="{% url 'DeleteCompanys' job.id %}" class="ui  red button">حذف</a>{% endif %}</td>
+                    <td>{% temp_get_permission_state request.user.id 'companys' 'delete' as del_per%}{% if del_per %}
+                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DelModal{{job.id}}">
+                        حذف
+                      </button>
+    
+                      {% endif %}</td>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="DelModal{{job.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{job.id}}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">عملية الحذف</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          هل انت متأكد من حذف العنصر
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الغاء</button>
+                          <a href="{% url 'DeleteCompanys' job.id %}" class="btn btn-danger">حذف</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   </tr>
                   {% endfor %}
                 </form>

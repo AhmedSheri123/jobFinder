@@ -12,7 +12,7 @@ def index(request):
     ip_info = add_get_user_ip(request)
     country_code = ip_info.get('isocode')
 
-    jobs = JobsModel.objects.filter(Q(state='1') | Q(state='2'), user__userprofile__companyprofile__country__name=str(country_code).upper())
+    jobs = JobsModel.objects.filter(Q(state='1', country__name=str(country_code).upper()) | Q(state='2'), country__name=str(country_code).upper())
     return render(request, 'jobs/index.html', {'jobs':jobs})
 
 def viewJob(request, id):

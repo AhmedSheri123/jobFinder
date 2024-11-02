@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.company_field import CompanyGenderFields
 from accounts.fields import CertTypeFields, JobTypeFields
+from accounts.models import CountrysModel
 from django.contrib.auth.models import User
 from accounts.libs import when_published
 
@@ -38,7 +39,7 @@ class JobsModel(models.Model):
     age_to = models.IntegerField(verbose_name="العمر الى")
 
     job_type = models.CharField(max_length=255, choices=JobTypeFields, null=True, verbose_name="الجنس")
-
+    country = models.ForeignKey(CountrysModel, on_delete=models.SET_NULL, null=True, verbose_name='الدولة المستهدفة')
     number_of_days_closing_job = models.IntegerField(verbose_name="عدد الايام للاغلاق الوظيفة تلقائيا", default=30)
     about_job = models.TextField(verbose_name="نبذه مختصرة عن مهام الوظيفة")
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
