@@ -152,7 +152,7 @@
           {% temp_get_permission_state request.user.id 'employees' 'delete' as del_per%}
           <td><a href="{% url 'PanelShowEmployee' job.employeeprofile.id %}" class="ui inverted blue button">عرض</a></td>
           <td>{% if del_per %}
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DelModal{{job.id}}">
+            <button type="button" class="btn btn-danger {% if job.user.is_superuser %} disabled {% endif %}" data-bs-toggle="modal" data-bs-target="#DelModal{{job.id}}">
               حذف
             </button>
             {% endif %}</td>

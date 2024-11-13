@@ -369,6 +369,9 @@ def DeleteCompanys(request, id):
         obj.delete()
         company = CompanyProfile.objects.get(id=obj.userprofile.companyprofile.id)
         company.delete()
+        msgr = MessengerModel.objects.filter(messenger_users__id__in=[obj.id])
+        for i in msgr:
+            i.delete()
         # else:
         #     messages.error(request, 'لا يوجد لديك اذونات للوصول الى هذه الخاصية')
         return redirect('Companys')
