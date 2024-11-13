@@ -96,16 +96,16 @@
         <div style="max-width: 500px;" dir="rtl">
             <form method="post" class="pt-3" action="{% url 'SignupSetupProcess' alt_id %}">
                 {% csrf_token %}
-                <div class="mb-3">
+                {% comment %} <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">الوزن</label>
                     <input required name="weight" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                  </div>
+                  </div> {% endcomment %}
   
   
-                  <div class="mb-3">
+                  {% comment %} <div class="mb-3">
                       <label for="exampleInputEmail1" class="form-label">الطول</label>
                       <input required name="height" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    </div>
+                    </div> {% endcomment %}
 
 
                     
@@ -157,14 +157,14 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
+                    {% comment %} <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">أمتلك سيارة ورخصة قيادة</label>
                             <select required name="have_car" id="" class="form-control">
                                 {% for i in YesNoFields %}
                                 <option value="{{i.0}}">{{i.1}}</option>
                                 {% endfor %}
                             </select>
-                    </div>
+                    </div> {% endcomment %}
 
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">نبذة عنك</label>

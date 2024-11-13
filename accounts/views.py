@@ -161,15 +161,15 @@ def cvSignupCvCreation(request, alt_id):
     skils_model = SkilsModel.objects.all()
 
     if request.method == 'POST':
-        weight = request.POST.get('weight')
-        height = request.POST.get('height')
+        # weight = request.POST.get('weight')
+        # height = request.POST.get('height')
         marital_status = request.POST.get('marital_status')
         health_status = request.POST.get('health_status')
         country = request.POST.get('country')
         employee_city = request.POST.get('employee_city')
         district = request.POST.get('district')
         nationality = request.POST.get('nationality')
-        have_car = request.POST.get('have_car')
+        # have_car = request.POST.get('have_car')
         about_me = request.POST.get('about_me')
         cert_type = request.POST.get('cert_type')
         major = request.POST.get('major')
@@ -183,15 +183,15 @@ def cvSignupCvCreation(request, alt_id):
         userprofile = UserProfile.objects.get(alt_id=alt_id)
         employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
         
-        employee_profile.weight = weight
-        employee_profile.height = height
+        # employee_profile.weight = weight
+        # employee_profile.height = height
         employee_profile.marital_status = marital_status
         employee_profile.health_status = HealthStatusModel.objects.get(id=health_status)
         employee_profile.country = countrys.get(id=country)
         employee_profile.employee_city = employee_city
         employee_profile.district = district
         employee_profile.nationality = nationalitys.get(id=nationality)
-        employee_profile.have_car = have_car
+        # employee_profile.have_car = have_car
         employee_profile.about_me = about_me
         employee_profile.cert_type = cert_type
         employee_profile.major = major
@@ -723,15 +723,15 @@ def SettingsCV(request):
         gender = request.POST.get('gender')
         age = request.POST.get('age')
 
-        weight = request.POST.get('weight')
-        height = request.POST.get('height')
+        # weight = request.POST.get('weight')
+        # height = request.POST.get('height')
         marital_status = request.POST.get('marital_status')
         health_status = request.POST.get('health_status')
         country = request.POST.get('country')
         employee_city = request.POST.get('employee_city')
         district = request.POST.get('district')
         nationality = request.POST.get('nationality')
-        have_car = request.POST.get('have_car')
+        # have_car = request.POST.get('have_car')
         about_me = request.POST.get('about_me')
         cert_type = request.POST.get('cert_type')
         major = request.POST.get('major')
@@ -759,15 +759,15 @@ def SettingsCV(request):
         employee_profile.job_title = job_title
         employee_profile.gender = gender
         employee_profile.age = age
-        employee_profile.weight = weight
-        employee_profile.height = height
+        # employee_profile.weight = weight
+        # employee_profile.height = height
         employee_profile.marital_status = marital_status
         employee_profile.health_status = HealthStatusModel.objects.get(id=health_status)
         employee_profile.country = countrys.get(id=country)
         employee_profile.employee_city = employee_city
         employee_profile.district = district
         employee_profile.nationality = nationalitys.get(id=nationality)
-        employee_profile.have_car = have_car
+        # employee_profile.have_car = have_car
         employee_profile.about_me = about_me
         employee_profile.cert_type = cert_type
         employee_profile.major = major
