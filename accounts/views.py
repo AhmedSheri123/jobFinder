@@ -92,6 +92,7 @@ def cvSignupVerifyEmail(request, alt_id):
             dial_code = get_dial_code_by_country_code(co.phone_country_code)
 
             wa_send_msg(msg, co.phone, dial_code)
+            messages.success(request, 'تم ارسال كود التفعيل على الواتساب')
             return redirect('EmployeeSendWhaCodeVerify', alt_id)
 
 
@@ -99,6 +100,12 @@ def cvSignupVerifyEmail(request, alt_id):
         if VerifyProccess == '1':
             phone = phoneCleaner(request.POST.get('phone'))
             country_code = request.POST.get('country_code')
+
+            company_profiles = CompanyProfile.objects.filter(phone=phone, phone_country_code=country_code)
+            employee_profiles = EmployeeProfile.objects.filter(phone=phone, phone_country_code=country_code)
+            if employee_profiles.exists() or company_profiles.exists():
+                messages.error(request, 'الرقم مسجل من قبل الرجاء ادخال رقم أخر او تسجيل الدخول')
+                return redirect('cvSignupVerifyEmail', alt_id)
             co = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
             co.phone = phone
             co.phone_country_code = country_code
@@ -113,6 +120,7 @@ def cvSignupVerifyEmail(request, alt_id):
             dial_code = get_dial_code_by_country_code(co.phone_country_code)
             
             wa_send_msg(msg, co.phone, dial_code)
+            messages.success(request, 'تم ارسال كود التفعيل على الواتساب')
             return redirect('EmployeeSendWhaCodeVerify', alt_id)
 
 
@@ -329,6 +337,12 @@ def companySignupVerifyEmail(request, alt_id):
         if VerifyProccess == '1':
             phone = phoneCleaner(request.POST.get('phone'))
             country_code = request.POST.get('country_code')
+            company_profiles = CompanyProfile.objects.filter(phone=phone, phone_country_code=country_code)
+            employee_profiles = EmployeeProfile.objects.filter(phone=phone, phone_country_code=country_code)
+            if employee_profiles.exists() or company_profiles.exists():
+                messages.error(request, 'الرقم مسجل من قبل الرجاء ادخال رقم أخر او تسجيل الدخول')
+                return redirect('companySignupVerifyEmail', alt_id)
+
             co = CompanyProfile.objects.get(id=userprofile.companyprofile.id)
             co.phone = phone
             co.phone_country_code = country_code

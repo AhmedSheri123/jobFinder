@@ -225,6 +225,7 @@
                     <th scope="col">#</th>
                     <th scope="col">أسم الشركة</th>
                     <th scope="col">أسم الممثل</th>
+                    <th scope="col">الدولة</th>
                     {% comment %} <th scope="col">رقم الهاتف</th> {% endcomment %}
                     {% comment %} <th scope="col">بريد الإلكتروني</th> {% endcomment %}
                     <th scope="col">عنوان</th>
@@ -258,6 +259,7 @@
                     </th>
                     <td>{{job.user.userprofile.companyprofile.company_name}}</td>
                     <td>{{job.user.userprofile.companyprofile.complite_name}}</td>
+                    <td>{{job.country}}</td>
                     <td>{{job.job_title}}</td>
                     <td>{{number_of_apllyers}}</td>
                     <td>{{number_of_accepted_apllyers}}</td>

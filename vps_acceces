@@ -20,3 +20,10 @@ sudo systemctl restart daphne
 sudo systemctl restart celerybeat.service
 sudo systemctl restart celery.service
 
+
+
+=====redis=====
+sudo nano /etc/redis/redis.conf
+
+#requirepass foobared --> requirepass newpassword
+sudo service redis-server restart 
