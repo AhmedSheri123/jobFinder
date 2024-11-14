@@ -15,3 +15,5 @@ class GeneralSettingsModel(models.Model):
     instgram = models.CharField(max_length=250, default='', blank=True, null=True, verbose_name="instgram")
     snapshat = models.CharField(max_length=250, default='', blank=True, null=True, verbose_name="snapshat")
     tiktok = models.CharField(max_length=250, default='', blank=True, null=True, verbose_name="tiktok")
+
+    allow_company_signup = models.BooleanField('السماح للشركات التسجيل', default=True)
