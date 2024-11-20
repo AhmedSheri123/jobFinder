@@ -180,6 +180,9 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+    @property
+    def when_join(self):
+        return when_published(self.creation_date)
     def reminding_subscription_days(self):
         datetime_now = DatetimeNow(self.user)
         date_now = datetime_now.date()

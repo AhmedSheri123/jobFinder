@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel, AdminADSModel, NationalityModel, HealthStatusModel
+from accounts.models import UserProfile, EmployeeProfile, CountrysModel, SubscriptionsModel, AdminADSModel, NationalityModel, HealthStatusModel, ReferralLinkModel
 from accounts.fields import CertTypeFields, GenderFields, StateFields, NationalityFields, GenderFieldsV2
 from accounts.libs import filter_sub_price
 from .models import ContactUsModel
@@ -135,3 +135,13 @@ def ContactUs(request):
         messages.success(request, 'شكرًا على تواصلك معنا سيتم الرد عليك في أقرب وقت')
     return redirect('index')
 
+
+
+def MostProfit(request):
+    
+    countrys = CountrysModel.objects.all()
+    referral_links = ReferralLinkModel.objects.filter().order_by('-all_total_earn')
+    country_id = request.GET.get('country_id', '')
+    if country_id:
+        referral_links = referral_links.filter(Q(creator_userprofile__employeeprofile__country__id=country_id)| Q(creator_userprofile__companyprofile__country__id=country_id))
+    return render(request, 'pages/most_profit.html', {'referral_links':referral_links, 'countrys':countrys})
