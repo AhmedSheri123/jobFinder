@@ -31,10 +31,11 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'Subscriptions' %}">الباقات</a>
           </li>
-
+          {% if request.user.is_superuser %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'MostProfit' %}">اعلى تحقيقا للارباح</a>
           </li>
+          {% endif %}
 
           <li class="nav-item">
             <a class="nav-link" href="/#contact-us">اتصل بنا</a>

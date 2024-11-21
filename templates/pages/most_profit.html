@@ -19,7 +19,7 @@
     <div class="table-responsive small mt-3">
         <form method="get" class="input-group flex-nowrap mb-2">
             <select class="form-select" name="country_id" aria-label="Default select example">
-                <option selected>--اختر الدولة--</option>
+                <option selected value="">--اختر الدولة--</option>
                 {% for country in countrys %}
                 <option value="{{country.id}}">{{country}}</option>
                 {% endfor %}
