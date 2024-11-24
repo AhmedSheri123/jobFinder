@@ -1168,16 +1168,17 @@ def checkPaymentProcess(request, orderID):
 
             try:
                 referrals = ReferralLinkModel.objects.filter(id=buyed_user.userprofile.referral.id)
-            except:referrals=None
+                if referrals.exists():
+                    referral = referrals.first()
+                    subscription = order.subscription
+                    price = subscription.price
+                    referral_percentage = subscription.referral_percentage_earn / 100
+                    total_earn = price * referral_percentage
+                    referral.total_earn += total_earn
+                    referral.save()
+            except:pass
             
-            if referrals.exists():
-                referral = referrals.first()
-                subscription = order.subscription
-                price = subscription.price
-                referral_percentage = subscription.referral_percentage_earn / 100
-                total_earn = price * referral_percentage
-                referral.total_earn += total_earn
-                referral.save()
+
 
             return EnableUserSubscription(request, order.id)
     return redirect('index')
