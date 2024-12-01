@@ -10,7 +10,5 @@ urlpatterns = [
     path('BlockUserMessenger/<int:receiver_id>', views.BlockUserMessenger, name="BlockUserMessenger"),
     
     path('DeleteFavorite/<int:fav_id>', views.DeleteFavorite, name="DeleteFavorite"),
-    path('DeleteBlockUser/<int:block_id>', views.DeleteBlockUser, name="DeleteBlockUser"),
-
-    
+    path('DeleteBlockUser/<int:block_id>', views.DeleteBlockUser, name="DeleteBlockUser"),    
 ]
