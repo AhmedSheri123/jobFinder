@@ -19,56 +19,17 @@
 
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">بريد الالكتروني</button>
+      <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="true">الهاتف</button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">الهاتف</button>
+      <button class="nav-link " id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="false">بريد الالكتروني</button>
     </li>
+
 
   </ul>
 
   <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-
-
-
-          <div style="max-width: 500px;" dir="rtl">
-              <form method="post" class="pt-3">
-                  {% csrf_token %}
-                  <input type="hidden" name="type" value="1">
-
-                  <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
-                    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                  </div>
-                  <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">كلمة مرور الحساب</label>
-
-                    <div style="position: relative;">
-                      <input type="password" name="password" class="form-control password" id="exampleInputPassword1">
-                      <i class="bi bi-eye-fill" style="position: absolute; top: 7px; left: 10px;" onclick="checkPassword()"></i>
-                    </div>
-                  </div>
-    
-                  <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
-
-                  <p class="mt-3">
-                      ليس لديك حساب؟ <a data-bs-toggle="modal" data-bs-target="#SignupModal" id="SignupBtn" href="#">انشاء حساب</a>
-                  </p>
-                  <p class="mt-3">
-                    هل نسيت كلمة المرور؟ <a href="{% url 'ForgetPassword' %}">استرجاع</a>
-                </p>
-                </form>
-          </div>
-
-    </div>
-
-
-
-
-
-
-    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+    <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
 
 
 
@@ -101,6 +62,42 @@
 
       </div>
     </div>
+
+    <div class="tab-pane fade " id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+
+
+
+      <div style="max-width: 500px;" dir="rtl">
+          <form method="post" class="pt-3">
+              {% csrf_token %}
+              <input type="hidden" name="type" value="1">
+
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">البريد الالكتروني</label>
+                <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">كلمة مرور الحساب</label>
+
+                <div style="position: relative;">
+                  <input type="password" name="password" class="form-control password" id="exampleInputPassword1">
+                  <i class="bi bi-eye-fill" style="position: absolute; top: 7px; left: 10px;" onclick="checkPassword()"></i>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+
+              <p class="mt-3">
+                  ليس لديك حساب؟ <a data-bs-toggle="modal" data-bs-target="#SignupModal" id="SignupBtn" href="#">انشاء حساب</a>
+              </p>
+              <p class="mt-3">
+                هل نسيت كلمة المرور؟ <a href="{% url 'ForgetPassword' %}">استرجاع</a>
+            </p>
+            </form>
+      </div>
+
+</div>
+
   </div>
               
 
