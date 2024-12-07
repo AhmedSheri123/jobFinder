@@ -31,7 +31,7 @@
                 </a>
           </li>
           <li class="nav-item">
-                <a id="noti" tabindex="0" class="btn" role="button" data-bs-toggle="popover" title="الاشعارات" ><i class="bi bi-bell-fill"></i></a>
+                <button id="noti" tabindex="0" class="btn" role="button" data-bs-toggle="popover" title="الاشعارات" ><i class="bi bi-bell-fill"></i></button>
           </li>
 
           <li class="nav-item">
@@ -95,7 +95,7 @@
             content: $('[data-name="popover-content-noti"]').html(),
             //Doing below won't work. Shows title only
             //content: $("#popover-content").html()
-            fallbackPlacements : ['top']
+            {% comment %} fallbackPlacements : ['top'] {% endcomment %}
         }
 
 
