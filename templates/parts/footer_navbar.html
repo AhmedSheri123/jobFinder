@@ -86,6 +86,7 @@
 
 
         var optionsNoti = {
+            container: 'body',
             sanitize: false,
             html: true,
             title: "الاشعارات",
@@ -95,7 +96,7 @@
             content: $('[data-name="popover-content-noti"]').html(),
             //Doing below won't work. Shows title only
             //content: $("#popover-content").html()
-            {% comment %} fallbackPlacements : ['top'] {% endcomment %}
+            fallbackPlacements : ['top']
         }
 
 
