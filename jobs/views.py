@@ -16,10 +16,20 @@ def index(request):
     return render(request, 'jobs/index.html', {'jobs':jobs})
 
 def viewJob(request, id):
-    job = JobsModel.objects.get(id=id)
-    appliers = JobAppliersModel.objects.filter(job=job)
-    return render(request, 'jobs/viewJob.html', {'job':job, 'appliers':appliers})
-
+    user = request.user
+    if user.authenticated:
+        userprofile = user.userprofile
+        if userprofile.is_has_subscription:
+            job = JobsModel.objects.get(id=id)
+            appliers = JobAppliersModel.objects.filter(job=job)
+            return render(request, 'jobs/viewJob.html', {'job':job, 'appliers':appliers})
+        else:
+            messages.error('يرجى اشتراك باحد الباقات لتتمكن من تقديم على الوظائف')
+            return redirect('JobIndex')
+    else:
+        messages.error('يرجى تسجيل الدخول او انشاء حساب')
+        return redirect('JobIndex')
+    
 def companyJobs(request):
     user = request.user
     jobs = JobsModel.objects.filter(user=user)
