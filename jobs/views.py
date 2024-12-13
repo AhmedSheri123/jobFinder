@@ -17,7 +17,7 @@ def index(request):
 
 def viewJob(request, id):
     user = request.user
-    if user.authenticated:
+    if user.is_authenticated:
         userprofile = user.userprofile
         if userprofile.is_has_subscription:
             job = JobsModel.objects.get(id=id)
