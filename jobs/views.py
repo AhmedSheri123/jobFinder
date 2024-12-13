@@ -24,10 +24,10 @@ def viewJob(request, id):
             appliers = JobAppliersModel.objects.filter(job=job)
             return render(request, 'jobs/viewJob.html', {'job':job, 'appliers':appliers})
         else:
-            messages.error('يرجى اشتراك باحد الباقات لتتمكن من تقديم على الوظائف')
+            messages.error(request, 'يرجى اشتراك باحد الباقات لتتمكن من تقديم على الوظائف')
             return redirect('JobIndex')
     else:
-        messages.error('يرجى تسجيل الدخول او انشاء حساب')
+        messages.error(request, 'يرجى تسجيل الدخول او انشاء حساب')
         return redirect('JobIndex')
     
 def companyJobs(request):
