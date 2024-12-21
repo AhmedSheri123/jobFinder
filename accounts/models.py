@@ -192,7 +192,8 @@ class UserProfile(models.Model):
         if reminding_days <=0:
             reminding_days = 0
         return reminding_days
-
+    
+    @property
     def is_has_subscription(self):
         datetime_now = DatetimeNow(self.user)
         date_now = datetime_now.date()

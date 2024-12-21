@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css\employee\employeePortal.css' %}">
+{% endblock %}
+
+{% block sheri %}
+
+<style>
+    .container p {
+        text-align: center;
+    }
+
+    .container h5 {
+        margin-top: 25px;
+        text-align: center;
+    }
+</style>
+
+
+
+<div class="container py-5 mt-5">
+
+
+    <div style="display: flex; justify-content: center;">
+        <h2 style="text-align: center; display: inline-block;" class="mt-5 bg-warning text-dark p-3 rounded mb-3">
+            نموذج التواصل
+        </h2>
+    </div>
+
+
+	{% comment %} <h1 style="margin-top: 100px; font-size: 25px; text-align: center;">نموذج التواصل</h1> {% endcomment %}
+	<div id="contact-us" dir="rtl" style="background-color: #fff;  box-shadow: inset #d4d4d4 0px 0px 5px 3px; padding: 15px; max-width: 950px; margin: auto; border-radius: 20px;">
+		<form  action="{% url 'ContactUs' %}" method="post" class="contact-form">
+		{% csrf_token %}
+		<div class="mb-3">
+			<label for="exampleFormControlInput1" class="form-label">الإسم</label>
+			<input style="text-align:right;" required name="name" type="text" class="form-control" id="exampleFormControlInput1" placeholder="مثال: محمد عدنان">
+		  </div>
+		  <div class="mb-3">
+			<label for="exampleFormControlInput1" class="form-label">بريد الالكتروني</label>
+			<input style="text-align:right;" required name="email" type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+		  </div>
+		  <div class="mb-3">
+			<label for="exampleFormControlTextarea1" class="form-label">رسالة</label>
+			<textarea class="form-control" required name="msg" id="exampleFormControlTextarea1" rows="3"></textarea>
+		  </div>
+
+		  <div class="col-auto">
+			<button type="submit" class="btn btn-primary mb-3 qa-btn-blu-color">إرسال</button>
+		  </div>
+		</form>
+	</div>
+
+</div>
+
+<br><br>
+{% endblock %}

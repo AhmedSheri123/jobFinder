@@ -1,5 +1,6 @@
 {% extends 'panel_base.html' %}
 {% load static %}
+{% load panel_tags %}
 
 {% block links %}
 
@@ -102,6 +103,35 @@
         <div class="item">
             <div class="header">يمتلك سيارة ورخصة قيادة</div>
             <p>{{employee.get_have_car_display}}</p>
+        </div>
+        <div class="item">
+            <div class="header">نبذة عني</div>
+            <p>{{employee.about_me}}</p>
+        </div>
+        <div class="item">
+            <div class="header">الرغبات</div>
+            {% json_to_html employee.desires as desires %}
+            <p>{{desires}}</p>
+        </div>
+        <div class="item">
+            <div class="header">خبرات</div>
+            {% json_to_html employee.experiences as experiences %}
+            <p>{{experiences}}</p>
+        </div>
+        <div class="item">
+            {% json_to_html employee.classes as classes %}
+            <div class="header">دورات</div>
+            <p>{{classes}}</p>
+        </div>
+        <div class="item">
+            <div class="header">مهارات</div>
+            {% json_to_html employee.skils as skils %}
+            <p>{{skils}}</p>
+        </div>
+        <div class="item">
+            <div class="header">لغات</div>
+            {% json_to_html employee.lang as lang %}
+            <p>{{lang}}</p>
         </div>
         {% comment %} <div class="item">
             <div class="header">نوع الإعاقة</div>

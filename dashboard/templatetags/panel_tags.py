@@ -12,6 +12,13 @@ def temp_get_permission_state(user_id, url, method):
     
     return p
 
+@register.simple_tag
+def json_to_html(json):
+    # for el in json:
+    p = ', '.join(json['desires'])
+    
+    return p
+
 
 # @register.simple_tag
 # def NumberOfPresenters(job_id):

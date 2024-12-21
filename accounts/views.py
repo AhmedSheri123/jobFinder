@@ -19,6 +19,7 @@ from dashboard.views import has_perm
 from .libs import get_dial_code_by_country_code, phoneCleaner
 from jobs.models import JobAppliersModel, JobsModel
 import json
+from dashboard.models import GeneralSettingsModel
 # Create your views here.
 email_from = settings.EMAIL_HOST_USER
 BASE_DIR = settings.BASE_DIR
@@ -825,6 +826,7 @@ def MyReferralLink(request):
     domain = getDomain(request)
     user = request.user
     userprofile = user.userprofile
+    subscriptions = filter_sub_price(request, SubscriptionsModel.objects.all())
 
     subs_url = reverse('Subscriptions')
     if userprofile.subscription:
@@ -846,7 +848,7 @@ def MyReferralLink(request):
         messages.error(request, f'لتتمكن من الحصول على رابط تحقق من خلاله ارباح, يجب عليك الاشتراك في احد الباقات <a href="{subs_url}">اضغط هنا</a>')
         return redirect('Profile', user.id)
     
-    return render(request, 'ReferralLink/MyReferralLinks.html', {'refs':refs, 'refs_total_earn':refs_total_earn, 'refs_all_total_earn':refs_all_total_earn, 'total_links':total_links, 'total_signin_users':total_signin_users, 'domain':domain})
+    return render(request, 'ReferralLink/MyReferralLinks.html', {'refs':refs, 'refs_total_earn':refs_total_earn, 'refs_all_total_earn':refs_all_total_earn, 'total_links':total_links, 'total_signin_users':total_signin_users, 'domain':domain, 'subscriptions':subscriptions})
 
 def CreateReferralLinkForMe(request):
     user = request.user
@@ -902,7 +904,12 @@ def WithdrawReferralLinkBalance(request, referral_id):
 
 def SignUpReferralLink(request, referral_id):
     request.session['referral_id'] = referral_id
-    
+    _settings = GeneralSettingsModel.objects.filter()
+    if _settings.exists():
+        _settings = _settings.first()
+        if not _settings.allow_company_signup:
+            return redirect('cvSignup')
+
     return redirect(reverse('Login')+'?is_signup=1')
 
 

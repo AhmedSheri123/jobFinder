@@ -190,7 +190,8 @@ def PanelShowEmployees(request):
         jobs = UserProfile.objects.filter(is_employee=True).order_by('-id')
         
         country = request.GET.get('country')
-        if country:jobs = jobs.filter(employeeprofile__country=country)
+        print(country)
+        if country:jobs = jobs.filter(employeeprofile__country__id=country)
 
         gender = request.GET.get('gender')
         if gender:jobs = jobs.filter(employeeprofile__gender=gender)
@@ -214,7 +215,7 @@ def PanelShowEmployees(request):
         else:search_email=''
 
         search_phone = request.GET.get('search_phone')
-        if search_phone:jobs = jobs.filter(employeeprofile__phone=search_phone)
+        if search_phone:jobs = jobs.filter(employeeprofile__phone__contains=search_phone)
         else:search_phone=''
 
         publish_date = request.GET.get('publish_date')
@@ -315,7 +316,7 @@ def Companys(request):
         else:search_email=''
 
         search_phone = request.GET.get('search_phone')
-        if search_phone:jobs = jobs.filter(companyprofile__phone=search_phone)
+        if search_phone:jobs = jobs.filter(companyprofile__phone__contains=search_phone)
         else:search_phone=''
 
         complite_name = request.GET.get('complite_name')
@@ -844,6 +845,10 @@ def get_permission_state(user_id, url, method):
             if method == 'show':
                 return permission.edit_settings
             if method == 'edit':
+                return permission.edit_settings
+            
+        elif url == 'send_notifications':
+            if method == 'show':
                 return permission.edit_settings
     
     return False

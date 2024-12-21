@@ -133,7 +133,7 @@ def ContactUs(request):
         obj = ContactUsModel.objects.create(name=name, email=email, msg=msg, creation_date=timezone.now())
         obj.save()
         messages.success(request, 'شكرًا على تواصلك معنا سيتم الرد عليك في أقرب وقت')
-    return redirect('index')
+    return render(request, 'pages/ContactUs.html')
 
 
 
@@ -142,6 +142,15 @@ def MostProfit(request):
     countrys = CountrysModel.objects.all()
     referral_links = ReferralLinkModel.objects.filter().order_by('-all_total_earn')
     country_id = request.GET.get('country_id', '')
+    
     if country_id:
         referral_links = referral_links.filter(Q(creator_userprofile__employeeprofile__country__id=country_id)| Q(creator_userprofile__companyprofile__country__id=country_id))
-    return render(request, 'pages/most_profit.html', {'referral_links':referral_links, 'countrys':countrys})
+
+    users = list(set([referral_link.creator_userprofile for referral_link in referral_links]))
+    print(users)
+    profits = []
+    for user in users:
+        ref = referral_links.filter(creator_userprofile=user)
+        profit = sum(i.all_total_earn for i in ref)
+        profits.append([user, profit])
+    return render(request, 'pages/most_profit.html', {'referral_links':referral_links, 'profits':profits, 'countrys':countrys})

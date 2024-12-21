@@ -251,7 +251,6 @@
                     <th scope="col">#</th>
                     <th scope="col">اسم المستعار</th>
                     <th scope="col">عنوان الأحالة</th>
-                    <th scope="col">نسبة عمولتك</th>
                     <th scope="col">ارباح الحالية</th>
                     <th scope="col">ارباح المسحوبة</th>
                     <th scope="col">اجمالي الارباح</th>
@@ -268,7 +267,6 @@
                     <th scope="row">{{forloop.counter}}</th>
                     <td>{{ref.alias_name}}</td>
                     <td>{{ref.referral_id}}</td>
-                    <td>{{ref.percentage_of_withdraw}}%</td>
                     <td>{{ref.total_earn}}$</td>
                     <td>{{ref.withdraw_earn}}$</td>
                     <td>{{ref.all_total_earn}}$</td>
@@ -344,9 +342,35 @@
             </tbody>
         </table>
 
+
     </div>
 
+    <div>
 
+        <h2 class="mt-5 mb-3">
+            نسب العمولة لكل باقة
+        </h2>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">الباقة</th>
+                <th scope="col">السعر</th>
+                <th scope="col">النسبة</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for i in subscriptions %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{i.title}}</td>
+                <td>{{i.price}}</td>
+                <td>{{i.referral_percentage_earn}}%</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
 </div>
 
 

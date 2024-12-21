@@ -5,7 +5,7 @@
 
 {% endblock links %}
 
-{% if request.user.userprofile.subscription %}
+{% if request.user.userprofile.is_has_subscription %}
 {% with subscription=request.user.userprofile.subscription %}
 
 <div class="Subscriptions-main-box" dir="rtl" style="display: flex; justify-content: space-between; flex-wrap: wrap; align-items: flex-start;">

@@ -37,25 +37,25 @@
             </tr>
           </thead>
           <tbody>
-            {% for referral_link in referral_links %}
+            {% for profit in profits %}
             <tr>
               <td>{{forloop.counter}}</td>
-              {% if referral_link.creator_userprofile.is_employee %}
-              <td>{{referral_link.creator_userprofile.employeeprofile.name}}</td>
+              {% if profit.0.is_employee %}
+              <td>{{profit.0.employeeprofile.name}}</td>
               
                 <td>
-                {{referral_link.creator_userprofile.employeeprofile.country}}
+                {{profit.0.employeeprofile.country}}
                 </td>
 
-                {% elif referral_link.creator_userprofile.is_company %}
-              <td>{{referral_link.creator_userprofile.companyprofile.company_name}}</td>
+                {% elif profit.0.is_company %}
+              <td>{{profit.0.companyprofile.company_name}}</td>
 
                 <td>
-                {{referral_link.creator_userprofile.companyprofile.country}}
+                {{profit.0.companyprofile.country}}
                 </td>
                 {% endif %}
-              <td>منذ {{referral_link.creator_userprofile.when_join}}</td>
-              <td>{{referral_link.all_total_earn}} $</td>
+              <td>منذ {{profit.0.when_join}}</td>
+              <td>{{profit.1}} $</td>
             </tr>
             
             {% endfor %}
