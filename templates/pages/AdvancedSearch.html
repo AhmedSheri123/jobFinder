@@ -11,21 +11,23 @@
 {% block sheri %}
 <style>
     h1 {font-size: 1.6em;}
-    
+    .search-main {
+        background-image: linear-gradient(135deg, #00000095 10%, #00000095 100%);
+    }
    
 </style>
 
 
-<div style="margin-top: 100px;"></div>
+<div style="margin-top: 80px;"></div>
 <div  dir="rtl">
-    <p>الرئيسية/ السير/ البحث المتقدم</p>
+    {% comment %} <p>الرئيسية/ السير/ البحث المتقدم</p> {% endcomment %}
     <div class="main">
 
-        <div class="search-main">
+<div class="search-main pt-5">
     {% if not_adv %}
-    <h1 class="mt-3" style="text-align: center;">البحث العادي</h1>
+    <h1 class="mt-3 text-white" style="text-align: center;">البحث العادي</h1>
     {% else %}
-    <h1 class="mt-3" style="text-align: center;">البحث المتقدم</h1>
+    <h1 class="mt-3 text-white" style="text-align: center;">البحث المتقدم</h1>
     {% endif %}
 <hr>
 

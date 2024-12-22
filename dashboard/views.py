@@ -196,15 +196,12 @@ def PanelShowEmployees(request):
         gender = request.GET.get('gender')
         if gender:jobs = jobs.filter(employeeprofile__gender=gender)
 
-        state = request.GET.get('state')
-        if state:jobs = jobs.filter(company_signup_process=state)
+        state = request.GET.get('state', '')
+        if state:jobs = jobs.filter(cv_signup_process=state)
 
         search = request.GET.get('search')
         if search:jobs = jobs.filter(employeeprofile__name__contains=search)
         else:search=''
-
-        post_state = request.GET.get('post_state')
-        if post_state:jobs = jobs.filter(cv_signup_process=post_state)
 
         id_code = request.GET.get('id_code')
         if id_code:jobs = jobs.filter(alt_id=id_code)

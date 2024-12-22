@@ -15,7 +15,7 @@ def temp_get_permission_state(user_id, url, method):
 @register.simple_tag
 def json_to_html(json):
     # for el in json:
-    p = ', '.join(json['desires'])
+    p = ', '.join(json.get('desires', []))
     
     return p
 

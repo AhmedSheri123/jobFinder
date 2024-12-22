@@ -20,9 +20,13 @@ def viewJob(request, id):
     if user.is_authenticated:
         userprofile = user.userprofile
         if userprofile.is_has_subscription:
-            job = JobsModel.objects.get(id=id)
-            appliers = JobAppliersModel.objects.filter(job=job)
-            return render(request, 'jobs/viewJob.html', {'job':job, 'appliers':appliers})
+            if userprofile.subscription.subscription.apply_jobs:
+                job = JobsModel.objects.get(id=id)
+                appliers = JobAppliersModel.objects.filter(job=job)
+                return render(request, 'jobs/viewJob.html', {'job':job, 'appliers':appliers})
+            else:
+                messages.error(request, 'يرجى ترقية الباقة الحالية لتتمكن من تقديم على الوظائف')
+                return redirect('JobIndex')
         else:
             messages.error(request, 'يرجى اشتراك باحد الباقات لتتمكن من تقديم على الوظائف')
             return redirect('JobIndex')

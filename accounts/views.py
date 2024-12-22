@@ -53,7 +53,7 @@ def cvSignup(request):
         userprofile.cv_signup_process = '2'
         referral_id = request.session.get('referral_id')
         if referral_id:
-            referral = ReferralLinkModel.objects.get(id=referral_id)
+            referral = ReferralLinkModel.objects.get(referral_id=referral_id)
             userprofile.referral=referral
 
         userprofile.save()
@@ -654,7 +654,7 @@ def CVProfile(request, id):
     employee_profile = EmployeeProfile.objects.get(id=userprofile.employeeprofile.id)
     profile_images = EmployeeProfileImages.objects.filter(user=user)
     if userprofile.cv_signup_process == '5':
-        messages.error(request, 'حاليا لن يتم ظهور حسابك ضمن نتائج حتى تتم مراجعته واعتماده من قبل الادارة')
+        messages.error(request, 'حاليا لن يتم ظهور حسابك ضمن نتائج البحث حتى تتم مراجعته واعتماده من قبل الادارة')
     return render(request, 'accounts/profile/Employee/profile.html', {'is_fav':is_fav, 'is_liked':is_liked, 'UserFavURL':UserFavURL, 'UserLikeURL':UserLikeURL, 'employee_profile':employee_profile, 'profile_images':profile_images, 'userprofile':userprofile, 'applier':applier})
 
 def CPProfile(request, id):
