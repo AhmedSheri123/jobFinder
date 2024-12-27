@@ -368,6 +368,7 @@ class ReferralLinkModel(models.Model):
     percentage_of_withdraw = models.IntegerField(blank=True, null=True)
     add_balance_for_signup = models.BooleanField(default=False, verbose_name="اضافة رصيد للمنشاء الحساب")
     add_balance_for_signup_amount = models.DecimalField(max_digits=6, decimal_places=3, default=0.000, verbose_name="كمية اضافة رصيد للمنشاء الحساب", blank=True, null=True)
+    subscription = models.ForeignKey('UserSubscriptionModel', on_delete=models.SET_NULL, null=True, blank=True)
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
 
     def __str__(self):
@@ -422,6 +423,7 @@ class SubscriptionsModel(models.Model):
     show_number_of_appearances = models.BooleanField(default=False, verbose_name='إظهار عدد الظهور')
     show_number_of_likes = models.BooleanField(default=False, verbose_name='إظهار عدد الإعجابات')
     referral_link_to_earn = models.BooleanField(default=False, verbose_name='رابط الإحالة للربح')
+    random_referral_link_chooseing_on_Subscription = models.BooleanField(default=False, verbose_name='اختيار العشوائي من روابط الأحالة عند التسجيل')
 
     creation_date = models.DateTimeField(null=True, verbose_name="تاريخ الانشاء")
 
@@ -444,7 +446,20 @@ class UserSubscriptionModel(models.Model):
     def __str__(self):
         return str(self.subscription.title)
 
-
+    @property
+    def is_has_subscription(self):
+        datetime_now = timezone.now()
+        date_now = datetime_now.date()
+        subscription_date = self.creation_date.date()
+        end_date = (datetime.timedelta(days=self.number_of_days) + subscription_date)
+        if date_now < end_date:
+            return True
+        return False
+    def is_has_subscription_str(self):
+        if self.is_has_subscription:
+            return 'مشترك'
+        return 'منتهي'
+    
 class UserViewedProfileModel(models.Model):
     profile_viewer = models.ForeignKey(User, related_name='profile_viewer', on_delete=models.CASCADE)
     profile_viewed = models.ForeignKey(User, related_name='profile_viewed', on_delete=models.CASCADE)

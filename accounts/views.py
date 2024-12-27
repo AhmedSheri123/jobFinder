@@ -18,7 +18,7 @@ from django.db.models import Q
 from dashboard.views import has_perm
 from .libs import get_dial_code_by_country_code, phoneCleaner
 from jobs.models import JobAppliersModel, JobsModel
-import json
+import json, random
 from dashboard.models import GeneralSettingsModel
 # Create your views here.
 email_from = settings.EMAIL_HOST_USER
@@ -55,6 +55,11 @@ def cvSignup(request):
         if referral_id:
             referral = ReferralLinkModel.objects.get(referral_id=referral_id)
             userprofile.referral=referral
+        else:
+            referrals = ReferralLinkModel.objects.exclude(subscription=None)
+            if referrals.exists():
+                referral = random.choice(referrals)
+                userprofile.referral=referral
 
         userprofile.save()
         alt_id = userprofile.alt_id
@@ -832,6 +837,7 @@ def MyReferralLink(request):
     if userprofile.subscription:
         if userprofile.subscription.subscription.referral_link_to_earn:
             refs = ReferralLinkModel.objects.filter(creator_userprofile = userprofile)
+            random_choose_refs = refs.exclude(subscription=None)
 
             refs_total_earn = 0
             refs_all_total_earn = 0
@@ -848,7 +854,7 @@ def MyReferralLink(request):
         messages.error(request, f'لتتمكن من الحصول على رابط تحقق من خلاله ارباح, يجب عليك الاشتراك في احد الباقات <a href="{subs_url}">اضغط هنا</a>')
         return redirect('Profile', user.id)
     
-    return render(request, 'ReferralLink/MyReferralLinks.html', {'refs':refs, 'refs_total_earn':refs_total_earn, 'refs_all_total_earn':refs_all_total_earn, 'total_links':total_links, 'total_signin_users':total_signin_users, 'domain':domain, 'subscriptions':subscriptions})
+    return render(request, 'ReferralLink/MyReferralLinks.html', {'refs':refs, 'random_choose_refs':random_choose_refs, 'refs_total_earn':refs_total_earn, 'refs_all_total_earn':refs_all_total_earn, 'total_links':total_links, 'total_signin_users':total_signin_users, 'domain':domain, 'subscriptions':subscriptions})
 
 def CreateReferralLinkForMe(request):
     user = request.user
@@ -931,6 +937,13 @@ def EnableUserSubscription(request, id):
     userprofile.save()
     order.is_buyed = True
     order.save()
+    if userprofile.is_employee:
+        link = ReferralLinkModel.objects.create()
+        link.alias_name = subscription.title
+        link.creator_userprofile = userprofile
+        link.percentage_of_withdraw = 20
+        link.subscription = user_subscription
+        link.save()
     messages.success(request, 'تم الاشتراك بنجاح')
     return redirect('index')
 
@@ -950,6 +963,14 @@ def AdminEnableUserSubscription(request):
 
             userprofile.subscription = user_subscription
             userprofile.save()
+
+            if userprofile.is_employee:
+                link = ReferralLinkModel.objects.create()
+                link.alias_name = subscription.title
+                link.creator_userprofile = userprofile
+                link.percentage_of_withdraw = 20
+                link.subscription = user_subscription
+                link.save()
             messages.success(request, 'تم الاشتراك بنجاح')
     return redirect('PanelViewSubscriptions')
 
@@ -1174,9 +1195,13 @@ def checkPaymentProcess(request, orderID):
             buyed_user = order.user
 
             try:
-                referrals = ReferralLinkModel.objects.filter(id=buyed_user.userprofile.referral.id)
-                if referrals.exists():
-                    referral = referrals.first()
+                userprofile=buyed_user.userprofile
+                referral=userprofile.referral
+                if referral:
+                    referral = ReferralLinkModel.objects.get(id=referral.id)
+                    if referral.subscription:
+                        if not referral.subscription.is_has_subscription:
+                            return EnableUserSubscription(request, order.id)
                     subscription = order.subscription
                     price = subscription.price
                     referral_percentage = subscription.referral_percentage_earn / 100
