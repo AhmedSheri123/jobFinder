@@ -17,8 +17,8 @@ def index(request):
 
     nationalitys = NationalityModel.objects.all()
     countrys = CountrysModel.objects.all()
-    userprofiles = UserProfile.objects.filter(is_employee=True, cv_signup_process='6')
-    distinctive_users = userprofiles.filter(subscription__subscription__show_in_distinctive_users=True).order_by('-user__last_login')
+    userprofiles = UserProfile.objects.filter(is_employee=True, cv_signup_process='6').order_by('-user__last_login')
+    distinctive_users = userprofiles.filter(subscription__subscription__show_in_distinctive_users=True)
     subscriptions = filter_sub_price(request, SubscriptionsModel.objects.all())
 
     # u = []
