@@ -1186,31 +1186,37 @@ def UserPayment(request, subscription_id):
     else:return redirect('Login')         
     return render(request, 'payment/pay.html', {'subscription':subscription})
 
+def get_general_setting():
+    _settings = GeneralSettingsModel.objects.filter()
+    if _settings.exists():
+        return _settings.first()
+    
+    return ''
 
 def checkPaymentProcess(request, orderID):
     order = UserPaymentOrderModel.objects.get(orderID=orderID)
+    _settings = get_general_setting()
     r = getInvoice(order.transactionNo)
     if r.get('success'):
         if r.get('orderStatus') == 'Paid':
             buyed_user = order.user
 
             try:
-                userprofile=buyed_user.userprofile
-                referral=userprofile.referral
-                if referral:
-                    referral = ReferralLinkModel.objects.get(id=referral.id)
-                    if referral.subscription:
-                        if not referral.subscription.is_has_subscription:
-                            return EnableUserSubscription(request, order.id)
-                    subscription = order.subscription
-                    price = subscription.price
-                    referral_percentage = subscription.referral_percentage_earn / 100
-                    total_earn = price * referral_percentage
-                    referral.total_earn += total_earn
-                    referral.save()
+                if _settings.stop_premium_link_earnings:
+                    userprofile=buyed_user.userprofile
+                    referral=userprofile.referral
+                    if referral:
+                        referral = ReferralLinkModel.objects.get(id=referral.id)
+                        if referral.subscription:
+                            if not referral.subscription.is_has_subscription:
+                                return EnableUserSubscription(request, order.id)
+                        subscription = order.subscription
+                        price = subscription.price
+                        referral_percentage = subscription.referral_percentage_earn / 100
+                        total_earn = price * referral_percentage
+                        referral.total_earn += total_earn
+                        referral.save()
             except:pass
-            
-
 
             return EnableUserSubscription(request, order.id)
     return redirect('index')

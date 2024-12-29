@@ -18,3 +18,4 @@ class GeneralSettingsModel(models.Model):
 
     allow_company_signup = models.BooleanField('السماح للشركات التسجيل', default=True)
     allow_employee_signup = models.BooleanField('السماح للموظفين التسجيل', default=True)
+    stop_premium_link_earnings = models.BooleanField(default=False, verbose_name='ايقاف ارباح الروابط المميزة')
