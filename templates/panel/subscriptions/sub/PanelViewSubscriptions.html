@@ -82,6 +82,7 @@
                     <th scope="col">صالحة لمدى</th>
                     <th scope="col">السعر</th>
                     <th scope="col">هل هي الافضراضية</th>
+                    <th scope="col">عدد الاشتراكات</th>
 
                     <th scope="col">تعديل</th>
                     <th scope="col">حذف</th>
@@ -109,6 +110,8 @@
                     <td>{{job.number_of_days}} يوم</td>
                     <td>{{job.price}}</td>
                     <td>{% if job.is_default_Subscription %}نعم{% else %}لا{% endif %}</td>
+                    {% get_user_subs job.id as user_subs%}
+                    <td>{{user_subs.count}}</td>
 
                     {% comment %} <td>{{job.user.userprofile.companyprofile.phone}}</td> {% endcomment %}
                     {% comment %} <td>{{job.user.email}}</td> {% endcomment %}

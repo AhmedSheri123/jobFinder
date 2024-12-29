@@ -57,7 +57,7 @@ proxy_redirect off;
 upstream channels-backend {server localhost:8000;}
 
 server {
-server_name www.ceveve.com;
+#server_name www.ceveve.com ceveve.com;
 location = /favicon.ico { access_log off; log_not_found off; }
 location /static/ {
 root /var/www/jobFinder;
@@ -93,14 +93,16 @@ location @proxy_to_app {
 
 
 server {
-    if ($host = www.ceveve.com) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-    
-listen 80;
-server_name www.ceveve.com;
-    return 404; # managed by Certbot
+    listen 80;
 
+    server_name www.ceveve.com;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 80;
+
+    server_name ceveve.com;
+    return 301 https://$host$request_uri;
 }
 =====================================
 

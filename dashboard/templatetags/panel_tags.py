@@ -3,6 +3,7 @@ from django import template
 import json
 from django.conf import settings
 from dashboard.views import get_permission_state
+from accounts.models import UserSubscriptionModel
 
 register = template.Library()
 
@@ -18,6 +19,11 @@ def json_to_html(json):
     p = ', '.join(json.get('desires', []))
     
     return p
+
+@register.simple_tag
+def get_user_subs(sub_id):
+    s = UserSubscriptionModel.objects.filter(subscription__id=sub_id)
+    return s
 
 
 # @register.simple_tag

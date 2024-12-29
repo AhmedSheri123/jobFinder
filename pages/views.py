@@ -18,7 +18,7 @@ def index(request):
     nationalitys = NationalityModel.objects.all()
     countrys = CountrysModel.objects.all()
     userprofiles = UserProfile.objects.filter(is_employee=True, cv_signup_process='6')
-    distinctive_users = userprofiles.filter(subscription__subscription__show_in_distinctive_users=True)
+    distinctive_users = userprofiles.filter(subscription__subscription__show_in_distinctive_users=True).order_by('user__last_login')
     subscriptions = filter_sub_price(request, SubscriptionsModel.objects.all())
 
     # u = []
@@ -101,7 +101,7 @@ def AdvancedSearch(request):
         'gender': gender,
         'marital_status': marital_status,
     }
-
+    userprofiles = userprofiles.order_by('user__last_login')
     dic = {'not_adv':not_adv, 'userprofiles':userprofiles, 'CertTypeFields':CertTypeFields, 'GenderFields':GenderFieldsV2, 'StateFields':StateFields, 'nationalitys':nationalitys, 'countrys':countrys, 'healthes_status':healthes_status, 'distinctive_users':distinctive_users}
     objs = {}
     objs.update(dic)
