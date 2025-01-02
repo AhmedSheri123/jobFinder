@@ -1201,22 +1201,20 @@ def checkPaymentProcess(request, orderID):
         if r.get('orderStatus') == 'Paid':
             buyed_user = order.user
 
-            try:
-                if not _settings.stop_premium_link_earnings:
-                    userprofile=buyed_user.userprofile
-                    referral=userprofile.referral
-                    if referral:
-                        referral = ReferralLinkModel.objects.get(id=referral.id)
-                        if referral.subscription:
-                            if not referral.subscription.is_has_subscription:
-                                return EnableUserSubscription(request, order.id)
-                        subscription = order.subscription
-                        price = subscription.price
-                        referral_percentage = subscription.referral_percentage_earn / 100
-                        total_earn = price * referral_percentage
-                        referral.total_earn += total_earn
-                        referral.save()
-            except:pass
+            if not _settings.stop_premium_link_earnings:
+                userprofile=buyed_user.userprofile
+                referral=userprofile.referral
+                if referral:
+                    referral = ReferralLinkModel.objects.get(id=referral.id)
+                    if referral.subscription:
+                        if not referral.subscription.is_has_subscription:
+                            return EnableUserSubscription(request, order.id)
+                    subscription = order.subscription
+                    price = subscription.price
+                    referral_percentage = subscription.referral_percentage_earn / 100
+                    total_earn = price * referral_percentage
+                    referral.total_earn += total_earn
+                    referral.save()
 
             return EnableUserSubscription(request, order.id)
     return redirect('index')
