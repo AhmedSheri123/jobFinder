@@ -1192,7 +1192,7 @@ def get_general_setting():
         return _settings.first()
     
     return ''
-
+from decimal import Decimal
 def checkPaymentProcess(request, orderID):
     order = UserPaymentOrderModel.objects.get(orderID=orderID)
     _settings = get_general_setting()
@@ -1212,7 +1212,7 @@ def checkPaymentProcess(request, orderID):
                     subscription = order.subscription
                     price = subscription.price
                     referral_percentage = subscription.referral_percentage_earn / 100
-                    total_earn = price * referral_percentage
+                    total_earn = price * Decimal(referral_percentage)
                     referral.total_earn += total_earn
                     referral.save()
 
