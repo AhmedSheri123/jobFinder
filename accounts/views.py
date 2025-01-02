@@ -1202,7 +1202,7 @@ def checkPaymentProcess(request, orderID):
             buyed_user = order.user
 
             try:
-                if _settings.stop_premium_link_earnings:
+                if not _settings.stop_premium_link_earnings:
                     userprofile=buyed_user.userprofile
                     referral=userprofile.referral
                     if referral:
