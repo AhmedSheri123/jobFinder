@@ -1224,7 +1224,7 @@ def checkPaymentProcess(request, orderID):
                 price = Decimal(0)
                 if currency.upper() != 'USD':
                     currency_price = currency_converter('USD', currency)
-                    price = subscription.price / currency_price
+                    price = subscription.price / Decimal(currency_price)
                     if price:
                         price = Decimal(price)
                 if price:
