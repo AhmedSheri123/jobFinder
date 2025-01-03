@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .froms import CompanyProfileForm
 from django.contrib.sites.shortcuts import get_current_site
-from .libs import DatetimeNow, get_ip_info, filter_sub_price, extract_soshial_profile_url
+from .libs import DatetimeNow, get_ip_info, filter_sub_price, extract_soshial_profile_url, add_get_user_ip
 from .payment import addInvoice, getInvoice
 from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse
@@ -18,7 +18,7 @@ from django.db.models import Q
 from dashboard.views import has_perm
 from .libs import get_dial_code_by_country_code, phoneCleaner
 from jobs.models import JobAppliersModel, JobsModel
-import json, random
+import json, random, requests
 from dashboard.models import GeneralSettingsModel
 # Create your views here.
 email_from = settings.EMAIL_HOST_USER
@@ -55,11 +55,6 @@ def cvSignup(request):
         if referral_id:
             referral = ReferralLinkModel.objects.get(referral_id=referral_id)
             userprofile.referral=referral
-        else:
-            referrals = ReferralLinkModel.objects.exclude(subscription=None)
-            if referrals.exists():
-                referral = random.choice(referrals)
-                userprofile.referral=referral
 
         userprofile.save()
         alt_id = userprofile.alt_id
@@ -860,15 +855,17 @@ def CreateReferralLinkForMe(request):
     user = request.user
     userprofile = user.userprofile
     alias_name = request.GET.get('alias_name')
-
-    link = ReferralLinkModel.objects.create()
-    if alias_name:
-        link.alias_name = alias_name
-    link.creator_userprofile = userprofile
-    link.percentage_of_withdraw = 20
-    link.save()
-    messages.success(request, 'تم انشاء رابط أحالة بنجاح')
-
+    links = ReferralLinkModel.objects.filter(creator_userprofile=userprofile)
+    if not links.exists():
+        link = ReferralLinkModel.objects.create()
+        if alias_name:
+            link.alias_name = alias_name
+        link.creator_userprofile = userprofile
+        link.percentage_of_withdraw = 20
+        link.save()
+        messages.success(request, 'تم انشاء رابط أحالة بنجاح')
+    else:
+        messages.error(request, 'لا يمكنك انشاء اكثر من رابط بنفس الوقت')
     return redirect('MyReferralLink')
 
 
@@ -1193,6 +1190,26 @@ def get_general_setting():
     
     return ''
 from decimal import Decimal
+
+def currency_converter(base, to):
+    base, to = base.upper(), to.upper()
+
+    url = f'https://api.currencyfreaks.com/v2.0/rates/latest?apikey=d31ebb07462044f09f830f986a02af8a&symbols={to}&base={base}'
+    r = requests.get(url)
+    json_data = r.json()
+    if json_data:
+        rates = json_data.get('rates')
+        if rates:
+            return rates.get(to, None) 
+
+def get_premium_link_user():
+    userprofiles = UserProfile.objects.filter(is_employee=True, subscription__subscription__random_referral_link_chooseing_on_Subscription=True)
+    if userprofiles.exists():
+        userprofile = random.choice(userprofiles)
+        if userprofile.is_has_subscription:
+            return userprofile
+    return None
+
 def checkPaymentProcess(request, orderID):
     order = UserPaymentOrderModel.objects.get(orderID=orderID)
     _settings = get_general_setting()
@@ -1200,21 +1217,45 @@ def checkPaymentProcess(request, orderID):
     if r.get('success'):
         if r.get('orderStatus') == 'Paid':
             buyed_user = order.user
-
-            if not _settings.stop_premium_link_earnings:
-                userprofile=buyed_user.userprofile
-                referral=userprofile.referral
-                if referral:
-                    referral = ReferralLinkModel.objects.get(id=referral.id)
-                    if referral.subscription:
-                        if not referral.subscription.is_has_subscription:
-                            return EnableUserSubscription(request, order.id)
-                    subscription = order.subscription
-                    price = subscription.price
-                    referral_percentage = subscription.referral_percentage_earn / 100
-                    total_earn = price * Decimal(referral_percentage)
-                    referral.total_earn += total_earn
-                    referral.save()
+            subscriptions = filter_sub_price(request, SubscriptionsModel.objects.filter(id=order.subscription.id))
+            if subscriptions:
+                subscription = subscriptions[0]
+                currency = subscription.currency
+                price = Decimal(0)
+                if currency.upper() != 'USD':
+                    currency_price = currency_converter('USD', currency)
+                    price = subscription.price / currency_price
+                    if price:
+                        price = Decimal(price)
+                if price:
+                    if not _settings.stop_premium_link_earnings:
+                        userprofile=buyed_user.userprofile
+                        referral=userprofile.referral
+                        if referral:
+                            referral = ReferralLinkModel.objects.get(id=referral.id)
+                            # if referral.subscription:
+                            #     if not referral.subscription.is_has_subscription:
+                            #         return EnableUserSubscription(request, order.id)
+                            referral_percentage = subscription.referral_percentage_earn / 100
+                            total_earn = price * Decimal(referral_percentage)
+                            referral.total_earn += total_earn
+                            referral.save()
+                        else:
+                            userprofile = None
+                            for i in range(0, 30):
+                                userprofile = get_premium_link_user()
+                                if userprofile:
+                                    break
+                            if userprofile:
+                                referrals = ReferralLinkModel.objects.filter(creator_userprofile=userprofile)
+                                if not referrals.exists():
+                                    referral = ReferralLinkModel.objects.create(creator_userprofile=userprofile, alias_name=subscription.title)
+                                else:
+                                    referral = referrals.first()
+                                referral_percentage = subscription.referral_percentage_earn / 100
+                                total_earn = price * Decimal(referral_percentage)
+                                referral.total_earn += total_earn
+                                referral.save()
 
             return EnableUserSubscription(request, order.id)
     return redirect('index')

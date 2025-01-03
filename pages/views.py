@@ -5,7 +5,6 @@ from accounts.libs import filter_sub_price
 from .models import ContactUsModel
 from django.contrib import messages
 from django.utils import timezone
-from accounts.libs import add_get_user_ip, get_ip_info
 import random
 import datetime, json
 from django.conf import settings
