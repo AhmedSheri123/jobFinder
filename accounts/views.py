@@ -1224,9 +1224,14 @@ def checkPaymentProcess(request, orderID):
                 price = Decimal(0)
                 if currency.upper() != 'USD':
                     currency_price = currency_converter('USD', currency)
-                    price = subscription.price / Decimal(currency_price)
+                    s_price = subscription.price / Decimal(currency_price)
                     if price:
-                        price = Decimal(price)
+                        price = Decimal(s_price)
+                else:
+                    s_price = subscription.price
+                    if s_price:
+                        price = Decimal(s_price)
+                    
                 if price:
                     if not _settings.stop_premium_link_earnings:
                         userprofile=buyed_user.userprofile
