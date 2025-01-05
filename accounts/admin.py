@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import UserProfile, EmployeeProfile, CountrysModel, SkilsModel, CompanyProfile, NotificationsModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, AdminADSModel, ForgetPWDModel
+from .models import (UserProfile, EmployeeProfile, CountrysModel, SkilsModel, CompanyProfile, NotificationsModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, AdminADSModel, ForgetPWDModel,
+UserPaymentOrderModel)
 
 # Register your models here.
 
@@ -14,3 +15,4 @@ admin.site.register(UserSubscriptionModel)
 admin.site.register(UserViewedProfileModel)
 admin.site.register(AdminADSModel)
 admin.site.register(ForgetPWDModel)
+admin.site.register(UserPaymentOrderModel)
