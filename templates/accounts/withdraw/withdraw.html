@@ -219,8 +219,8 @@
 
                 </div>
 
-                <label for="amount">كمية السحب</label>
-                <input required type="number" name="amount" id="amount">
+                <label for="amount">المبلغ المطلوب سحبه بالدولار</label>
+                <input required type="number" value="{{request.user.userprofile.money}}" name="amount" id="amount">
 
                 <label for="desc">ملاحظات عن السحب</label>
                 <textarea name="desc" id="desc" rows="3" cols="6"></textarea>

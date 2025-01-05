@@ -23,6 +23,9 @@ def json_to_html(json):
 @register.simple_tag
 def get_user_subs(sub_id):
     s = UserSubscriptionModel.objects.filter(subscription__id=sub_id)
+    for i in s:
+        if not i.is_has_subscription:
+            s = s.exclude(id=i.id)
     return s
 
 

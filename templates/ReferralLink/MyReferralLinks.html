@@ -165,21 +165,21 @@
         <div class="menu-box">
 
             <button class="btn btn-warning details-card" id="button-addon1"><strong>الرصيد الحالي</strong>
-                <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i> {{user.userprofile.money}}</strong>
+                <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i> {{user.userprofile.money}}$</strong>
                     <i class="bi bi-wallet fa-2x"></i>
                 </div>
             </button>
 
 
             <button class="btn btn-primary details-card" id="button-addon1"><strong>السحب المتاح</strong>
-                <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i> {{refs_total_earn}}</strong>
+                <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i> {{refs_total_earn}}$</strong>
                     <i class="bi bi-coin fa-2x"></i>
                 </div>
             </button>
 
             <button class="btn btn-danger details-card" id="button-addon1"><strong>اجمالي السحوبات</strong>
                 <div class="ico-with-value"><strong><i class="fa-solid fa-dollar-sign"></i>
-                        {{refs_all_total_earn}}</strong>
+                        {{refs_all_total_earn}}$</strong>
                     <i class="bi bi-arrows fa-2x"></i>
                 </div>
             </button>
@@ -193,22 +193,22 @@
                 </div>
             </button>
 
-            <button class="btn btn-secondary details-card" id="button-addon1"><strong>عدد الروابط</strong>
+            {% comment %} <button class="btn btn-secondary details-card" id="button-addon1"><strong>عدد الروابط</strong>
                 <div class="ico-with-value"><strong><i class="bi bi-check2"></i>
                         {{total_links}}</strong>
                     <i class="bi bi-link fa-2x"></i>
                 </div>
-            </button>
+            </button> {% endcomment %}
 
 
 
 
-            <button class="btn btn-dark details-card" id="button-addon1"><strong>اجمالي ارباح الأحالات</strong>
+            {% comment %} <button class="btn btn-dark details-card" id="button-addon1"><strong>اجمالي ارباح الأحالات</strong>
                 <div class="ico-with-value"><strong><i class="bi bi-currency-dollar"></i>
                         {{refs_all_total_earn}}</strong>
                     <i class="bi bi-currency-dollar fa-2x"></i>
                 </div>
-            </button>
+            </button> {% endcomment %}
         </div>
     </div>
 

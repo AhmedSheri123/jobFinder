@@ -1225,7 +1225,6 @@ def checkPaymentProcess(request, orderID):
                 if currency.upper() != 'USD':
                     currency_price = currency_converter('USD', currency)
                     s_price = subscription.price / Decimal(currency_price)
-                    print(s_price, currency_price)
                     if s_price:
                         price = Decimal(s_price)
                 else:
@@ -1243,7 +1242,6 @@ def checkPaymentProcess(request, orderID):
                         referral_percentage = subscription.referral_percentage_earn / 100
                         total_earn = price * Decimal(referral_percentage)
                         referral.total_earn += total_earn
-                        print(total_earn, price)
                         referral.save()
                     else:
                         if not _settings.stop_premium_link_earnings:
@@ -1400,7 +1398,7 @@ def Withdrawn(request):
                     obj.save()
                 return redirect('Withdrawn')
             else:
-                messages.error(request, 'يجب ان تسحب على الاقل 10 دولار')
+                messages.error(request, 'يجب ان تسحب على الاقل 100 دولار')
 
                 
         else:
