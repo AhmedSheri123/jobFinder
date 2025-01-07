@@ -1242,6 +1242,7 @@ def checkPaymentProcess(request, orderID):
                         referral_percentage = subscription.referral_percentage_earn / 100
                         total_earn = price * Decimal(referral_percentage)
                         referral.total_earn += total_earn
+                        referral.all_total_earn += total_earn
                         referral.save()
                     else:
                         if not _settings.stop_premium_link_earnings:
@@ -1260,6 +1261,7 @@ def checkPaymentProcess(request, orderID):
                                 referral_percentage = subscription.referral_percentage_earn / 100
                                 total_earn = price * Decimal(referral_percentage)
                                 referral.total_earn += total_earn
+                                referral.all_total_earn += total_earn
                                 referral.save()
 
             return EnableUserSubscription(request, order.id)

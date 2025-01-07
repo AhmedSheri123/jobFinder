@@ -146,7 +146,6 @@ def MostProfit(request):
         referral_links = referral_links.filter(Q(creator_userprofile__employeeprofile__country__id=country_id)| Q(creator_userprofile__companyprofile__country__id=country_id))
 
     users = list(set([referral_link.creator_userprofile for referral_link in referral_links]))
-    print(users)
     profits = []
     for user in users:
         ref = referral_links.filter(creator_userprofile=user)
