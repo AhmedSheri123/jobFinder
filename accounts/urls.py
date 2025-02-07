@@ -29,6 +29,7 @@ urlpatterns = [
     path('CPProfile/<int:id>', views.CPProfile, name='CompanyProfile'),
     path('CompanySettingGernral', views.CompanySettingGernral, name='CompanySettingGernral'),
 
+    path('DeleteAccount/<int:id>', views.DeleteAccount, name='DeleteAccount'),
 
     path('Withdrawn', views.Withdrawn, name='Withdrawn'),
 

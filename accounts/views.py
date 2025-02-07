@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .models import UserProfile, EmployeeProfile, CompanyProfile, CountrysModel, SkilsModel, EmployeeProfileImages, ReferralLinkModel, SubscriptionsModel, UserSubscriptionModel, UserViewedProfileModel, CompanyRandomNumCodeGen, UserPaymentOrderModel, WhatsappOTP, EmailOTPModel, UserLikeModel, ForgetPWDModel, NationalityModel, GenrateUserID, HealthStatusModel, Withdraw, withdrawal_method_list, usdt_network_choices
+from messenger.models import MessengerModel
 from .fields import GenderFields, StateFields, YesNoFields, HealthStatusFields, CertTypeFields, NationalityFields
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -1533,3 +1534,34 @@ def verify_change_email(request):
             else:
                 messages.error(request, 'رمز تأكيد البريد خاطئ')
     return render(request, 'accounts/change_email/verify_change_email.html')
+
+
+def DeleteAccount(request, id):
+    if request.method == 'POST':
+        obj = User.objects.get(userprofile__id=id)
+        userprofile = obj.userprofile
+        password = request.POST.get('password')
+        user = authenticate(username=obj.username, password=password)
+        if user is None:
+            messages.error(request, "خطاء في كلمة المرور")
+            if userprofile.is_employee:return redirect('CVSettingsGernral')
+            elif userprofile.is_company:return redirect('CompanySettingGernral')
+        
+        logout(request)
+        
+        if userprofile:
+            if userprofile.is_employee:
+                employeeprofile_id = userprofile.employeeprofile.id
+                if employeeprofile_id:
+                    e_profile = EmployeeProfile.objects.filter(id=employeeprofile_id)
+                    e_profile.delete()
+            elif userprofile.is_company:
+                company = CompanyProfile.objects.get(id=userprofile.companyprofile.id)
+                company.delete()
+        obj.delete()
+        msgr = MessengerModel.objects.filter(messenger_users__id__in=[obj.id])
+        
+        for i in msgr:
+            i.delete()
+        messages.error(request, "تم عملية حذف الحساب بنجاح")
+        return redirect('index')
